@@ -57,6 +57,26 @@ abstract class ApiController extends BaseController
      *
      * @return JsonResponse
      */
+    public function responseForbidden($message = null)
+    {
+        return response()->json(compact('message'), HttpResponse::HTTP_FORBIDDEN);
+    }
+
+    /**
+     * @param $message
+     *
+     * @return JsonResponse
+     */
+    public function responseUnauthorized($message = null)
+    {
+        return response()->json(compact('message'), HttpResponse::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * @param $message
+     *
+     * @return JsonResponse
+     */
     public function responseNotFound($message = null)
     {
         return response()->json(compact('message'), HttpResponse::HTTP_NOT_FOUND);

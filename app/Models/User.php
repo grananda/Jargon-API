@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Traits\PassportToken;
+use App\Models\Traits\HasUuid;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 
@@ -12,7 +11,7 @@ class User extends Authenticatable
 {
     use HasApiTokens,
         Notifiable,
-        PassportToken;
+        HasUuid;
 
     /**
      * The attributes that are mass assignable.
@@ -40,4 +39,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Determines if the User is activated.
+     *
+     * @return bool
+     */
+    public function isActivated()
+    {
+        return (bool) $this->activated_at;
+    }
 }
