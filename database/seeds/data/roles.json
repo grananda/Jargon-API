@@ -1,0 +1,65 @@
+[
+    {
+        "description": "Staff member",
+        "alias": "staff",
+        "role_type": "staff",
+        "root": true,
+        "security_clearance": null
+    },
+    {
+        "description": "Super administrator",
+        "alias": "super-admin",
+        "role_type": "staff",
+        "root": false,
+        "security_clearance": 110
+    },
+    {
+        "description": "Senior staff member",
+        "alias": "senior-staff",
+        "role_type": "staff",
+        "root": false,
+        "security_clearance": 120
+    },
+    {
+        "description": "Junior staff member",
+        "alias": "junior-staff",
+        "role_type": "staff",
+        "root": false,
+        "security_clearance": 130
+    },
+    {
+        "description": "Registered user",
+        "alias": "registered-user",
+        "role_type": "user",
+        "root": true,
+        "security_clearance": null
+    },
+    {
+        "description": "Project administrator",
+        "alias": "project-admin",
+        "role_type": "user",
+        "root": false,
+        "security_clearance": 210
+    },
+    {
+        "description": "Project manager",
+        "alias": "project-manager",
+        "role_type": "user",
+        "root": false,
+        "security_clearance": 220
+    },
+    {
+        "description": "Project translator",
+        "alias": "project-translator",
+        "role_type": "user",
+        "root": false,
+        "security_clearance": 230
+    },
+    {
+        "description": "Project user",
+        "alias": "project-user",
+        "role_type": "user",
+        "root": false,
+        "security_clearance": 240
+    }
+]
