@@ -1,0 +1,39 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/php:7.2-node-browsers
+
+    working_directory: ~/repo
+
+    environment:
+      APP_ENV: sqlite_memory_testing
+      APP_KEY: base64:RbqDAmtaSuDTEd1FGFhPyFjuFYLxRky86U3yfJMabEU=
+
+    steps:
+      - checkout
+      - run: sudo apt-get install -y libpng-dev
+      - run: sudo docker-php-ext-install gd  zip bcmath
+      - run: openssl genrsa -out storage/oauth-private.key 4096
+      - run: openssl rsa -in storage/oauth-private.key -pubout > storage/oauth-public.key
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "composer.lock" }}
+            - composer-v1-
+      - restore_cache:
+          keys:
+            - node-v1-{{ checksum "package.json" }}
+            - node-v1-
+      - run: composer install -n --prefer-dist
+      - save_cache:
+          key: composer-v1-{{ checksum "composer.lock" }}
+          paths:
+            - vendor
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run: cp .env.ci .env
+      - run: vendor/bin/phpunit
+      - store_test_results:
+          path: test-results
