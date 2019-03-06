@@ -30,7 +30,7 @@ class ShowTest extends TestCase
         $organization->setOwner($user);
 
         // When
-        $response = $this->get(route('api.organizations.show', [$organization->uuid]));
+        $response = $this->get(route('organizations.show', [$organization->uuid]));
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -51,7 +51,7 @@ class ShowTest extends TestCase
         $organization->setOwner($owner);
 
         // When
-        $response = $this->signIn($user)->get(route('api.organizations.show', [$organization->uuid]));
+        $response = $this->signIn($user)->get(route('organizations.show', [$organization->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -72,7 +72,7 @@ class ShowTest extends TestCase
         $organization->addMember($user, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS);
 
         // When
-        $response = $this->signIn($user)->get(route('api.organizations.show', [$organization->uuid]));
+        $response = $this->signIn($user)->get(route('organizations.show', [$organization->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -90,7 +90,7 @@ class ShowTest extends TestCase
         $organization->setOwner($user);
 
         // When
-        $response = $this->signIn($user)->get(route('api.organizations.show', [$organization->uuid]));
+        $response = $this->signIn($user)->get(route('organizations.show', [$organization->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
@@ -115,7 +115,7 @@ class ShowTest extends TestCase
         $organization->validateMember($user);
 
         // When
-        $response = $this->signIn($user)->get(route('api.organizations.show', [$organization->uuid]));
+        $response = $this->signIn($user)->get(route('organizations.show', [$organization->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_OK);

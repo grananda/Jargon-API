@@ -25,7 +25,7 @@ class DeleteTest extends TestCase
         $organization->setOwner($user);
 
         // When
-        $response = $this->delete(route('api.organizations.destroy', [$organization->uuid]));
+        $response = $this->delete(route('organizations.destroy', [$organization->uuid]));
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -46,7 +46,7 @@ class DeleteTest extends TestCase
         $organization->setOwner($owner);
 
         // When
-        $response = $this->signIn($user)->delete(route('api.organizations.destroy', [$organization->uuid]));
+        $response = $this->signIn($user)->delete(route('organizations.destroy', [$organization->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -64,7 +64,7 @@ class DeleteTest extends TestCase
         $organization->setOwner($user);
 
         // When
-        $response = $this->signIn($user)->delete(route('api.organizations.destroy', [$organization->uuid]));
+        $response = $this->signIn($user)->delete(route('organizations.destroy', [$organization->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_NO_CONTENT);

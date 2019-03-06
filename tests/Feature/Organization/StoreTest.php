@@ -23,7 +23,7 @@ class StoreTest extends TestCase
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
         // When
-        $response = $this->post(route('api.organizations.store'));
+        $response = $this->post(route('organizations.store'));
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -69,7 +69,7 @@ class StoreTest extends TestCase
         ];
 
         // When
-        $response = $this->signIn($user)->post(route('api.organizations.store'), $data);
+        $response = $this->signIn($user)->post(route('organizations.store'), $data);
 
         // Assert
         $response->assertStatus(Response::HTTP_CREATED);

@@ -16,7 +16,7 @@ class ListTest extends TestCase
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
         // When
-        $response = $this->get(route('api.organizations.index'));
+        $response = $this->get(route('organizations.index'));
 
         // Then
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -34,7 +34,7 @@ class ListTest extends TestCase
         $organization->setOwner($user);
 
         // When
-        $response = $this->signIn($user)->get(route('api.organizations.index'));
+        $response = $this->signIn($user)->get(route('organizations.index'));
 
         // Then
         $response->assertStatus(Response::HTTP_OK);

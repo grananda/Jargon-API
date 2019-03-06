@@ -17,7 +17,7 @@ class UpdateTest extends TestCase
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
         // When
-        $response = $this->put(route('api.organizations.update', [1]));
+        $response = $this->put(route('organizations.update', [1]));
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -45,7 +45,7 @@ class UpdateTest extends TestCase
         ];
 
         // When
-        $response = $this->signIn($user)->put(route('api.organizations.update', [$organization->uuid]), $data);
+        $response = $this->signIn($user)->put(route('organizations.update', [$organization->uuid]), $data);
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -68,7 +68,7 @@ class UpdateTest extends TestCase
         ];
 
         // When
-        $response = $this->signIn($owner)->put(route('api.organizations.update', [$organization->uuid]), $data);
+        $response = $this->signIn($owner)->put(route('organizations.update', [$organization->uuid]), $data);
 
         // Assert
         $response->assertStatus(Response::HTTP_OK);
