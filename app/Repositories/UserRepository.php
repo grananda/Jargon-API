@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Connection;

@@ -36,14 +36,14 @@ class AuthController extends ApiController
             /** @var array $credentials */
             $credentials = request(['email', 'password']);
 
-            if (!Auth::attempt($credentials, $request->remember_me)) {
+            if (! Auth::attempt($credentials, $request->remember_me)) {
                 return $this->responseUnauthorized(trans('Unauthorized'));
             }
 
             /** @var \App\Models\User $user */
             $user = $request->user();
 
-            if (!$user->isActivated()) {
+            if (! $user->isActivated()) {
                 return $this->responseForbidden(trans('User is not active'));
             }
 

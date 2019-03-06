@@ -183,7 +183,7 @@ abstract class CoreRepository
             })
             ->orderByDesc('id')
             ->get()
-        ;
+            ;
     }
 
     /**
@@ -202,7 +202,7 @@ abstract class CoreRepository
             })
             ->orderByDesc('id')
             ->get()
-        ;
+            ;
     }
 
     /**
@@ -226,20 +226,19 @@ abstract class CoreRepository
 
     /**
      * @param \App\Models\User $user
-     * @param string           $role
      * @param array            $attributes
      *
      * @throws \Throwable
      *
      * @return mixed
      */
-    public function createWithOwner(User $user, string $role, array $attributes)
+    public function createWithOwner(User $user, array $attributes)
     {
-        return $this->dbConnection->transaction(function () use ($user, $role, $attributes) {
-            /** @var \App\Models\Project $entity */
+        return $this->dbConnection->transaction(function () use ($user, $attributes) {
+            /** @var \App\Models\BaseEntity $entity */
             $entity = $this->create($attributes);
 
-            $entity->addOwner($user, $role);
+            $entity->setOwner($user);
 
             return $entity->fresh();
         });
@@ -304,5 +303,22 @@ abstract class CoreRepository
     public function getQuery()
     {
         return $this->getModel()->query();
+    }
+
+    /**
+     * Adds collaborator members to entity.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $entity
+     * @param array                               $collaborators
+     *
+     * @return \App\Models\Organization
+     */
+    protected function addCollaborators(Model $entity, array $collaborators)
+    {
+        foreach ($collaborators as $collaborator) {
+            $entity->addMember(User::findByUuidOrFail($collaborator[0]), $collaborator[1]);
+        }
+
+        return $entity->refresh();
     }
 }

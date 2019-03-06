@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\ApiController;
-use Illuminate\Http\Request;
 use App\Http\Requests\UserRegistrationRequest;
 use App\Repositories\UserRepository;
 use Exception;
+use Illuminate\Http\Request;
 
 class UserController extends ApiController
 {
@@ -32,8 +32,9 @@ class UserController extends ApiController
      *
      * @param \App\Http\Requests\UserRegistrationRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(UserRegistrationRequest $request)
     {

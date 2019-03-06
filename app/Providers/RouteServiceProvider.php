@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -55,7 +55,8 @@ class RouteServiceProvider extends ServiceProvider
             ->namespace($this->namespace)
             ->group(function () {
                 require base_path('routes/web.php');
-            });
+            })
+        ;
     }
 
     /**
@@ -73,6 +74,9 @@ class RouteServiceProvider extends ServiceProvider
             ->group(function () {
                 require base_path('routes/auth.php');
                 require base_path('routes/users.php');
-            });
+                require base_path('routes/organizations.php');
+                require base_path('routes/organizationInvitations.php');
+            })
+        ;
     }
 }
