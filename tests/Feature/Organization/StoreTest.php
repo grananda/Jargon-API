@@ -3,21 +3,19 @@
 namespace Tests\Feature\Api\Organization;
 
 use App\Events\CollaboratorAddedToOrganization;
-use App\Mail\SendOrganizationCollaboratorEmail;
 use App\Models\Organization;
 use App\Models\Subscriptions\ActiveSubscription;
-use App\Models\Subscriptions\ActiveSubscriptionOptionValue;
-use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
+use Tests\traits\CreateActiveSubscription;
 
 class StoreTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase,
+        CreateActiveSubscription;
 
     /** @test */
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
@@ -41,23 +39,8 @@ class StoreTest extends TestCase
         /** @var \App\Models\User $collaborator */
         $collaborator = factory(User::class)->create();
 
-        /** @var SubscriptionPlan | null $subscriptionPlan */
-        $subscriptionPlan = SubscriptionPlan::findByAliasOrFail('professional');
-
-        /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
-        $activeSubscription = factory(ActiveSubscription::class)->create([
-            'user_id'              => $user->id,
-            'subscription_plan_id' => $subscriptionPlan->id,
-            'subscription_active'  => true,
-        ]);
-
-        foreach ($subscriptionPlan->options as $option) {
-            factory(ActiveSubscriptionOptionValue::class)->create([
-                'active_subscription_id' => $activeSubscription->id,
-                'option_key'             => $option->option_key,
-                'option_value'           => $option->option_value,
-            ]);
-        }
+        /** @var ActiveSubscription $ativeSubscriptionPlan */
+        $ativeSubscriptionPlan = $this->createActiveSubscription($user, 'professional');
 
         $data = [
             'name'          => $this->faker->word,
