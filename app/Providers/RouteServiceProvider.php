@@ -76,6 +76,8 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/users.php');
                 require base_path('routes/organizations.php');
                 require base_path('routes/organizationInvitations.php');
+                require base_path('routes/teams.php');
+                require base_path('routes/teamInvitations.php');
             })
         ;
     }

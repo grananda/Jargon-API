@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Events\CollaboratorAddedToOrganization;
 use App\Models\Traits\HasCollaborators;
 use App\Models\Traits\HasUuid;
+use App\Models\Translations\Project;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -43,7 +44,6 @@ class Organization extends BaseEntity
      * @var array
      */
     protected $hidden = [
-        'item_token',
     ];
 
     /**

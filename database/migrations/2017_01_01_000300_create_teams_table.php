@@ -12,6 +12,7 @@ class CreateTeamsTable extends Migration
             $table->increments('id');
             $table->uuid('uuid')->unique();
             $table->string('name');
+            $table->mediumText('description')->nullable();
             $table->timestamps();
         });
 

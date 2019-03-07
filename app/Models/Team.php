@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\CollaboratorAddedToTeam;
 use App\Models\Traits\HasCollaborators;
 use App\Models\Traits\HasUuid;
 use App\Models\Translations\Project;
@@ -12,13 +13,14 @@ class Team extends BaseEntity
     use HasCollaborators,
         HasUuid;
 
+    const INVITATION_EXPIRATION_DAYS = 30;
+
     const ITEM_TOKEN_LENGTH = 50;
 
     const TEAM_OWNER_ROLE_ALIAS      = 'project-admin';
     const TEAM_MANAGER_ROLE_ALIAS    = 'project-manager';
     const TEAM_TRANSLATOR_ROLE_ALIAS = 'project-translator';
-
-    const TEAM_DEFAULT_ROLE_ALIAS = 'project-manager';
+    const TEAM_DEFAULT_ROLE_ALIAS    = 'project-user';
 
     protected $dates = [
         'created_at',
@@ -30,6 +32,7 @@ class Team extends BaseEntity
      */
     protected $fillable = [
         'name',
+        'description',
     ];
 
     /**
@@ -59,7 +62,7 @@ class Team extends BaseEntity
      */
     public function createAddCollaboratorEvent(self $team, User $user, string $invitationToken)
     {
-//        event(new CollaboratorAddedToOrganization($organization, $user, $invitationToken));
+        event(new CollaboratorAddedToTeam($team, $user, $invitationToken));
     }
 
     /**
