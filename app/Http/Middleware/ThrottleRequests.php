@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use RuntimeException;
 use Illuminate\Routing\Middleware\ThrottleRequests as Middleware;
+use RuntimeException;
 
 class ThrottleRequests extends Middleware
 {

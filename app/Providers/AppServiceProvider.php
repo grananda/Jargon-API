@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use App\Http\Resources\Projects\Project;
 use App\Models\Organization;
 use App\Models\Team;
+use App\Models\Translations\Project;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
