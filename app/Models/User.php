@@ -2,9 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Traits\HasUuid;
-use Illuminate\Notifications\Notifiable;
+use App\Models\Translations\Project;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
@@ -32,6 +38,13 @@ class User extends Authenticatable
     ];
 
     /**
+     * @var array
+     */
+    protected $dates = [
+        'created_at', 'updated_at', 'activated_at', 'last_login',
+    ];
+
+    /**
      * The attributes that should be cast to native types.
      *
      * @var array
@@ -39,6 +52,178 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * @return HasOne
+     */
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class);
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function meta()
+    {
+        return $this->hasOne(UserMeta::class);
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function organizations()
+    {
+        return $this->morphedByMany(Organization::class, 'entity', 'collaborators')
+            ->withTimestamps()
+            ;
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function teams()
+    {
+        return $this->morphToMany(Team::class, 'entity', 'collaborators')
+            ->withTimestamps()
+            ;
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class)
+            ->withTimestamps()
+            ;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function projects()
+    {
+        return $this->morphedByMany(Project::class, 'entity', 'collaborators');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function activeSubscription()
+    {
+        return $this->hasOne(ActiveSubscription::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function memos()
+    {
+        return $this->hasMany(Memo::class, 'user_id', 'id');
+    }
+
+    /**
+     * @param $id
+     *
+     * @return bool
+     */
+    public function isTeamMember($id)
+    {
+        $teams = array_column($this->teams->toArray(), 'id');
+
+        return array_search($id, $teams) > -1;
+    }
+
+    /**
+     * @param string $role
+     *
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        $roles = array_column($this->roles->toArray(), 'alias');
+
+        return array_search($role, $roles) > -1;
+    }
+
+    /**
+     * @param string $v
+     */
+    public function setPassword($v)
+    {
+        $this->attributes['password'] = Hash::make($v);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPasswordToken()
+    {
+        return md5($this->password);
+    }
+
+    /**
+     * @param $roleAlias
+     *
+     * @return bool
+     */
+    public function checkUserHasRole($roleAlias)
+    {
+        return in_array($roleAlias, array_column($this->roles->toArray(), 'alias'));
+    }
+
+    /**
+     * @param $roleAlias
+     *
+     * @return bool
+     *
+     * @internal param User $user
+     */
+    public function checkSecurityClearance($roleAlias)
+    {
+        $role = Role::where('alias', $roleAlias)->firstOrFail();
+
+        $userRoleClearances = array_column($this->roles->toArray(), 'security_clearance');
+        foreach ($userRoleClearances as $item) {
+            if ($item <= $role->security_clearance) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiAccessToken()
+    {
+        return $this->apiTokens()->first()->getApiToken();
+    }
+
+    /**
+     * @return string
+     */
+    public function getItemToken()
+    {
+        return $this->item_token;
+    }
+
+    public function createUserLoggedInEvent()
+    {
+        event(new UserLoggedIn($this));
+    }
+
+    /**
+     * Sets user role.
+     *
+     * @param \App\Models\Role $role
+     */
+    public function setRole(Role $role)
+    {
+        $this->roles()->attach($role);
+    }
 
     /**
      * Determines if the User is activated.

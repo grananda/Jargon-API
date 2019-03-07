@@ -1,0 +1,92 @@
+[
+    {
+        "title": "Communication",
+        "description": "Define what type of email notification you wish to receive.",
+        "options": [
+            {
+                "title": "Receive notification emails",
+                "description": "Receive emails when a new staff notification is posted.",
+                "option_key": "receive_notifications_by_email",
+                "option_value": true,
+                "option_scope": "user",
+                "option_type": "check",
+                "is_private": false
+            },
+            {
+                "title": "Receive messages by email",
+                "description": "Receive a email when a  team or organization member sends a message.",
+                "option_key": "receive_messages_by_email",
+                "option_value": true,
+                "option_scope": "user",
+                "option_type": "check",
+                "is_private": false
+            },
+            {
+                "title": "Get Git notifications",
+                "description": "Receive an email notification when a Git activity such as commits or pull request creation occurs (subject to Git support feature available).",
+                "option_key": "receive_git_activity_by_email",
+                "option_value": true,
+                "option_scope": "user",
+                "option_type": "check",
+                "is_private": false
+            },
+            {
+                "title": "Get Laravel plug-in email notifications",
+                "description": "Allow the Laravel plug-in to notify you when new syncs are completed.",
+                "option_key": "receive_plugin_activity_by_email",
+                "option_value": true,
+                "option_scope": "user",
+                "option_type": "check",
+                "is_private": false
+            },
+            {
+                "title": "Send invoice notification",
+                "description": "Receive en email whe a new invoice is available for downloading.",
+                "option_key": "send_invoice_notification",
+                "option_value": true,
+                "option_scope": "user",
+                "option_type": "check",
+                "is_private": false
+            }
+        ]
+    },
+    {
+        "title": "Security",
+        "description": "Activate extra security options to improve your account security.",
+        "options": [
+            {
+                "title": "Allow API access",
+                "description": "Allow or deny APi access with just one click.",
+                "option_key": "allow_api_access",
+                "option_value": true,
+                "option_scope": "user",
+                "option_type": "check",
+                "is_private": false
+            }
+        ]
+    },
+    {
+        "title": "Integration",
+        "description": "Specify how your account will interact with third party systems.",
+        "options": [
+            {
+                "title": "Allow automatic git pull requests",
+                "description": "Allow the system to generate periodical pull request on Git-Hub when new translations are available.",
+                "option_key": "automatic_git_commits",
+                "option_value": true,
+                "option_scope": "user",
+                "option_type": "check",
+                "is_private": false
+            },
+            {
+                "title": "Allow automatic sync activity",
+                "description": "Allow the Laravel plug-in to automatically sync new translation in your code with the system.",
+                "option_key": "automatic_laravel_sync",
+                "option_value": true,
+                "option_scope": "user",
+                "option_type": "check",
+                "is_private": false
+            }
+        ]
+    }
+]
