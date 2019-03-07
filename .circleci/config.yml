@@ -12,27 +12,36 @@ jobs:
 
     steps:
       - checkout
+      - run: sudo apt update
       - run: sudo apt-get install -y libpng-dev
       - run: sudo docker-php-ext-install gd  zip bcmath
       - run: openssl genrsa -out storage/oauth-private.key 4096
       - run: openssl rsa -in storage/oauth-private.key -pubout > storage/oauth-public.key
+
+      # Download and cache dependencies
       - restore_cache:
           keys:
-            - composer-v1-{{ checksum "composer.lock" }}
-            - composer-v1-
+            # "composer.lock" can be used if it is committed to the repo
+            - v1-dependencies-{{ checksum "composer.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: composer install -n --prefer-dist
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "composer.json" }}
+          paths:
+            - ./vendor
       - restore_cache:
           keys:
             - node-v1-{{ checksum "package.json" }}
             - node-v1-
-      - run: composer install -n --prefer-dist
-      - save_cache:
-          key: composer-v1-{{ checksum "composer.lock" }}
-          paths:
-            - vendor
+      - run: yarn install
       - save_cache:
           key: node-v1-{{ checksum "package.json" }}
           paths:
             - node_modules
+
       - run: cp .env.ci .env
       - run: vendor/bin/phpunit
       - store_test_results:
