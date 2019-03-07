@@ -115,4 +115,35 @@ class OptionUserRepositoryTest extends TestCase
             'user_id'      => $user->id,
         ]);
     }
+
+    /** @test */
+    public function rebuild_user_options()
+    {
+        // Given
+        /** @var OptionUserRepository $optionUserRepository */
+        $optionUserRepository = resolve(OptionUserRepository::class);
+
+        /** @var OptionRepository $optionsRepository */
+        $optionsRepository = resolve(OptionRepository::class);
+
+        /** @var \App\Models\User $user */
+        $user = factory(User::class)->create();
+
+        /** @var \Illuminate\Database\Eloquent\Collection $options */
+        $options = $optionsRepository->findAllBy([
+            'option_scope' => 'user',
+            'is_private'   => false,
+        ]);
+
+        // When
+        $optionUserRepository->rebuildUserOptions($user);
+
+        // Then
+        foreach ($options as $option) {
+            $this->assertDatabaseHas('option_users', [
+                'option_key' => $option->option_key,
+                'user_id'    => $user->id,
+            ]);
+        }
+    }
 }
