@@ -2,10 +2,17 @@
 
 namespace App\Policies;
 
+use App\Exceptions\SubscriptionLimitExceeded;
+use App\Models\Team;
 use App\Models\User;
+use Exception;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class TeamPolicy extends AbstractPolicy
 {
+    const TEAM_SUBSCRIPTION_CREATE   = 'api.client.subscription.team.create.error';
+    const TEAM_SUBSCRIPTION_ADD_USER = 'api.client.subscription.team.addUser.error';
+
     /**
      * Determines is a user can list teams.
      *
@@ -16,5 +23,61 @@ class TeamPolicy extends AbstractPolicy
     public function list(User $user)
     {
         return true;
+    }
+
+    /**
+     * @param User             $user
+     * @param \App\Models\Team $team
+     *
+     * @return bool
+     */
+    public function show(User $user, Team $team)
+    {
+        return $team->isMember($user);
+    }
+
+    /**
+     * @param User $user
+     *
+     * @throws Exception
+     *
+     * @return bool
+     */
+    public function create(User $user)
+    {
+        $subscriptionTeamCount = $user->activeSubscription->options()->where('option_key', 'team_count')->first()->option_value;
+
+        $userTeamCount = $user->teams->filter(function ($team) use ($user) {
+            /* @var $team \App\Models\Team */
+            return $team->isOwner($user) == true;
+        })->count();
+
+        if ($subscriptionTeamCount <= $userTeamCount && ! is_null($subscriptionTeamCount)) {
+            throw new SubscriptionLimitExceeded(trans(self::TEAM_SUBSCRIPTION_CREATE), HttpResponse::HTTP_PAYMENT_REQUIRED);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param User             $user
+     * @param \App\Models\Team $team
+     *
+     * @return bool
+     */
+    public function update(User $user, Team $team)
+    {
+        return $team->isOwner($user);
+    }
+
+    /**
+     * @param User             $user
+     * @param \App\Models\Team $team
+     *
+     * @return bool
+     */
+    public function delete(User $user, Team $team)
+    {
+        return $team->isOwner($user);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Organization;
 
+use App\Exceptions\SubscriptionLimitExceeded;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Organization\DeleteOrganizationRequest;
 use App\Http\Requests\Organization\IndexOrganizationRequest;
@@ -76,6 +77,8 @@ class OrganizationApiController extends ApiController
             $organization = $this->organizationRepository->createOrganization($request->user(), $request->validated());
 
             return $this->responseCreated(new OrganizationResource($organization));
+        } catch (SubscriptionLimitExceeded $subscriptionLimitExceeded) {
+            return $this->responseInternalError($subscriptionLimitExceeded->getMessage());
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
         }

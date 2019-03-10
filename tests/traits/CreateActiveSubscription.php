@@ -16,9 +16,11 @@ trait CreateActiveSubscription
      * @param \App\Models\User $user
      * @param string           $subscriptionType
      *
+     * @param array            $options
+     *
      * @return \App\Models\Subscriptions\ActiveSubscription
      */
-    public function createActiveSubscription(User $user, string $subscriptionType)
+    public function createActiveSubscription(User $user, string $subscriptionType, array $options = [])
     {
         /** @var SubscriptionPlan | null $subscriptionPlan */
         $subscriptionPlan = SubscriptionPlan::findByAliasOrFail($subscriptionType);
@@ -34,7 +36,7 @@ trait CreateActiveSubscription
             factory(ActiveSubscriptionOptionValue::class)->create([
                 'active_subscription_id' => $activeSubscription->id,
                 'option_key'             => $option->option_key,
-                'option_value'           => $option->option_value,
+                'option_value'           => $options[$option->option_key] ?? $option->option_value,
             ]);
         }
 
