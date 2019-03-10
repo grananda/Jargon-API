@@ -87,6 +87,8 @@ class Organization extends BaseEntity
 
     /**
      * @param \App\Models\User $user
+     *
+     * @throws \App\Exceptions\SubscriptionLimitExceeded
      */
     public function setOwner(User $user)
     {
