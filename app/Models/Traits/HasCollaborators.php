@@ -2,12 +2,9 @@
 
 namespace App\Models\Traits;
 
-use App\Exceptions\SubscriptionLimitExceeded;
 use App\Models\Role;
-use App\Models\Team;
 use App\Models\User;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 trait HasCollaborators
@@ -106,8 +103,6 @@ trait HasCollaborators
      *
      * @param \App\Models\User $user
      * @param string           $role
-     *
-     * @throws \App\Exceptions\SubscriptionLimitExceeded
      */
     public function addMember(User $user, string $role)
     {
@@ -126,8 +121,6 @@ trait HasCollaborators
      *
      * @param \App\Models\User $user
      * @param string           $role
-     *
-     * @throws \App\Exceptions\SubscriptionLimitExceeded
      */
     protected function addOwner(User $user, string $role)
     {
@@ -145,15 +138,9 @@ trait HasCollaborators
      * Adds a set of collaborator to an entity.
      *
      * @param array $collaborators
-     *
-     * @throws \App\Exceptions\SubscriptionLimitExceeded
      */
     private function setCollaborators(array $collaborators)
     {
-        if ($this->getCurrentSubscriptionCollaboratorQuota() < count($collaborators)) {
-            throw new SubscriptionLimitExceeded(trans('Maximum collaborators per entity has been exceeded for current subscription.'));
-        }
-
         /** @var array $currentCollaborators */
         $currentCollaborators = array_column($this->collaborators()->get()->toArray(), 'id');
 
@@ -189,30 +176,5 @@ trait HasCollaborators
                 $this->collaborators()->detach($collaborator->pivot->user_id);
             }
         }
-    }
-
-    /**
-     * Determines if current entity can hold desired collaborator count.
-     *
-     * @return bool
-     */
-    private function getCurrentSubscriptionCollaboratorQuota()
-    {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-
-        $subscriptionCollaboratorQuota = $user->activeSubscription->options()->where('option_key', 'collaborator_count')->first()->option_value;
-
-        /** @var \App\Models\Organization $organization */
-        foreach ($user->organizations as $organization) {
-            $subscriptionCollaboratorQuota -= $organization->collaborators->members()->count();
-        }
-
-//        /** @var Team $team */
-//        foreach($user->teams as $team){
-//            $subscriptionCollaboratorQuota -= $team->collaborators->members()->count();
-//        }
-
-        return $subscriptionCollaboratorQuota;
     }
 }

@@ -84,7 +84,7 @@ class User extends Authenticatable
      */
     public function teams()
     {
-        return $this->morphToMany(Team::class, 'entity', 'collaborators')
+        return $this->morphedByMany(Team::class, 'entity', 'collaborators')
             ->withTimestamps()
             ;
     }

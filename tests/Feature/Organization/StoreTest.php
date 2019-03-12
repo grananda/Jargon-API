@@ -59,7 +59,7 @@ class StoreTest extends TestCase
     }
 
     /** @test */
-    public function a_500_will_be_returned_if_the_user_creates_a_new_organization_without_collaborator_quota()
+    public function a_403_will_be_returned_if_the_user_creates_a_new_organization_without_collaborator_quota()
     {
         // Given
         Event::fake([CollaboratorAddedToOrganization::class]);
@@ -88,7 +88,8 @@ class StoreTest extends TestCase
         $response = $this->signIn($user)->post(route('organizations.store'), $data);
 
         // Assert
-        $response->assertStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        Event::assertNotDispatched(CollaboratorAddedToOrganization::class);
     }
 
     /** @test */
