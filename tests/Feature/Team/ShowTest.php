@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Team;
+namespace Tests\Feature\Team;
 
 
 use App\Models\Team;

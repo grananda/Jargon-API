@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\OrganizationInvitation;
+namespace Tests\Feature\OrganizationInvitation;
 
 
 use App\Models\Organization;
@@ -32,16 +32,21 @@ class UpdateTest extends TestCase
     /** @test */
     public function a_403_will_be_returned_when_validating_an_expired_invitation_token()
     {
+        /** @var \App\Models\User $owner */
+        $owner = factory(User::class)->create();
+        $this->signIn($owner);
+
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
+        $organization->setOwner($owner);
         $organization->addMember($user, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS);
 
-        $organization->collaborators()->updateExistingPivot($user->id, ['created_at'=> Carbon::now()->subDays(40)]);
+        $organization->nonActiveMembers()->updateExistingPivot($user->id, ['created_at'=> Carbon::now()->subDays(40)]);
 
-        $token = $organization->collaborators()->where('user_id', $user->id)->first()->pivot->validation_token;
+        $token = $organization->nonActiveMembers()->where('user_id', $user->id)->first()->pivot->validation_token;
 
         // When
         $response = $this->put(route('organizations.invitation.update', ['token' => $token]));
@@ -54,14 +59,19 @@ class UpdateTest extends TestCase
     public function a_200_will_be_returned_when_validating_an_invitation_token()
     {
         // Given
+        /** @var \App\Models\User $owner */
+        $owner = factory(User::class)->create();
+        $this->signIn($owner);
+
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
+        $organization->setOwner($owner);
         $organization->addMember($user, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS);
 
-        $token = $organization->collaborators()->where('user_id', $user->id)->first()->pivot->validation_token;
+        $token = $organization->nonActiveMembers()->where('user_id', $user->id)->first()->pivot->validation_token;
 
         // When
         $response = $this->put(route('organizations.invitation.update', ['token' => $token]));

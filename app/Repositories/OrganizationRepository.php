@@ -79,7 +79,7 @@ class OrganizationRepository extends CoreRepository
     {
         return $this->getModel()
             ->with('collaborators')
-            ->whereHas('collaborators', function ($query) use ($token) {
+            ->whereHas('nonActiveMembers', function ($query) use ($token) {
                 $expDate = Carbon::now()->subDays(Organization::INVITATION_EXPIRATION_DAYS);
 
                 $query->where('validation_token', $token);

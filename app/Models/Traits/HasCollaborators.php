@@ -47,6 +47,25 @@ trait HasCollaborators
     }
 
     /**
+     * Returns entity active members.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function nonActiveMembers()
+    {
+        return $this->morphToMany(User::class, 'entity', 'collaborators')
+            ->where('is_owner', false)
+            ->where('is_valid', false)
+            ->withPivot([
+                'is_valid',
+                'role_id',
+                'validation_token',
+            ])
+            ->withTimestamps()
+            ;
+    }
+
+    /**
      * Returns entity active owners.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany

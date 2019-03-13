@@ -28,7 +28,7 @@ class OrganizationPolicy extends AbstractPolicy
      */
     public function show(User $user, Organization $organization)
     {
-        return $organization->isMember($user);
+        return $organization->isMember($user) || $organization->isOwner($user);
     }
 
     /**
