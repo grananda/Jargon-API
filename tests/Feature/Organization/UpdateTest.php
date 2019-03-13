@@ -61,7 +61,6 @@ class UpdateTest extends TestCase
     {
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
-        $this->signIn($owner);
 
         /** @var \App\Models\User $collaborator1 */
         $collaborator1 = factory(User::class)->create();
@@ -102,7 +101,6 @@ class UpdateTest extends TestCase
     {
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
-        $this->signIn($owner);
 
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();

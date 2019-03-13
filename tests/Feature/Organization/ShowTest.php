@@ -84,7 +84,6 @@ class ShowTest extends TestCase
         // Given
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();
-        $this->signIn($user);
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();

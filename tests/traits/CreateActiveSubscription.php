@@ -22,6 +22,8 @@ trait CreateActiveSubscription
      */
     public function createActiveSubscription(User $user, string $subscriptionType, array $options = [])
     {
+        $this->signIn($user);
+
         /** @var SubscriptionPlan | null $subscriptionPlan */
         $subscriptionPlan = SubscriptionPlan::findByAliasOrFail($subscriptionType);
 
