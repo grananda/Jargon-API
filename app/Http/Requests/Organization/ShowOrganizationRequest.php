@@ -8,7 +8,7 @@ use App\Models\Organization;
 class ShowOrganizationRequest extends Request
 {
     /**
-     * The Organization isntance.
+     * The Organization instance.
      *
      * @var \App\Models\Organization
      */

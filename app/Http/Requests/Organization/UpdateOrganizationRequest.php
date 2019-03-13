@@ -47,6 +47,7 @@ class UpdateOrganizationRequest extends Request
     {
         return [
             'name'            => ['required', 'string'],
+            'description'     => ['nullable', 'string', 'max:255'],
             'teams'           => ['array'],
             'teams.*'         => [new ValidTeam($this->user())],
             'collaborators'   => ['array'],

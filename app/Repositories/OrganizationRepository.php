@@ -4,11 +4,14 @@ namespace App\Repositories;
 
 use App\Models\Organization;
 use App\Models\User;
+use App\Repositories\Traits\InvitationTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Connection;
 
 class OrganizationRepository extends CoreRepository
 {
+    use InvitationTrait;
+
     /**
      * ProjectRepository constructor.
      *
@@ -66,34 +69,5 @@ class OrganizationRepository extends CoreRepository
 
             return $organization->fresh();
         });
-    }
-
-    /**
-     * Returns organization realated to user validation token.
-     *
-     * @param string $token
-     *
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
-     */
-    public function findOneByInvitationToken(string $token)
-    {
-        return $this->getModel()
-            ->with('collaborators')
-            ->whereHas('nonActiveMembers', function ($query) use ($token) {
-                $expDate = Carbon::now()->subDays(Organization::INVITATION_EXPIRATION_DAYS);
-
-                $query->where('validation_token', $token);
-                $query->whereDate('collaborators.created_at', '>=', $expDate);
-            })->firstOrFail();
-    }
-
-    /**
-     * Validate user invitation.
-     *
-     * @param \App\Models\Organization $organization
-     */
-    public function validateInvitation(Organization $organization)
-    {
-        $organization->validateMember($organization->collaborators()->first());
     }
 }

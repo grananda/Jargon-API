@@ -2,10 +2,22 @@
 
 namespace App\Http\Requests\Team;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Request;
+use App\Models\Team;
+use App\Policies\Traits\ActiveSubscriptionRestrictionsTrait;
+use App\Rules\ValidMember;
 
-class UpdateTeamRequest extends FormRequest
+class UpdateTeamRequest extends Request
 {
+    use ActiveSubscriptionRestrictionsTrait;
+
+    /**
+     * The Team instance.
+     *
+     * @var \App\Models\Team
+     */
+    public $team;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +25,16 @@ class UpdateTeamRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        $this->team = Team::findByUuidOrFail($this->route('id'));
+
+        /** @var array $collaborators */
+        $collaborators = $this->input('collaborators');
+
+        $currentSubscriptionCollaborationQuota = $this->getCurrentSubscriptionCollaborationQuota($this->user()) + $this->team->members()->count();
+
+        return $this->hasActiveSubscription($this->user())
+            && $currentSubscriptionCollaborationQuota >= count($collaborators)
+            && $this->user()->can('update', $this->team);
     }
 
     /**
@@ -24,7 +45,10 @@ class UpdateTeamRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name'            => ['required', 'string'],
+            'description'     => ['nullable', 'string', 'max:255'],
+            'collaborators'   => ['array'],
+            'collaborators.*' => ['array', new ValidMember()],
         ];
     }
 }

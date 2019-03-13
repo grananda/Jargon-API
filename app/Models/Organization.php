@@ -14,8 +14,6 @@ class Organization extends BaseEntity
     use HasUuid,
         HasCollaborators;
 
-    const INVITATION_EXPIRATION_DAYS = 30;
-
     const ITEM_TOKEN_LENGTH = 50;
 
     const ORGANIZATION_OWNER_ROLE_ALIAS      = 'project-admin';

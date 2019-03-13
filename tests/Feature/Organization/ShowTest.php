@@ -79,6 +79,27 @@ class ShowTest extends TestCase
     }
 
     /** @test */
+    public function a_403_will_be_returned_when_showing_an_organization_to_a_non_validated_member()
+    {
+        // Given
+        $user = factory(User::class)->create();
+
+        /** @var \App\Models\User $owner */
+        $owner = factory(User::class)->create();
+
+        /** @var \App\Models\Organization $organization */
+        $organization = factory(Organization::class)->create();
+        $organization->setOwner($owner);
+        $organization->addMember($user, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS);
+
+        // When
+        $response = $this->signIn($user)->get(route('organizations.show', [$organization->uuid]));
+
+        // Then
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    /** @test */
     public function a_200_will_be_returned_when_showing_an_organization_to_owner()
     {
         // Given

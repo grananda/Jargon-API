@@ -16,7 +16,11 @@ use Illuminate\Http\JsonResponse;
 
 class OrganizationApiController extends ApiController
 {
-    /** @var \App\Repositories\OrganizationRepository */
+    /**
+     * The OrganizationRepository instance.
+     *
+     * @var \App\Repositories\OrganizationRepository
+     */
     protected $organizationRepository;
 
     /**

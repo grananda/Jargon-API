@@ -5,10 +5,10 @@ namespace App\Http\Requests\Team;
 use App\Http\Requests\Request;
 use App\Models\Team;
 
-class DeleteTeamRequest extends Request
+class ShowTeamRequest extends Request
 {
     /**
-     * The team instance.
+     * The Team instance.
      *
      * @var \App\Models\Team
      */
@@ -21,8 +21,10 @@ class DeleteTeamRequest extends Request
      */
     public function authorize()
     {
-        $this->team = Team::findByUuidOrFail($this->route('id'));
+        $teamId = (string)$this->route('id');
 
-        return $this->user()->can('delete', $this->team);
+        $this->team = Team::findByUuidOrFail($teamId);
+
+        return $this->user()->can('show', [Team::class, $this->team]);
     }
 }

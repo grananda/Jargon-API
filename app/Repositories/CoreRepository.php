@@ -199,6 +199,7 @@ abstract class CoreRepository
             ->whereHas('collaborators', function ($query) use ($user) {
                 /* @var \Illuminate\Database\Query\Builder $query */
                 $query->where('collaborators.user_id', $user->id);
+                $query->where('collaborators.is_valid', true);
             })
             ->orderByDesc('id')
             ->get()

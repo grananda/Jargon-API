@@ -10,9 +10,6 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class TeamPolicy extends AbstractPolicy
 {
-    const TEAM_SUBSCRIPTION_CREATE   = 'api.client.subscription.team.create.error';
-    const TEAM_SUBSCRIPTION_ADD_USER = 'api.client.subscription.team.addUser.error';
-
     /**
      * Determines is a user can list teams.
      *
@@ -33,7 +30,7 @@ class TeamPolicy extends AbstractPolicy
      */
     public function show(User $user, Team $team)
     {
-        return $team->isMember($user);
+        return $team->isMember($user) || $team->isOwner($user);
     }
 
     /**
@@ -52,8 +49,8 @@ class TeamPolicy extends AbstractPolicy
             return $team->isOwner($user) == true;
         })->count();
 
-        if ($subscriptionTeamCount <= $userTeamCount && ! is_null($subscriptionTeamCount)) {
-            throw new SubscriptionLimitExceeded(trans(self::TEAM_SUBSCRIPTION_CREATE), HttpResponse::HTTP_PAYMENT_REQUIRED);
+        if ($subscriptionTeamCount <= $userTeamCount && !is_null($subscriptionTeamCount)) {
+            return false;
         }
 
         return true;
