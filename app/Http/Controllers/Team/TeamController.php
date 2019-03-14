@@ -62,7 +62,7 @@ class TeamController extends ApiController
     public function store(StoreTeamRequest $request)
     {
         try {
-            $team = $this->teamRepository->createTeam($request->organization, $request->user(), $request->validated());
+            $team = $this->teamRepository->createTeam($request->user(), $request->validated());
 
             return $this->responseCreated(new TeamResource($team));
         } catch (Exception $e) {
@@ -96,7 +96,7 @@ class TeamController extends ApiController
     public function update(UpdateTeamRequest $request)
     {
         try {
-            $organization = $this->teamRepository->updateTeam($request->organization, $request->validated());
+            $organization = $this->teamRepository->updateTeam($request->team, $request->validated());
 
             return $this->responseOk(new TeamResource($organization));
         } catch (Exception $e) {

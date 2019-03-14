@@ -54,7 +54,7 @@ class TeamRepository extends CoreRepository
      *
      * @return mixed
      */
-    public function updateOrganization(Team $team, array $attributes)
+    public function updateTeam(Team $team, array $attributes)
     {
         return $this->dbConnection->transaction(function () use ($team, $attributes) {
             /** @var \App\Models\Team $team */

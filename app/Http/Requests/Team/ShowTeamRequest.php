@@ -21,7 +21,7 @@ class ShowTeamRequest extends Request
      */
     public function authorize()
     {
-        $teamId = (string)$this->route('id');
+        $teamId = (string) $this->route('id');
 
         $this->team = Team::findByUuidOrFail($teamId);
 
