@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\Organization;
 use App\Models\User;
 use App\Repositories\Traits\InvitationTrait;
-use Carbon\Carbon;
 use Illuminate\Database\Connection;
 
 class OrganizationRepository extends CoreRepository

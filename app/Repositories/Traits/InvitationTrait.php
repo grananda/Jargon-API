@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Traits;
 
-
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 

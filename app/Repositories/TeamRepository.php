@@ -28,8 +28,9 @@ class TeamRepository extends CoreRepository
      * @param \App\Models\User $user
      * @param array            $attributes
      *
-     * @return mixed
      * @throws \Throwable
+     *
+     * @return mixed
      */
     public function createTeam(User $user, array $attributes)
     {
@@ -49,8 +50,9 @@ class TeamRepository extends CoreRepository
      * @param \App\Models\Team $team
      * @param array            $attributes
      *
-     * @return mixed
      * @throws \Throwable
+     *
+     * @return mixed
      */
     public function updateOrganization(Team $team, array $attributes)
     {

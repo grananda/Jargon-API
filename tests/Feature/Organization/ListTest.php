@@ -23,7 +23,7 @@ class ListTest extends TestCase
     }
 
     /** @test */
-    public function a_403_will_be_returned_when_listing_all_organizations_for_a_non_valid_member()
+    public function a_200_will_be_returned_when_listing_all_organizations_for_a_non_valid_member()
     {
         // Given
         /** @var \App\Models\User $owner */

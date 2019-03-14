@@ -8,8 +8,8 @@ use App\Http\Requests\Team\IndexTeamRequest;
 use App\Http\Requests\Team\ShowTeamRequest;
 use App\Http\Requests\Team\StoreTeamRequest;
 use App\Http\Requests\Team\UpdateTeamRequest;
-use App\Http\Resources\Teams\TeamCollection;
 use App\Http\Resources\Teams\Team as TeamResource;
+use App\Http\Resources\Teams\TeamCollection;
 use App\Repositories\TeamRepository;
 use Exception;
 
@@ -54,6 +54,8 @@ class TeamController extends ApiController
      * Store a newly created resource in storage.
      *
      * @param \App\Http\Requests\Team\StoreTeamRequest $request
+     *
+     * @throws \Throwable
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -107,8 +109,9 @@ class TeamController extends ApiController
      *
      * @param \App\Http\Requests\Team\DeleteTeamRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(DeleteTeamRequest $request)
     {

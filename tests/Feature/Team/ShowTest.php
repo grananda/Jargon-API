@@ -60,7 +60,7 @@ class ShowTest extends TestCase
     }
 
     /** @test */
-    public function a_403_will_be_returned_when_showing_an_organization_to_non_validated_team_member()
+    public function a_403_will_be_returned_when_showing_a_team_to_a_non_validated_team_member()
     {
         // Given
         $user = factory(User::class)->create();
@@ -87,7 +87,7 @@ class ShowTest extends TestCase
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
-    public function a_200_will_be_returned_when_showing_an_organization_to_owner()
+    public function a_200_will_be_returned_when_showing_a_team_to_an_owner()
     {
         // Given
         /** @var \App\Models\User $user */
@@ -114,7 +114,7 @@ class ShowTest extends TestCase
     }
 
     /** @test */
-    public function a_200_will_be_returned_when_showing_an_organization_to_member()
+    public function a_200_will_be_returned_when_showing_a_team_to_a_member()
     {
         // Given
         $user = factory(User::class)->create();

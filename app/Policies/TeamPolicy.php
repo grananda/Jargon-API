@@ -2,11 +2,9 @@
 
 namespace App\Policies;
 
-use App\Exceptions\SubscriptionLimitExceeded;
 use App\Models\Team;
 use App\Models\User;
 use Exception;
-use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class TeamPolicy extends AbstractPolicy
 {
@@ -49,7 +47,7 @@ class TeamPolicy extends AbstractPolicy
             return $team->isOwner($user) == true;
         })->count();
 
-        if ($subscriptionTeamCount <= $userTeamCount && !is_null($subscriptionTeamCount)) {
+        if ($subscriptionTeamCount <= $userTeamCount && ! is_null($subscriptionTeamCount)) {
             return false;
         }
 
