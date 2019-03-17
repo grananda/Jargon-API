@@ -4,11 +4,13 @@ namespace App\Repositories;
 
 use App\Models\Organization;
 use App\Models\User;
-use Carbon\Carbon;
+use App\Repositories\Traits\InvitationTrait;
 use Illuminate\Database\Connection;
 
 class OrganizationRepository extends CoreRepository
 {
+    use InvitationTrait;
+
     /**
      * ProjectRepository constructor.
      *
@@ -36,10 +38,6 @@ class OrganizationRepository extends CoreRepository
             /** @var \App\Models\Organization $organization */
             $organization = $this->createWithOwner($user, $attributes);
 
-            $this->addCollaborators($organization, $attributes['collaborators']);
-
-            $organization->teams()->sync($attributes['teams']);
-
             return $organization->fresh();
         });
     }
@@ -60,40 +58,7 @@ class OrganizationRepository extends CoreRepository
             /** @var \App\Models\Organization $organization */
             $organization = $this->update($organization, $attributes);
 
-            $this->addCollaborators($organization, $attributes['collaborators']);
-
-            $organization->teams()->sync($attributes['teams']);
-
             return $organization->fresh();
         });
-    }
-
-    /**
-     * Returns organization realated to user validation token.
-     *
-     * @param string $token
-     *
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
-     */
-    public function findOneByInvitationToken(string $token)
-    {
-        return $this->getModel()
-            ->with('collaborators')
-            ->whereHas('collaborators', function ($query) use ($token) {
-                $expDate = Carbon::now()->subDays(Organization::INVITATION_EXPIRATION_DAYS);
-
-                $query->where('validation_token', $token);
-                $query->whereDate('collaborators.created_at', '>=', $expDate);
-            })->firstOrFail();
-    }
-
-    /**
-     * Validate user invitation.
-     *
-     * @param \App\Models\Organization $organization
-     */
-    public function validateInvitation(Organization $organization)
-    {
-        $organization->validateMember($organization->collaborators()->first());
     }
 }

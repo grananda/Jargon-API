@@ -2,18 +2,18 @@
 
 namespace App\Mail;
 
-use App\Models\Organization;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Mail\Mailable;
 
-class SendOrganizationCollaboratorEmail extends Mailable
+class SendTeamCollaboratorEmail extends Mailable
 {
     /**
-     * Organization instance.
+     * Team instance.
      *
-     * @var \App\Models\Organization
+     * @var \App\Models\Team
      */
-    protected $organization;
+    protected $team;
 
     /**
      * User recipient.
@@ -32,13 +32,13 @@ class SendOrganizationCollaboratorEmail extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param Organization $organization
-     * @param User         $user
-     * @param              $invitationToken
+     * @param \App\Models\Team $team
+     * @param User             $user
+     * @param string           $invitationToken
      */
-    public function __construct(Organization $organization, User $user, string $invitationToken)
+    public function __construct(Team $team, User $user, string $invitationToken)
     {
-        $this->organization    = $organization;
+        $this->team            = $team;
         $this->user            = $user;
         $this->invitationToken = $invitationToken;
     }
@@ -50,14 +50,14 @@ class SendOrganizationCollaboratorEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.organization.collaboratorInvitation')
+        return $this->view('emails.team.collaboratorInvitation')
             ->subject($this->subject)
             ->with([
-                'subject'         => trans($this->organization->name.' wants you to collaborate with them'),
-                'organization'    => $this->organization,
+                'subject'         => trans($this->team->name.' wants you to collaborate with them'),
+                'team'            => $this->team,
                 'user'            => $this->user,
                 'invitationToken' => $this->invitationToken,
             ])
-            ;
+        ;
     }
 }

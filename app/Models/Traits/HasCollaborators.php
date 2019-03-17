@@ -4,15 +4,20 @@ namespace App\Models\Traits;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 trait HasCollaborators
 {
     /**
+     * Returns entity active collaborators.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function collaborators()
     {
         return $this->morphToMany(User::class, 'entity', 'collaborators')
+            ->where('is_valid', true)
             ->withPivot([
                 'is_owner',
                 'is_valid',
@@ -24,12 +29,15 @@ trait HasCollaborators
     }
 
     /**
+     * Returns entity active members.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function owners()
+    public function members()
     {
         return $this->morphToMany(User::class, 'entity', 'collaborators')
-            ->where('is_owner', true)
+            ->where('is_owner', false)
+            ->where('is_valid', true)
             ->withPivot([
                 'is_valid',
                 'role_id',
@@ -39,58 +47,64 @@ trait HasCollaborators
     }
 
     /**
+     * Returns entity active members.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function nonActiveMembers()
+    {
+        return $this->morphToMany(User::class, 'entity', 'collaborators')
+            ->where('is_owner', false)
+            ->where('is_valid', false)
+            ->withPivot([
+                'is_valid',
+                'role_id',
+                'validation_token',
+            ])
+            ->withTimestamps()
+            ;
+    }
+
+    /**
+     * Returns entity active owners.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function owners()
+    {
+        return $this->morphToMany(User::class, 'entity', 'collaborators')
+            ->where('is_owner', true)
+            ->where('is_valid', true)
+            ->withPivot([
+                'is_valid',
+                'role_id',
+            ])
+            ->withTimestamps()
+        ;
+    }
+
+    /**
+     * Checks if a collaborator is and entity owner.
+     *
      * @param User $user
      *
      * @return bool
      */
     public function isOwner(User $user)
     {
-        foreach ($this->collaborators as $member) {
-            if ($user->id === $member->id && $member->pivot->is_owner) {
-                return true;
-            }
-        }
-
-        return false;
+        return (bool) $this->owners()->where('user_id', $user->id)->first();
     }
 
     /**
+     * Checks is a collaborator is an active entity member.
+     *
      * @param User $user
      *
      * @return bool
      */
     public function isMember(User $user)
     {
-        $userMembers = array_column($this->collaborators()
-            ->where('is_valid', true)
-            ->get()
-            ->toArray(), 'id');
-
-        return array_search($user->id, $userMembers) > -1;
-    }
-
-    protected function addOwner(User $user, string $role)
-    {
-        $this->setCollaborators([
-                $user->id => [
-                    'is_valid' => true,
-                    'is_owner' => true,
-                    'role_id'  => Role::where('alias', $role)->first()->id,
-                ],
-            ]
-        );
-    }
-
-    public function addMember(User $user, string $role)
-    {
-        $this->setCollaborators([
-                $user->id => [
-                    'is_valid' => false,
-                    'is_owner' => false,
-                    'role_id'  => Role::where('alias', $role)->first()->id,
-                ],
-            ]
-        );
+        return (bool) $this->members()->where('user_id', $user->id)->first();
     }
 
     /**
@@ -104,21 +118,57 @@ trait HasCollaborators
     }
 
     /**
+     * Adds a standard collaborator member to an entity.
+     *
+     * @param \App\Models\User $user
+     * @param string           $role
+     */
+    protected function addMember(User $user, string $role)
+    {
+        $this->setCollaborators([
+                $user->id => [
+                    'is_valid' => false,
+                    'is_owner' => false,
+                    'role_id'  => Role::where('alias', $role)->first()->id,
+                ],
+            ]
+        );
+    }
+
+    /**
+     * Adds a new collaborator as an entity owner.
+     *
+     * @param \App\Models\User $user
+     * @param string           $role
+     */
+    protected function addOwner(User $user, string $role)
+    {
+        $this->setCollaborators([
+                $user->id => [
+                    'is_valid' => true,
+                    'is_owner' => true,
+                    'role_id'  => Role::where('alias', $role)->first()->id,
+                ],
+            ]
+        );
+    }
+
+    /**
+     * Adds a set of collaborator to an entity.
+     *
      * @param array $collaborators
      */
-    public function setCollaborators(array $collaborators)
+    private function setCollaborators(array $collaborators)
     {
-        $_collaborators = [];
-        $userMembersId  = array_column($this->collaborators->toArray(), 'id');
+        /** @var array $currentCollaborators */
+        $currentCollaborators = array_column($this->collaborators()->get()->toArray(), 'id');
 
         foreach ($collaborators as $userId => $options) {
-            $_collaborators[$userId]['role_id']  = $options['role_id'];
-            $_collaborators[$userId]['is_owner'] = $options['is_owner'];
-            $_collaborators[$userId]['is_valid'] = $options['is_valid'];
+            if (array_search($userId, $currentCollaborators) === false) {
+                $invitationToken = Str::random(self::ITEM_TOKEN_LENGTH);
 
-            if (array_search($userId, $userMembersId) === false) {
-                $invitationToken                             = str_random(self::ITEM_TOKEN_LENGTH);
-                $_collaborators[$userId]['validation_token'] = $invitationToken;
+                Arr::set($collaborators, $userId.'.validation_token', $invitationToken);
+                Arr::set($collaborators, $userId.'.is_valid', $options['is_owner']);
 
                 /** @var \App\Models\User $user */
                 $user = User::find($userId);
@@ -129,8 +179,21 @@ trait HasCollaborators
             }
         }
 
-        $this->collaborators()->syncWithoutDetaching($_collaborators);
+        $this->detachCollaborators();
+        $this->collaborators()->syncWithoutDetaching($collaborators);
 
         $this->load('collaborators');
+    }
+
+    /**
+     * Detach all non owner collaborators from entity.
+     */
+    private function detachCollaborators()
+    {
+        foreach ($this->collaborators as $collaborator) {
+            if (! $collaborator->pivot->is_owner) {
+                $this->collaborators()->detach($collaborator->pivot->user_id);
+            }
+        }
     }
 }

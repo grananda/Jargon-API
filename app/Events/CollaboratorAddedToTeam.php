@@ -2,17 +2,17 @@
 
 namespace App\Events;
 
-use App\Models\Organization;
+use App\Models\Team;
 use App\Models\User;
 
-class CollaboratorAddedToOrganization
+class CollaboratorAddedToTeam
 {
     /**
-     * The Organization instance.
+     * The Team instance.
      *
-     * @var \App\Models\Organization
+     * @var \App\Models\Team
      */
-    public $organization;
+    public $team;
 
     /**
      * The User recipient instance.
@@ -31,13 +31,13 @@ class CollaboratorAddedToOrganization
     /**
      * CollaboratorAddedToOrganization constructor.
      *
-     * @param \App\Models\Organization $organization
-     * @param \App\Models\User         $user
-     * @param string                   $invitationToken
+     * @param \App\Models\Team $team
+     * @param \App\Models\User $user
+     * @param string           $invitationToken
      */
-    public function __construct(Organization $organization, User $user, string $invitationToken)
+    public function __construct(Team $team, User $user, string $invitationToken)
     {
-        $this->organization    = $organization;
+        $this->team            = $team;
         $this->user            = $user;
         $this->invitationToken = $invitationToken;
     }

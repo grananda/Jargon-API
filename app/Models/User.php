@@ -75,6 +75,12 @@ class User extends Authenticatable
     public function organizations()
     {
         return $this->morphedByMany(Organization::class, 'entity', 'collaborators')
+            ->withPivot([
+                'is_owner',
+                'is_valid',
+                'role_id',
+                'validation_token',
+            ])
             ->withTimestamps()
             ;
     }
@@ -84,7 +90,13 @@ class User extends Authenticatable
      */
     public function teams()
     {
-        return $this->morphToMany(Team::class, 'entity', 'collaborators')
+        return $this->morphedByMany(Team::class, 'entity', 'collaborators')
+            ->withPivot([
+                'is_owner',
+                'is_valid',
+                'role_id',
+                'validation_token',
+            ])
             ->withTimestamps()
             ;
     }

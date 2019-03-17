@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Organization;
+namespace App\Http\Requests\Team;
 
 use App\Http\Requests\Request;
-use App\Models\Organization;
+use App\Models\Team;
 
-class CreateOrganizationRequest extends Request
+class IndexTeamRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,6 +14,6 @@ class CreateOrganizationRequest extends Request
      */
     public function authorize()
     {
-        return $this->user()->can('create', Organization::class);
+        return $this->user()->can('list', [Team::class]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\CollaboratorAddedToTeam;
 use App\Models\Traits\HasCollaborators;
 use App\Models\Traits\HasUuid;
 use App\Models\Translations\Project;
@@ -17,8 +18,7 @@ class Team extends BaseEntity
     const TEAM_OWNER_ROLE_ALIAS      = 'project-admin';
     const TEAM_MANAGER_ROLE_ALIAS    = 'project-manager';
     const TEAM_TRANSLATOR_ROLE_ALIAS = 'project-translator';
-
-    const TEAM_DEFAULT_ROLE_ALIAS = 'project-manager';
+    const TEAM_DEFAULT_ROLE_ALIAS    = 'project-user';
 
     protected $dates = [
         'created_at',
@@ -30,6 +30,7 @@ class Team extends BaseEntity
      */
     protected $fillable = [
         'name',
+        'description',
     ];
 
     /**
@@ -43,23 +44,13 @@ class Team extends BaseEntity
     }
 
     /**
-     * @return BelongsToMany
-     */
-    public function organizations()
-    {
-        return $this->belongsToMany(Organization::class)
-            ->withTimestamps()
-        ;
-    }
-
-    /**
      * @param \App\Models\Team $team
      * @param \App\Models\User $user
      * @param string           $invitationToken
      */
     public function createAddCollaboratorEvent(self $team, User $user, string $invitationToken)
     {
-//        event(new CollaboratorAddedToOrganization($organization, $user, $invitationToken));
+        event(new CollaboratorAddedToTeam($team, $user, $invitationToken));
     }
 
     /**
@@ -70,17 +61,8 @@ class Team extends BaseEntity
         $this->addOwner($user, self::TEAM_OWNER_ROLE_ALIAS);
     }
 
-    /**
-     * Add a team to an organization.
-     *
-     * @param \App\Models\Organization $organization
-     *
-     * @return \App\Models\Team|null
-     */
-    public function setOrganization(Organization $organization)
+    public function setMember(User $user, string $role = null)
     {
-        $this->organizations()->save($organization);
-
-        return $this->fresh();
+        $this->addMember($user, $role ?? self::TEAM_DEFAULT_ROLE_ALIAS);
     }
 }

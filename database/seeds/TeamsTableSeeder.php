@@ -35,7 +35,6 @@ class TeamsTableSeeder extends AbstractSeeder
                     /** @var \App\Models\Team $team */
                     foreach ($teams as $team) {
                         $team->setOwner($user);
-                        $team->setOrganization($user->organizations()->inRandomOrder()->first());
                     }
                 }
             }

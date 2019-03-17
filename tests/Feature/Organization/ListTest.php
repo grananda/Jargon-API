@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Organization;
+namespace Tests\Feature\Organization;
 
 use App\Models\Organization;
 use App\Models\User;
@@ -23,7 +23,29 @@ class ListTest extends TestCase
     }
 
     /** @test */
-    public function a_200_will_be_returned_when_listing_all_organizations_for_a_user()
+    public function a_200_will_be_returned_when_listing_all_organizations_for_a_non_valid_member()
+    {
+        // Given
+        /** @var \App\Models\User $owner */
+        $owner = factory(User::class)->create();
+
+        /** @var \App\Models\User $user */
+        $user = factory(User::class)->create();
+
+        /** @var \App\Models\Organization $organization */
+        $organization = factory(Organization::class)->create();
+        $organization->setOwner($owner);
+
+        // When
+        $response = $this->signIn($user)->get(route('organizations.index'));
+
+        // Then
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonCount(0, 'data');
+    }
+
+    /** @test */
+    public function a_200_will_be_returned_when_listing_all_organizations_for_an_owner()
     {
         // Given
         /** @var \App\Models\User $user */
@@ -39,6 +61,19 @@ class ListTest extends TestCase
         // Then
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment(['id' => $organization->uuid]);
+    }
 
+    /** @test */
+    public function a_200_will_be_returned_when_listing_all_organizations_for_a_team_member()
+    {
+        /** TODO Complete list org-team test */
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    public function a_200_will_be_returned_when_listing_all_organizations_for_a_project_member()
+    {
+        /** TODO Complete list org-project test */
+        $this->assertTrue(true);
     }
 }

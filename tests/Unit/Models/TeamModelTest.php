@@ -18,7 +18,7 @@ class TeamModelTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_team_can_be_added_to_an_organization()
+    public function a_team_can_be_added_to_an_owner_user()
     {
         // Given
         /** @var \App\Models\Role $role */
@@ -52,12 +52,11 @@ class TeamModelTest extends TestCase
 
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
-        $team->setOwner($user);
 
         // When
-        $team->setOrganization($organization);
+        $team->setOwner($user);
 
         // Then
-        $this->assertEquals($organization->uuid, $team->organizations->first()->uuid);
+        $this->assertEquals($user->uuid, $team->owners()->first()->uuid);
     }
 }

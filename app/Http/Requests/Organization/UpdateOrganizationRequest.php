@@ -4,11 +4,12 @@ namespace App\Http\Requests\Organization;
 
 use App\Http\Requests\Request;
 use App\Models\Organization;
-use App\Rules\ValidCollaborator;
-use App\Rules\ValidTeam;
+use App\Policies\Traits\ActiveSubscriptionRestrictionsTrait;
 
 class UpdateOrganizationRequest extends Request
 {
+    use ActiveSubscriptionRestrictionsTrait;
+
     /**
      * The organization instance.
      *
@@ -25,7 +26,8 @@ class UpdateOrganizationRequest extends Request
     {
         $this->organization = Organization::findByUuidOrFail($this->route('id'));
 
-        return $this->user()->can('update', $this->organization);
+        return $this->hasActiveSubscription($this->user())
+            && $this->user()->can('update', $this->organization);
     }
 
     /**
@@ -36,11 +38,8 @@ class UpdateOrganizationRequest extends Request
     public function rules()
     {
         return [
-            'name'            => ['required', 'string'],
-            'teams'           => ['array'],
-            'teams.*'         => [new ValidTeam($this->user())],
-            'collaborators'   => ['array'],
-            'collaborators.*' => ['array', new ValidCollaborator()],
+            'name'        => ['required', 'string'],
+            'description' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

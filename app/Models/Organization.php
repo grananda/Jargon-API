@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Events\CollaboratorAddedToOrganization;
 use App\Models\Traits\HasCollaborators;
 use App\Models\Traits\HasUuid;
+use App\Models\Translations\Project;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -12,8 +12,6 @@ class Organization extends BaseEntity
 {
     use HasUuid,
         HasCollaborators;
-
-    const INVITATION_EXPIRATION_DAYS = 30;
 
     const ITEM_TOKEN_LENGTH = 50;
 
@@ -43,18 +41,7 @@ class Organization extends BaseEntity
      * @var array
      */
     protected $hidden = [
-        'item_token',
     ];
-
-    /**
-     * @return BelongsToMany
-     */
-    public function teams()
-    {
-        return $this->belongsToMany(Team::class)
-            ->withTimestamps()
-        ;
-    }
 
     /**
      * @return HasMany
@@ -73,16 +60,6 @@ class Organization extends BaseEntity
             ->withPivot('organization_id', 'media_file_id')
             ->withTimestamps()
         ;
-    }
-
-    /**
-     * @param \App\Models\Organization $organization
-     * @param \App\Models\User         $user
-     * @param string                   $invitationToken
-     */
-    public function createAddCollaboratorEvent(self $organization, User $user, string $invitationToken)
-    {
-        event(new CollaboratorAddedToOrganization($organization, $user, $invitationToken));
     }
 
     /**

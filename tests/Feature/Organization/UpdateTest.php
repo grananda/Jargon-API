@@ -8,10 +8,12 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Illuminate\Http\Response;
+use Tests\traits\CreateActiveSubscription;
 
 class UpdateTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase,
+        CreateActiveSubscription;
 
     /** @test */
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
@@ -32,16 +34,16 @@ class UpdateTest extends TestCase
 
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
+        $this->signIn($owner);
+
+        $this->createActiveSubscription($owner, 'professional');
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
         $organization->setOwner($owner);
-        $organization->addMember($user, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS);
 
         $data = [
             'name' => $this->faker->sentence,
-            'teams'         => [],
-            'collaborators' => [],
         ];
 
         // When
@@ -57,14 +59,20 @@ class UpdateTest extends TestCase
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
 
+        /** @var \App\Models\User $user */
+        $user = factory(User::class)->create();
+
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
         $organization->setOwner($owner);
 
+        $this->createActiveSubscription(
+            $owner,
+            'professional'
+        );
+
         $data = [
             'name' => $this->faker->sentence,
-            'teams'         => [],
-            'collaborators' => [],
         ];
 
         // When

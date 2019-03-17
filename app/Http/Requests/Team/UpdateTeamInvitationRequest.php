@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Organization;
+namespace App\Http\Requests\Team;
 
 use App\Http\Requests\Request;
 
-class UpdateOrganizationInvitationRequest extends Request
+class UpdateTeamInvitationRequest extends Request
 {
     /**
      * Invitation token.
@@ -14,11 +14,11 @@ class UpdateOrganizationInvitationRequest extends Request
     public $invitationToken;
 
     /**
-     * The Organization to be invited to.
+     * The Team to be invited to.
      *
-     * @var \App\Models\Organization
+     * @var \App\Models\Team
      */
-    public $organization;
+    public $team;
 
     /**
      * Determine if the user is authorized to make this request.

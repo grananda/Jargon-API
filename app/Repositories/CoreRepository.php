@@ -199,6 +199,7 @@ abstract class CoreRepository
             ->whereHas('collaborators', function ($query) use ($user) {
                 /* @var \Illuminate\Database\Query\Builder $query */
                 $query->where('collaborators.user_id', $user->id);
+                $query->where('collaborators.is_valid', true);
             })
             ->orderByDesc('id')
             ->get()
@@ -316,7 +317,7 @@ abstract class CoreRepository
     protected function addCollaborators(Model $entity, array $collaborators)
     {
         foreach ($collaborators as $collaborator) {
-            $entity->addMember(User::findByUuidOrFail($collaborator[0]), $collaborator[1]);
+            $entity->setMember(User::findByUuidOrFail($collaborator[0]), $collaborator[1]);
         }
 
         return $entity->refresh();

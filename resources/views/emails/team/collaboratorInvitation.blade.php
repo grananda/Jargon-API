@@ -10,8 +10,8 @@
     </tr>
     <tr>
         <td bgcolor="#ffffff" style="padding: 0 40px 40px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; text-align: center;">
-            <p style="margin: 0;">@lang('email.organization.collaborators.mail.p1', ['organization' => $organization->name])</p>
-            <p style="margin: 0;">@lang('email.organization.collaborators.mail.p2')</p>
+            <p style="margin: 0;">@lang('email.team.teams.mail.p1', ['team' => $team->name])</p>
+            <p style="margin: 0;">@lang('email.team.teams.mail.p2')</p>
         </td>
     </tr>
     <tr>
@@ -19,8 +19,8 @@
             <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" style="margin: auto">
                 <tr>
                     <td style="border-radius: 3px; background: #222222; text-align: center;" class="button-td">
-                        <a href="{{ route('organizations.invitation.update', ['token'=>$invitationToken]) }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
-                            &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ffffff;">@lang('email.organization.collaborators.mail.link')</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{{ route('teams.invitation.update', ['token'=>$invitationToken]) }}" style="background: #222222; border: 15px solid #222222; font-family: sans-serif; font-size: 13px; line-height: 1.1; text-align: center; text-decoration: none; display: block; border-radius: 3px; font-weight: bold;" class="button-a">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ffffff;">@lang('email.team.teams.mail.link')</span>&nbsp;&nbsp;&nbsp;&nbsp;
                         </a>
                     </td>
                 </tr>
@@ -30,9 +30,9 @@
     </tr>
     <tr>
         <td bgcolor="#ffffff" style="padding: 0 40px 40px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555; text-align: center;">
-            <p style="margin: 0;">@lang('email.organization.collaborators.mail.p3')</p>
+            <p style="margin: 0;">@lang('email.team.teams.mail.p3')</p>
             <p style="margin: 0;">
-                <small>{{ route('organizations.invitation.update', ['token'=>$invitationToken]) }}</small>
+                <small>{{ route('teams.invitation.update', ['token'=>$invitationToken]) }}</small>
             </p>
         </td>
     </tr>
