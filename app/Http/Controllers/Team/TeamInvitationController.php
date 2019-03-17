@@ -2,67 +2,47 @@
 
 namespace App\Http\Controllers\Team;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\Team\UpdateTeamInvitationRequest;
+use App\Repositories\TeamRepository;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class TeamInvitationController extends Controller
+class TeamInvitationController extends ApiController
 {
+    /** @var \App\Repositories\TeamRepository */
+    protected $teamRepository;
+
     /**
-     * Display a listing of the resource.
+     * TeamInvitationController constructor.
      *
-     * @return \Illuminate\Http\Response
+     * @param \App\Repositories\TeamRepository $teamRepository
      */
-    public function index()
+    public function __construct(TeamRepository $teamRepository)
     {
-        //
+        $this->teamRepository = $teamRepository;
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Accepts user invitation to organization.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Controllers\Team\UpdateTeamInvitationRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
-    public function store(Request $request)
+    public function update(UpdateTeamInvitationRequest $request)
     {
-        //
-    }
+        try {
+            /** @var \App\Models\Team $team */
+            $team = $this->teamRepository->findOneByinvitationToken($request->invitationToken);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+            $this->teamRepository->validateInvitation($team);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            return $this->responseOk(true);
+        } catch (ModelNotFoundException $modelNotFoundException) {
+            return $this->responseNotFound($modelNotFoundException->getMessage());
+        } catch (Exception $e) {
+            return $this->responseInternalError($e->getMessage());
+        }
     }
 }

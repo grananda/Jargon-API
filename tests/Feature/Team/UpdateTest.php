@@ -41,11 +41,10 @@ class UpdateTest extends TestCase
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
         $team->setOwner($owner);
-        $team->addMember($user, Team::TEAM_DEFAULT_ROLE_ALIAS);
+        $team->setMember($user, Team::TEAM_DEFAULT_ROLE_ALIAS);
 
         $data = [
             'name'          => $this->faker->sentence,
-            'teams'         => [],
             'collaborators' => [],
         ];
 
@@ -71,7 +70,7 @@ class UpdateTest extends TestCase
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
         $team->setOwner($owner);
-        $team->addMember($collaborator1, Team::TEAM_TRANSLATOR_ROLE_ALIAS);
+        $team->setMember($collaborator1, Team::TEAM_TRANSLATOR_ROLE_ALIAS);
 
 
         $this->createActiveSubscription(
@@ -81,7 +80,6 @@ class UpdateTest extends TestCase
 
         $data = [
             'name'          => $this->faker->sentence,
-            'teams'         => [],
             'collaborators' => [
                 [$collaborator1->uuid, Team::TEAM_DEFAULT_ROLE_ALIAS],
                 [$collaborator2->uuid, Team::TEAM_DEFAULT_ROLE_ALIAS],
@@ -108,7 +106,7 @@ class UpdateTest extends TestCase
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
         $team->setOwner($owner);
-        $team->addMember($user, Team::TEAM_TRANSLATOR_ROLE_ALIAS);
+        $team->setMember($user, Team::TEAM_TRANSLATOR_ROLE_ALIAS);
 
         $this->createActiveSubscription(
             $owner,
@@ -117,7 +115,6 @@ class UpdateTest extends TestCase
 
         $data = [
             'name'          => $this->faker->sentence,
-            'teams'         => [],
             'collaborators' => [],
         ];
 

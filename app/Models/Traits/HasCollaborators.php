@@ -123,7 +123,7 @@ trait HasCollaborators
      * @param \App\Models\User $user
      * @param string           $role
      */
-    public function addMember(User $user, string $role)
+    protected function addMember(User $user, string $role)
     {
         $this->setCollaborators([
                 $user->id => [

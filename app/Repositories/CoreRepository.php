@@ -317,7 +317,7 @@ abstract class CoreRepository
     protected function addCollaborators(Model $entity, array $collaborators)
     {
         foreach ($collaborators as $collaborator) {
-            $entity->addMember(User::findByUuidOrFail($collaborator[0]), $collaborator[1]);
+            $entity->setMember(User::findByUuidOrFail($collaborator[0]), $collaborator[1]);
         }
 
         return $entity->refresh();

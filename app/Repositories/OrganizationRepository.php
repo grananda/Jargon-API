@@ -38,10 +38,6 @@ class OrganizationRepository extends CoreRepository
             /** @var \App\Models\Organization $organization */
             $organization = $this->createWithOwner($user, $attributes);
 
-            $this->addCollaborators($organization, $attributes['collaborators']);
-
-            $organization->teams()->sync($attributes['teams']);
-
             return $organization->fresh();
         });
     }
@@ -61,10 +57,6 @@ class OrganizationRepository extends CoreRepository
         return $this->dbConnection->transaction(function () use ($organization, $attributes) {
             /** @var \App\Models\Organization $organization */
             $organization = $this->update($organization, $attributes);
-
-            $this->addCollaborators($organization, $attributes['collaborators']);
-
-            $organization->teams()->sync($attributes['teams']);
 
             return $organization->fresh();
         });

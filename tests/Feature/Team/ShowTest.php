@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Team;
 
-
-use App\Models\Organization;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,16 +39,9 @@ class ShowTest extends TestCase
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
 
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-        $organization->setOwner($user);
-        $organization->addMember($user, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS);
-
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
         $team->setOwner($owner);
-
-        $organization->teams()->save($team);
 
         // When
         $response = $this->signIn($user)->get(route('teams.show', [$team->uuid]));
@@ -68,17 +59,10 @@ class ShowTest extends TestCase
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
 
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-        $organization->setOwner($owner);
-        $organization->addMember($user, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS);
-        $organization->validateMember($user);
-
-
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
         $team->setOwner($owner);
-        $team->addMember($user, Team::TEAM_DEFAULT_ROLE_ALIAS);
+        $team->setMember($user, Team::TEAM_DEFAULT_ROLE_ALIAS);
 
         // When
         $response = $this->signIn($user)->get(route('teams.show', [$team->uuid]));
@@ -93,15 +77,9 @@ class ShowTest extends TestCase
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();
 
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-        $organization->setOwner($user);
-
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
         $team->setOwner($user);
-
-        $organization->teams()->save($team);
 
         // When
         $response = $this->signIn($user)->get(route('teams.show', [$team->uuid]));
@@ -122,17 +100,10 @@ class ShowTest extends TestCase
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
 
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-        $organization->setOwner($owner);
-        $organization->addMember($user, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS);
-        $organization->validateMember($user);
-
-
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
         $team->setOwner($owner);
-        $team->addMember($user, Team::TEAM_DEFAULT_ROLE_ALIAS);
+        $team->setMember($user, Team::TEAM_DEFAULT_ROLE_ALIAS);
         $team->validateMember($user);
 
         // When

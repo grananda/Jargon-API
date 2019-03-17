@@ -41,7 +41,7 @@ class ProjectsTableSeeder extends AbstractSeeder
                             $project->setOrganization($organization);
 
                             /** @var \App\Models\Team $team */
-                            if ($team = $organization->teams()->inRandomOrder()->first()) {
+                            if ($team = $user->teams()->where('is_owner', true)->inRandomOrder()->first()) {
                                 $project->setTeams([$team->id]);
                             }
                         }

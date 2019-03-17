@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Events\CollaboratorAddedToOrganization;
 use App\Models\Traits\HasCollaborators;
 use App\Models\Traits\HasUuid;
 use App\Models\Translations\Project;
@@ -45,16 +44,6 @@ class Organization extends BaseEntity
     ];
 
     /**
-     * @return BelongsToMany
-     */
-    public function teams()
-    {
-        return $this->belongsToMany(Team::class)
-            ->withTimestamps()
-        ;
-    }
-
-    /**
      * @return HasMany
      */
     public function projects()
@@ -71,16 +60,6 @@ class Organization extends BaseEntity
             ->withPivot('organization_id', 'media_file_id')
             ->withTimestamps()
         ;
-    }
-
-    /**
-     * @param \App\Models\Organization $organization
-     * @param \App\Models\User         $user
-     * @param string                   $invitationToken
-     */
-    public function createAddCollaboratorEvent(self $organization, User $user, string $invitationToken)
-    {
-        event(new CollaboratorAddedToOrganization($organization, $user, $invitationToken));
     }
 
     /**

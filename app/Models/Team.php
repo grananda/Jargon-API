@@ -44,16 +44,6 @@ class Team extends BaseEntity
     }
 
     /**
-     * @return BelongsToMany
-     */
-    public function organizations()
-    {
-        return $this->belongsToMany(Organization::class)
-            ->withTimestamps()
-        ;
-    }
-
-    /**
      * @param \App\Models\Team $team
      * @param \App\Models\User $user
      * @param string           $invitationToken
@@ -71,17 +61,8 @@ class Team extends BaseEntity
         $this->addOwner($user, self::TEAM_OWNER_ROLE_ALIAS);
     }
 
-    /**
-     * Add a team to an organization.
-     *
-     * @param \App\Models\Organization $organization
-     *
-     * @return \App\Models\Team|null
-     */
-    public function setOrganization(Organization $organization)
+    public function setMember(User $user, string $role = null)
     {
-        $this->organizations()->save($organization);
-
-        return $this->fresh();
+        $this->addMember($user, $role ?? self::TEAM_DEFAULT_ROLE_ALIAS);
     }
 }

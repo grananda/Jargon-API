@@ -1,9 +1,10 @@
 <?php
 
-namespace Tests\Feature\OrganizationInvitation;
+namespace Tests\Feature\TeamInvitation;
 
 
 use App\Models\Organization;
+use App\Models\Team;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -23,7 +24,7 @@ class UpdateTest extends TestCase
         $token = Str::random(Organization::ITEM_TOKEN_LENGTH);
 
         // When
-        $response = $this->put(route('organizations.invitation.update', ['token' => $token]));
+        $response = $this->put(route('teams.invitation.update', ['token' => $token]));
 
         // Then
         $response->assertStatus(Response::HTTP_NOT_FOUND);
@@ -39,17 +40,17 @@ class UpdateTest extends TestCase
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();
 
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-        $organization->setOwner($owner);
-        $organization->addMember($user, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS);
+        /** @var \App\Models\Team $team */
+        $team = factory(Team::class)->create();
+        $team->setOwner($owner);
+        $team->setMember($user, Team::TEAM_DEFAULT_ROLE_ALIAS);
 
-        $organization->nonActiveMembers()->updateExistingPivot($user->id, ['created_at'=> Carbon::now()->subDays(40)]);
+        $team->nonActiveMembers()->updateExistingPivot($user->id, ['created_at'=> Carbon::now()->subDays(40)]);
 
-        $token = $organization->nonActiveMembers()->where('user_id', $user->id)->first()->pivot->validation_token;
+        $token = $team->nonActiveMembers()->where('user_id', $user->id)->first()->pivot->validation_token;
 
         // When
-        $response = $this->put(route('organizations.invitation.update', ['token' => $token]));
+        $response = $this->put(route('teams.invitation.update', ['token' => $token]));
 
         // Then
         $response->assertStatus(Response::HTTP_NOT_FOUND);
@@ -66,15 +67,15 @@ class UpdateTest extends TestCase
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();
 
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-        $organization->setOwner($owner);
-        $organization->addMember($user, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS);
+        /** @var \App\Models\Team $team */
+        $team = factory(Team::class)->create();
+        $team->setOwner($owner);
+        $team->setMember($user, Team::TEAM_DEFAULT_ROLE_ALIAS);
 
-        $token = $organization->nonActiveMembers()->where('user_id', $user->id)->first()->pivot->validation_token;
+        $token = $team->nonActiveMembers()->where('user_id', $user->id)->first()->pivot->validation_token;
 
         // When
-        $response = $this->put(route('organizations.invitation.update', ['token' => $token]));
+        $response = $this->put(route('teams.invitation.update', ['token' => $token]));
 
         // Then
         $response->assertStatus(Response::HTTP_OK);

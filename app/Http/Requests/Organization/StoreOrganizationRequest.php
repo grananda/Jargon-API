@@ -5,8 +5,6 @@ namespace App\Http\Requests\Organization;
 use App\Http\Requests\Request;
 use App\Models\Organization;
 use App\Policies\Traits\ActiveSubscriptionRestrictionsTrait;
-use App\Rules\ValidMember;
-use App\Rules\ValidTeam;
 
 class StoreOrganizationRequest extends Request
 {
@@ -19,11 +17,7 @@ class StoreOrganizationRequest extends Request
      */
     public function authorize()
     {
-        /** @var array $collaborators */
-        $collaborators = $this->input('collaborators');
-
         return $this->hasActiveSubscription($this->user())
-            && $this->getCurrentSubscriptionCollaborationQuota($this->user()) >= count($collaborators)
             && $this->user()->can('create', Organization::class);
     }
 
@@ -35,12 +29,8 @@ class StoreOrganizationRequest extends Request
     public function rules()
     {
         return [
-            'name'            => ['required', 'string'],
-            'description'     => ['nullable', 'string', 'max:255'],
-            'teams'           => ['array'],
-            'teams.*'         => [new ValidTeam($this->user())],
-            'collaborators'   => ['array'],
-            'collaborators.*' => ['array', new ValidMember()],
+            'name'        => ['required', 'string'],
+            'description' => ['nullable', 'string', 'max:255'],
         ];
     }
 }
