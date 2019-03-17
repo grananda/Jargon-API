@@ -40,7 +40,7 @@ class ProjectModelTest extends TestCase
 
         // When
         $project->setOwner($owner);
-        $project->addMember($member, Project::PROJECT_DEFAULT_ROLE_ALIAS);
+        $project->setMember($member, Project::PROJECT_DEFAULT_ROLE_ALIAS);
 
         // Then
         $this->assertDatabaseHas('collaborators', [
@@ -95,7 +95,6 @@ class ProjectModelTest extends TestCase
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
         $team->setOwner($user);
-        $team->setOrganization($organization);
 
         /** @var \App\Models\Dialect $dialect */
         $dialect = Dialect::inRandomOrder()->first();

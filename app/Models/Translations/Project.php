@@ -135,6 +135,15 @@ class Project extends BaseEntity
     }
 
     /**
+     * @param \App\Models\User $user
+     * @param string|null      $role
+     */
+    public function setMember(User $user, string $role = null)
+    {
+        $this->addMember($user, $role ?? self::PROJECT_DEFAULT_ROLE_ALIAS);
+    }
+
+    /**
      * @param \App\Models\Project $project
      * @param \App\Models\User    $user
      * @param string              $invitationToken
