@@ -17,13 +17,10 @@ class Project extends BaseEntity
 
     const ITEM_TOKEN_LENGTH = 50;
 
-    const PROJECT_OWNER_ROLE_ALIAS = 'project-admin';
-
-    const PROJECT_MANAGER_ROLE_ALIAS = 'project-manager';
-
+    const PROJECT_OWNER_ROLE_ALIAS      = 'project-admin';
+    const PROJECT_MANAGER_ROLE_ALIAS    = 'project-manager';
     const PROJECT_TRANSLATOR_ROLE_ALIAS = 'project-translator';
-
-    const PROJECT_DEFAULT_ROLE_ALIAS = 'project-manager';
+    const PROJECT_DEFAULT_ROLE_ALIAS    = 'project-manager';
 
     protected $fillable = [
         'title',

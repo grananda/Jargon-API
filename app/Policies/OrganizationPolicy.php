@@ -77,7 +77,7 @@ class OrganizationPolicy extends AbstractPolicy
     }
 
     /**
-     * Determines is a user can store a project.
+     * Determines if a user can store a project.
      *
      * @param \App\Models\User         $user
      * @param \App\Models\Organization $organization
