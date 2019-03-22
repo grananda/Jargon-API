@@ -15,11 +15,6 @@ class ShowTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /** @test */
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
