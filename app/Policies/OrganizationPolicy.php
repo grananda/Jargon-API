@@ -4,10 +4,26 @@ namespace App\Policies;
 
 use App\Models\Organization;
 use App\Models\User;
+use App\Repositories\OrganizationRepository;
 use Exception;
 
 class OrganizationPolicy extends AbstractPolicy
 {
+    /**
+     * @var \App\Repositories\OrganizationRepository
+     */
+    private $organizationRepository;
+
+    /**
+     * OrganizationPolicy constructor.
+     *
+     * @param \App\Repositories\OrganizationRepository $organizationRepository
+     */
+    public function __construct(OrganizationRepository $organizationRepository)
+    {
+        $this->organizationRepository = $organizationRepository;
+    }
+
     /**
      * Determines is a user can list organizations.
      *
@@ -28,7 +44,9 @@ class OrganizationPolicy extends AbstractPolicy
      */
     public function show(User $user, Organization $organization)
     {
-        return $organization->isMember($user) || $organization->isOwner($user);
+        return (bool) $this->organizationRepository->findAllByMember($user)->map(function ($item) use ($organization) {
+            return $item->id === $organization->id;
+        })->count();
     }
 
     /**
