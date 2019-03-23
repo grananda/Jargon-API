@@ -4,10 +4,24 @@ namespace App\Policies;
 
 use App\Models\Translations\Project;
 use App\Models\User;
+use App\Repositories\ProjectRepository;
 use Exception;
 
 class ProjectPolicy extends AbstractPolicy
 {
+    /** @var \App\Repositories\ProjectRepository */
+    private $projectRepository;
+
+    /**
+     * ProjectPolicy constructor.
+     *
+     * @param \App\Repositories\ProjectRepository $projectRepository
+     */
+    public function __construct(ProjectRepository $projectRepository)
+    {
+        $this->projectRepository = $projectRepository;
+    }
+
     /**
      * Determines is a user can list projects.
      *
@@ -28,7 +42,9 @@ class ProjectPolicy extends AbstractPolicy
      */
     public function show(User $user, Project $project)
     {
-        return $project->isMember($user) || $project->isOwner($user);
+        return (bool) $this->projectRepository->findAllByMember($user)->map(function ($item) use ($project) {
+            return $item->id === $project->id;
+        })->count();
     }
 
     /**

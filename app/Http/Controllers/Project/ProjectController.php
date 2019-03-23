@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Project\IndexProjectRequest;
+use App\Http\Requests\Project\ShowProjectRequest;
+use App\Http\Resources\Projects\Project as ProjectResource;
 use App\Http\Resources\Projects\ProjectCollection;
 use App\Repositories\ProjectRepository;
 use Exception;
@@ -61,13 +63,17 @@ class ProjectController extends ApiController
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param \App\Http\Requests\Project\ShowProjectRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function show(ShowProjectRequest $request)
     {
-        //
+        try {
+            return $this->responseOk(new ProjectResource($request->project));
+        } catch (Exception $e) {
+            return $this->responseInternalError($e->getMessage());
+        }
     }
 
     /**
