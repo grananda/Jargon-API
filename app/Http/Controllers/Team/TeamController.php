@@ -91,6 +91,8 @@ class TeamController extends ApiController
      *
      * @param \App\Http\Requests\Team\UpdateTeamRequest $request
      *
+     * @throws \Throwable
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateTeamRequest $request)

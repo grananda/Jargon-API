@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Project;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\Project\DeleteProjectRequest;
 use App\Http\Requests\Project\IndexProjectRequest;
 use App\Http\Requests\Project\ShowProjectRequest;
+use App\Http\Requests\Project\StoreProjectRequest;
+use App\Http\Requests\Project\UpdateProjectRequest;
 use App\Http\Resources\Projects\Project as ProjectResource;
 use App\Http\Resources\Projects\ProjectCollection;
 use App\Repositories\ProjectRepository;
 use Exception;
-use Illuminate\Http\Request;
 
 class ProjectController extends ApiController
 {
@@ -51,13 +53,19 @@ class ProjectController extends ApiController
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\Project\StoreProjectRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        //
+        try {
+            $team = $this->projectRepository->createProject($request->user(), $request->validated());
+
+            return $this->responseCreated(new ProjectResource($team));
+        } catch (Exception $e) {
+            return $this->responseInternalError($e->getMessage());
+        }
     }
 
     /**
@@ -79,25 +87,39 @@ class ProjectController extends ApiController
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param \App\Http\Requests\Project\UpdateProjectRequest $request
+     * @param int                                             $id
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateProjectRequest $request, $id)
     {
-        //
+        try {
+            $organization = $this->projectRepository->updateTeam($request->project, $request->validated());
+
+            return $this->responseOk(new ProjectResource($organization));
+        } catch (Exception $e) {
+            return $this->responseInternalError($e->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param \App\Http\Requests\Project\DeleteProjectRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @throws \Throwable
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(DeleteProjectRequest $request)
     {
-        //
+        try {
+            $this->projectRepository->delete($request->project);
+
+            return $this->responseNoContent();
+        } catch (Exception $e) {
+            return $this->responseInternalError($e->getMessage());
+        }
     }
 }

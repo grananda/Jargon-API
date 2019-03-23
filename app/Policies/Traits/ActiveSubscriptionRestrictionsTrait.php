@@ -24,8 +24,55 @@ trait ActiveSubscriptionRestrictionsTrait
 
             $subscriptionCollaboratorQuota -= $this->calculateCurrentOrganizationQuota($user->organizations);
             $subscriptionCollaboratorQuota -= $this->calculateCurrentTeamQuota($user->teams);
+            $subscriptionCollaboratorQuota -= $this->calculateCurrentProjectQuota($user->projects);
 
             return $subscriptionCollaboratorQuota;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns user subscription team quota.
+     *
+     * @param \App\Models\User $user
+     *
+     * @return bool
+     */
+    public function getCurrentSubscriptionTeamQuota(User $user)
+    {
+        if ($activeSubscription = $user->activeSubscription) {
+            $subscriptionTeamQuota = $activeSubscription->options()
+                ->where('option_key', 'team_count')
+                ->first()
+                ->option_value;
+
+            $subscriptionTeamQuota -= $user->teams()->count();
+
+            return $subscriptionTeamQuota;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns user subscription project quota.
+     *
+     * @param \App\Models\User $user
+     *
+     * @return bool
+     */
+    public function getCurrentSubscriptionProjectQuota(User $user)
+    {
+        if ($activeSubscription = $user->activeSubscription) {
+            $subscriptionProjectQuota = $activeSubscription->options()
+                ->where('option_key', 'project_count')
+                ->first()
+                ->option_value;
+
+            $subscriptionProjectQuota -= $user->projects()->count();
+
+            return $subscriptionProjectQuota;
         }
 
         return false;
@@ -76,6 +123,25 @@ trait ActiveSubscriptionRestrictionsTrait
         /** @var \App\Models\Team $team */
         foreach ($teams as $team) {
             $counter -= $team->members()->count();
+        }
+
+        return $counter;
+    }
+
+    /**
+     * Calculates current user project collaborators.
+     *
+     * @param \Illuminate\Database\Eloquent\Collection $projects
+     *
+     * @return int
+     */
+    private function calculateCurrentProjectQuota(Collection $projects)
+    {
+        $counter = 0;
+
+        /** @var \App\Models\Translations\Project $project */
+        foreach ($projects as $project) {
+            $counter += $project->members()->count();
         }
 
         return $counter;
