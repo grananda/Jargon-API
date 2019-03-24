@@ -55,6 +55,8 @@ class ProjectController extends ApiController
      *
      * @param \App\Http\Requests\Project\StoreProjectRequest $request
      *
+     * @throws \Throwable
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreProjectRequest $request)

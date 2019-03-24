@@ -2,6 +2,7 @@
 
 namespace App\Models\Translations;
 
+use App\Events\CollaboratorAddedToProject;
 use App\Models\BaseEntity;
 use App\Models\Dialect;
 use App\Models\Organization;
@@ -141,12 +142,12 @@ class Project extends BaseEntity
     }
 
     /**
-     * @param \App\Models\Project $project
-     * @param \App\Models\User    $user
-     * @param string              $invitationToken
+     * @param self             $project
+     * @param \App\Models\User $user
+     * @param string           $invitationToken
      */
     public function createAddCollaboratorEvent(self $project, User $user, string $invitationToken)
     {
-//        event(new CollaboratorAddedToOrganization($organization, $user, $invitationToken));
+        event(new CollaboratorAddedToProject($this, $user, $invitationToken));
     }
 }

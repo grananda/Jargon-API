@@ -4,10 +4,12 @@ namespace App\Repositories;
 
 use App\Models\Translations\Project;
 use App\Models\User;
+use App\Repositories\Traits\InvitationTrait;
 use Illuminate\Database\Connection;
 
 class ProjectRepository extends CoreRepository
 {
+    use InvitationTrait;
 
     /**
      * The TeamRepository instance.
@@ -51,7 +53,8 @@ class ProjectRepository extends CoreRepository
                 $query->where('collaborators.is_valid', true);
             })
             ->orderByDesc('id')
-            ->get();
+            ->get()
+        ;
     }
 
     /**
@@ -84,8 +87,9 @@ class ProjectRepository extends CoreRepository
      * @param \App\Models\Translations\Project $project
      * @param array                            $attributes
      *
-     * @return mixed
      * @throws \Throwable
+     *
+     * @return mixed
      */
     public function updateTeam(Project $project, array $attributes)
     {
