@@ -16,7 +16,7 @@ use Tests\TestCase;
 class SendTeamCollaboratorInvitationEmailTest extends TestCase
 {
     /** @test */
-    public function email_is_sent_after_collaborator_is_added_to_organization()
+    public function email_is_sent_after_collaborator_is_added_to_a_team()
     {
         // Given
         Mail::fake();
@@ -27,7 +27,7 @@ class SendTeamCollaboratorInvitationEmailTest extends TestCase
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
 
-        $invitationToken = Str::random(Organization::ITEM_TOKEN_LENGTH);
+        $invitationToken = Str::random(Team::ITEM_TOKEN_LENGTH);
 
         /** @var \App\Events\CollaboratorAddedToTeam $event */
         $event = new CollaboratorAddedToTeam($team, $user, $invitationToken);
