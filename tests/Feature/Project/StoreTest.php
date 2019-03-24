@@ -33,6 +33,8 @@ class StoreTest extends TestCase
     public function a_403_will_be_returned_if_the_user_creates_a_new_project_without_project_quota()
     {
         // Given
+        Event::fake([CollaboratorAddedToProject::class]);
+
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();
 
@@ -57,6 +59,8 @@ class StoreTest extends TestCase
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
+
+        Event::assertNotDispatched(CollaboratorAddedToProject::class);
     }
 
     /** @test */
@@ -90,6 +94,7 @@ class StoreTest extends TestCase
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
+
         Event::assertNotDispatched(CollaboratorAddedToProject::class);
     }
 

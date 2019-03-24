@@ -57,15 +57,58 @@ class ShowTest extends TestCase
     /** @test */
     public function a_403_will_be_returned_when_showing_an_organization_to_a_non_valid_team_member()
     {
-        /** TODO Complete show org-team test */
-        $this->assertTrue(true);
+        // Given
+        /** @var \App\Models\User $user */
+        $user = factory(User::class)->create();
+
+        /** @var \App\Models\User $owner */
+        $owner = factory(User::class)->create();
+
+        /** @var \App\Models\Organization $organization */
+        $organization = factory(Organization::class)->create();
+        $organization->setOwner($owner);
+
+        /** @var \App\Models\Team $team */
+        $team = factory(Team::class)->create();
+        $team->setOwner($owner);
+        $team->setMember($user);
+
+        /** @var \App\Models\Translations\Project $project */
+        $project = factory(Project::class)->create();
+        $project->setOwner($owner);
+        $project->setTeams([$team->id]);
+
+        // When
+        $response = $this->signIn($user)->get(route('organizations.show', [$organization->uuid]));
+
+        // Then
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
     /** @test */
     public function a_403_will_be_returned_when_showing_an_organization_to_a_non_valid_project_member()
     {
-        /** TODO Complete show org-project test */
-        $this->assertTrue(true);
+        // Given
+        /** @var \App\Models\User $user */
+        $user = factory(User::class)->create();
+
+        /** @var \App\Models\User $owner */
+        $owner = factory(User::class)->create();
+
+        /** @var \App\Models\Organization $organization */
+        $organization = factory(Organization::class)->create();
+        $organization->setOwner($owner);
+
+        /** @var \App\Models\Translations\Project $project */
+        $project = factory(Project::class)->create();
+        $project->setOwner($owner);
+        $project->setMember($user);
+
+        // When
+        $response = $this->signIn($user)->get(route('organizations.show', [$organization->uuid]));
+
+        // Then
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
     /** @test */

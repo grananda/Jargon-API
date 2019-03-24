@@ -28,7 +28,7 @@ class UpdateTeamRequest extends Request
         $this->team = Team::findByUuidOrFail($this->route('id'));
 
         /** @var array $collaborators */
-        $collaborators = $this->input('collaborators');
+        $collaborators = $this->input('collaborators') ?? [];
 
         $currentSubscriptionCollaborationQuota = $this->getCurrentSubscriptionCollaborationQuota($this->user()) + $this->team->members()->count();
 

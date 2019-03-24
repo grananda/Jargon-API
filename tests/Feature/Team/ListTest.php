@@ -5,6 +5,7 @@ namespace Tests\Feature\Team;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
@@ -42,7 +43,6 @@ class ListTest extends TestCase
         // Then
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonCount(0, 'data');
-
     }
 
     /** @test */

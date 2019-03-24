@@ -27,7 +27,6 @@ class StoreTest extends TestCase
     public function a_403_will_be_returned_if_the_user_creates_a_new_organization_without_organization_quota()
     {
         // Given
-
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();
 

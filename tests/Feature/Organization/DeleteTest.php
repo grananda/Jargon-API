@@ -32,7 +32,7 @@ class DeleteTest extends TestCase
     }
 
     /** @test */
-    public function a_403_will_be_returned_if_the_user_has_no_organization_access()
+    public function a_403_will_be_returned_if_the_user_has_non_owner_organization_access()
     {
         // Given
         /** @var \App\Models\User $user */

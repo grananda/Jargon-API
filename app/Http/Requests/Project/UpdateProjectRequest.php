@@ -25,7 +25,7 @@ class UpdateProjectRequest extends Request
         $this->project = Project::findByUuidOrFail($this->route('id'));
 
         /** @var array $collaborators */
-        $collaborators = $this->input('collaborators');
+        $collaborators = $this->input('collaborators') ?? [];
 
         $currentSubscriptionCollaborationQuota = $this->getCurrentSubscriptionCollaborationQuota($this->user()) + $this->project->members()->count();
 

@@ -38,7 +38,9 @@ class TeamRepository extends CoreRepository
             /** @var \App\Models\Team $team */
             $team = $this->createWithOwner($user, $attributes);
 
-            $this->addCollaborators($team, $attributes['collaborators']);
+            if (isset($attributes['collaborators'])) {
+                $this->addCollaborators($team, $attributes['collaborators']);
+            }
 
             return $team->fresh();
         });
@@ -60,7 +62,9 @@ class TeamRepository extends CoreRepository
             /** @var \App\Models\Team $team */
             $team = $this->update($team, $attributes);
 
-            $this->addCollaborators($team, $attributes['collaborators']);
+            if (isset($attributes['collaborators'])) {
+                $this->addCollaborators($team, $attributes['collaborators']);
+            }
 
             return $team->fresh();
         });

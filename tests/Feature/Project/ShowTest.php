@@ -30,7 +30,7 @@ class ShowTest extends TestCase
     }
 
     /** @test */
-    public function a_403_will_be_returned_if_the_user_has_no_project_access_as_owner()
+    public function a_403_will_be_returned_if_the_user_has_no_project_access()
     {
         // Given
         /** @var \App\Models\User $user */

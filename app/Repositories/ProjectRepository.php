@@ -73,9 +73,13 @@ class ProjectRepository extends CoreRepository
             /** @var \App\Models\Translations\Project $project */
             $project = $this->createWithOwner($user, $attributes);
 
-            $this->addCollaborators($project, $attributes['collaborators']);
+            if (isset($attributes['collaborators'])) {
+                $this->addCollaborators($project, $attributes['collaborators']);
+            }
 
-            $this->addTeams($project, $attributes['teams']);
+            if (isset($attributes['teams'])) {
+                $this->addTeams($project, $attributes['teams']);
+            }
 
             return $project->fresh();
         });
@@ -97,9 +101,13 @@ class ProjectRepository extends CoreRepository
             /** @var Project $project */
             $project = $this->update($project, $attributes);
 
-            $this->addCollaborators($project, $attributes['collaborators']);
+            if (isset($attributes['collaborators'])) {
+                $this->addCollaborators($project, $attributes['collaborators']);
+            }
 
-            $this->addTeams($project, $attributes['teams']);
+            if (isset($attributes['teams'])) {
+                $this->addTeams($project, $attributes['teams']);
+            }
 
             return $project->fresh();
         });

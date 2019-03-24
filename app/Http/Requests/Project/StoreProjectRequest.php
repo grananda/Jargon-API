@@ -20,7 +20,7 @@ class StoreProjectRequest extends Request
     public function authorize()
     {
         /** @var array $collaborators */
-        $collaborators = $this->input('collaborators');
+        $collaborators = $this->input('collaborators') ?? [];
 
         return $this->hasActiveSubscription($this->user())
             && $this->getCurrentSubscriptionCollaborationQuota($this->user()) >= count($collaborators)

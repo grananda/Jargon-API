@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,6 +16,8 @@ class DatabaseSeeder extends Seeder
         if (app()->environment('production')) {
             exit('Database seeders should not be run on production!');
         }
+
+        Mail::fake();
 
         DB::beginTransaction();
 

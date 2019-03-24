@@ -3,12 +3,14 @@
 namespace Tests\Feature\Project;
 
 
+use App\Events\CollaboratorAddedToProject;
 use App\Models\Organization;
 use App\Models\Team;
 use App\Models\Translations\Project;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
@@ -31,6 +33,8 @@ class UpdateTest extends TestCase
     public function a_403_will_be_returned_if_a_non_owner_updates_an_project()
     {
         // Given
+        Event::fake(CollaboratorAddedToProject::class);
+
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();
 
@@ -46,8 +50,7 @@ class UpdateTest extends TestCase
         $project->setMember($user);
 
         $data = [
-            'title'         => $this->faker->sentence,
-            'collaborators' => [],
+            'title' => $this->faker->sentence,
         ];
 
         // When
@@ -55,12 +58,16 @@ class UpdateTest extends TestCase
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
+
+        Event::assertDispatched(CollaboratorAddedToProject::class, 1);
     }
 
     /** @test */
     public function a_403_will_be_returned_if_the_user_updates_a_project_without_collaborator_quota()
     {
         // Given
+        Event::fake(CollaboratorAddedToProject::class);
+
         /** @var \App\Models\User $collaborator1 */
         $collaborator1 = factory(User::class)->create();
 
@@ -91,14 +98,21 @@ class UpdateTest extends TestCase
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
+
+        Event::assertDispatched(CollaboratorAddedToProject::class, 1);
     }
 
     /** @test */
     public function a_200_will_be_returned_if_an_owner_updates_an_project()
     {
         // Given
+        Event::fake(CollaboratorAddedToProject::class);
+
         /** @var \App\Models\User $collaborator1 */
         $collaborator1 = factory(User::class)->create();
+
+        /** @var \App\Models\User $collaborator2 */
+        $collaborator2 = factory(User::class)->create();
 
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
@@ -122,10 +136,15 @@ class UpdateTest extends TestCase
         $data = [
             'title'         => $this->faker->sentence,
             'collaborators' => [
-                [$collaborator1->uuid, Project::PROJECT_DEFAULT_ROLE_ALIAS,],
+                [
+                    $collaborator1->uuid, Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    $collaborator2->uuid, Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                ],
             ],
             'teams'         => [
-                [$team->uuid,],
+                [
+                    $team->uuid,
+                ],
             ],
         ];
 
@@ -144,5 +163,7 @@ class UpdateTest extends TestCase
             'is_owner'    => 0,
             'user_id'     => $collaborator1->id,
         ]);
+
+        Event::assertDispatched(CollaboratorAddedToProject::class, 2);
     }
 }
