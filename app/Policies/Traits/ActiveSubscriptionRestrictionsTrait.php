@@ -33,6 +33,34 @@ trait ActiveSubscriptionRestrictionsTrait
     }
 
     /**
+     * Returns user subscription organization quota.
+     *
+     * @param \App\Models\User $user
+     *
+     * @return int
+     */
+    public function getCurrentSubscriptionOrganizationQuota(User $user)
+    {
+        if ($activeSubscription = $user->activeSubscription) {
+            $subscriptionProjectQuota = $activeSubscription->options()
+                ->where('option_key', 'organization_count')
+                ->first()
+                ->option_value;
+
+            $currentOrganizationCount = $user->organizations->filter(function ($org) use ($user) {
+                /* @var $org \App\Models\Organization */
+                return $org->isOwner($user) == true;
+            })->count();
+
+            $subscriptionProjectQuota -= $currentOrganizationCount;
+
+            return $subscriptionProjectQuota;
+        }
+
+        return 0;
+    }
+
+    /**
      * Returns user subscription team quota.
      *
      * @param \App\Models\User $user
@@ -47,7 +75,12 @@ trait ActiveSubscriptionRestrictionsTrait
                 ->first()
                 ->option_value;
 
-            $subscriptionTeamQuota -= $user->teams()->count();
+            $currentTeamCount = $user->teams->filter(function ($team) use ($user) {
+                /* @var $team \App\Models\Team */
+                return $team->isOwner($user) == true;
+            })->count();
+
+            $subscriptionTeamQuota -= $currentTeamCount;
 
             return $subscriptionTeamQuota;
         }

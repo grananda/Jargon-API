@@ -4,11 +4,13 @@ namespace App\Policies;
 
 use App\Models\Translations\Project;
 use App\Models\User;
+use App\Policies\Traits\ActiveSubscriptionRestrictionsTrait;
 use App\Repositories\ProjectRepository;
-use Exception;
 
 class ProjectPolicy extends AbstractPolicy
 {
+    use ActiveSubscriptionRestrictionsTrait;
+
     /** @var \App\Repositories\ProjectRepository */
     private $projectRepository;
 
@@ -49,36 +51,31 @@ class ProjectPolicy extends AbstractPolicy
 
     /**
      * @param User $user
-     *
-     * @throws Exception
+     * @param int  $collaboratorsSize
      *
      * @return bool
      */
-    public function create(User $user)
+    public function create(User $user, int $collaboratorsSize)
     {
-        $subscriptionProjectCount = $user->activeSubscription->options()->where('option_key', 'project_count')->first()->option_value;
-
-        $currentProjectCount = $user->organizations->filter(function ($org) use ($user) {
-            /* @var $org \App\Models\Organization */
-            return $org->isOwner($user) == true;
-        })->count();
-
-        if ($subscriptionProjectCount <= $currentProjectCount && ! is_null($subscriptionProjectCount)) {
-            return false;
-        }
-
-        return true;
+        return $this->hasActiveSubscription($user)
+            && (bool) $this->getCurrentSubscriptionProjectQuota($user)
+            && $this->getCurrentSubscriptionCollaborationQuota($user) >= $collaboratorsSize;
     }
 
     /**
      * @param User                             $user
      * @param \App\Models\Translations\Project $project
+     * @param int                              $collaboratorsSize
      *
      * @return bool
      */
-    public function update(User $user, Project $project)
+    public function update(User $user, Project $project, int $collaboratorsSize)
     {
-        return $project->isOwner($user);
+        $currentSubscriptionCollaborationQuota = $this->getCurrentSubscriptionCollaborationQuota($user) + $project->members()->count();
+
+        return $this->hasActiveSubscription($user)
+            && (bool) $project->isOwner($user)
+            && $currentSubscriptionCollaborationQuota >= $collaboratorsSize;
     }
 
     /**

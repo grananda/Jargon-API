@@ -4,11 +4,14 @@ namespace App\Policies;
 
 use App\Models\Organization;
 use App\Models\User;
+use App\Policies\Traits\ActiveSubscriptionRestrictionsTrait;
 use App\Repositories\OrganizationRepository;
 use Exception;
 
 class OrganizationPolicy extends AbstractPolicy
 {
+    use ActiveSubscriptionRestrictionsTrait;
+
     /**
      * @var \App\Repositories\OrganizationRepository
      */
@@ -58,18 +61,7 @@ class OrganizationPolicy extends AbstractPolicy
      */
     public function create(User $user)
     {
-        $subscriptionOrganizationCount = $user->activeSubscription->options()->where('option_key', 'organization_count')->first()->option_value;
-
-        $currentOrganizationCount = $user->organizations->filter(function ($org) use ($user) {
-            /* @var $org \App\Models\Organization */
-            return $org->isOwner($user) == true;
-        })->count();
-
-        if ($subscriptionOrganizationCount <= $currentOrganizationCount && ! is_null($subscriptionOrganizationCount)) {
-            return false;
-        }
-
-        return true;
+        return $this->hasActiveSubscription($user) && (bool) $this->getCurrentSubscriptionOrganizationQuota($user);
     }
 
     /**
@@ -80,7 +72,7 @@ class OrganizationPolicy extends AbstractPolicy
      */
     public function update(User $user, Organization $organization)
     {
-        return $organization->isOwner($user);
+        return $this->hasActiveSubscription($user) && $organization->isOwner($user);
     }
 
     /**

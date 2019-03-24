@@ -4,13 +4,10 @@ namespace App\Http\Requests\Team;
 
 use App\Http\Requests\Request;
 use App\Models\Team;
-use App\Policies\Traits\ActiveSubscriptionRestrictionsTrait;
 use App\Rules\ValidMember;
 
 class UpdateTeamRequest extends Request
 {
-    use ActiveSubscriptionRestrictionsTrait;
-
     /**
      * The Team instance.
      *
@@ -30,11 +27,7 @@ class UpdateTeamRequest extends Request
         /** @var array $collaborators */
         $collaborators = $this->input('collaborators') ?? [];
 
-        $currentSubscriptionCollaborationQuota = $this->getCurrentSubscriptionCollaborationQuota($this->user()) + $this->team->members()->count();
-
-        return $this->hasActiveSubscription($this->user())
-            && $currentSubscriptionCollaborationQuota >= count($collaborators)
-            && $this->user()->can('update', $this->team);
+        return $this->user()->can('update', [$this->team, count($collaborators)]);
     }
 
     /**

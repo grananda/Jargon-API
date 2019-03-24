@@ -4,13 +4,10 @@ namespace App\Http\Requests\Team;
 
 use App\Http\Requests\Request;
 use App\Models\Team;
-use App\Policies\Traits\ActiveSubscriptionRestrictionsTrait;
 use App\Rules\ValidMember;
 
 class StoreTeamRequest extends Request
 {
-    use ActiveSubscriptionRestrictionsTrait;
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -21,9 +18,7 @@ class StoreTeamRequest extends Request
         /** @var array $collaborators */
         $collaborators = $this->input('collaborators') ?? [];
 
-        return $this->hasActiveSubscription($this->user())
-            && $this->getCurrentSubscriptionCollaborationQuota($this->user()) >= count($collaborators)
-            && $this->user()->can('create', Team::class);
+        return $this->user()->can('create', [Team::class, count($collaborators)]);
     }
 
     /**
