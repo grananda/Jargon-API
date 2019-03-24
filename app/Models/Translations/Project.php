@@ -97,18 +97,6 @@ class Project extends BaseEntity
     }
 
     /**
-     * @param array $teams
-     *
-     * @return Project
-     */
-    public function setTeams(array $teams)
-    {
-        $this->teams()->sync($teams);
-
-        return $this->refresh();
-    }
-
-    /**
      * @param array $dialects
      *
      * @return Project
@@ -138,6 +126,18 @@ class Project extends BaseEntity
     public function setMember(User $user, string $role = null)
     {
         $this->addMember($user, $role ?? self::PROJECT_DEFAULT_ROLE_ALIAS);
+    }
+
+    /**
+     * @param array $teams
+     *
+     * @return Project
+     */
+    public function setTeams(array $teams)
+    {
+        $this->teams()->sync($teams);
+
+        return $this->refresh();
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Model;
@@ -95,6 +96,24 @@ abstract class CoreRepository
     }
 
     /**
+     * Find all records within an array of values.
+     *
+     * @param array $values
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function findAllWhereIn(array $values)
+    {
+        $query = $this->getQuery();
+
+        foreach ($values as $column => $value) {
+            $query->whereIn($column, $value);
+        }
+
+        return $query->get();
+    }
+
+    /**
      * Find model by id.
      *
      * @param string $id
@@ -182,8 +201,7 @@ abstract class CoreRepository
                 $query->where('collaborators.user_id', $user->id);
             })
             ->orderByDesc('id')
-            ->get()
-            ;
+            ->get();
     }
 
     /**
@@ -202,8 +220,7 @@ abstract class CoreRepository
                 $query->where('collaborators.is_valid', true);
             })
             ->orderByDesc('id')
-            ->get()
-            ;
+            ->get();
     }
 
     /**

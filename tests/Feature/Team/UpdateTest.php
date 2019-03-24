@@ -56,7 +56,7 @@ class UpdateTest extends TestCase
     }
 
     /** @test */
-    public function a_403_will_be_returned_if_the_user_updates_a_new_team_without_collaborator_quota()
+    public function a_403_will_be_returned_if_the_user_updates_a_team_without_collaborator_quota()
     {
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();

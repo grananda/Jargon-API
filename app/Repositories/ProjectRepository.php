@@ -8,15 +8,26 @@ use Illuminate\Database\Connection;
 
 class ProjectRepository extends CoreRepository
 {
+
+    /**
+     * The TeamRepository instance.
+     *
+     * @var \App\Repositories\TeamRepository
+     */
+    private $teamRepository;
+
     /**
      * ProjectRepository constructor.
      *
      * @param \Illuminate\Database\Connection  $dbConnection
      * @param \App\Models\Translations\Project $model
+     * @param \App\Repositories\TeamRepository $teamRepository
      */
-    public function __construct(Connection $dbConnection, Project $model)
+    public function __construct(Connection $dbConnection, Project $model, TeamRepository $teamRepository)
     {
         parent::__construct($dbConnection, $model);
+
+        $this->teamRepository = $teamRepository;
     }
 
     /**
@@ -40,7 +51,72 @@ class ProjectRepository extends CoreRepository
                 $query->where('collaborators.is_valid', true);
             })
             ->orderByDesc('id')
-            ->get()
-        ;
+            ->get();
+    }
+
+    /**
+     * Creates a new project for a given user owner.
+     *
+     * @param \App\Models\User $user
+     * @param array            $attributes
+     *
+     * @throws \Throwable
+     *
+     * @return mixed
+     */
+    public function createProject(User $user, array $attributes)
+    {
+        return $this->dbConnection->transaction(function () use ($user, $attributes) {
+            /** @var \App\Models\Translations\Project $project */
+            $project = $this->createWithOwner($user, $attributes);
+
+            $this->addCollaborators($project, $attributes['collaborators']);
+
+            $this->addTeams($project, $attributes['teams']);
+
+            return $project->fresh();
+        });
+    }
+
+    /**
+     * Updates an existing team.
+     *
+     * @param \App\Models\Translations\Project $project
+     * @param array                            $attributes
+     *
+     * @return mixed
+     * @throws \Throwable
+     */
+    public function updateTeam(Project $project, array $attributes)
+    {
+        return $this->dbConnection->transaction(function () use ($project, $attributes) {
+            /** @var Project $project */
+            $project = $this->update($project, $attributes);
+
+            $this->addCollaborators($project, $attributes['collaborators']);
+
+            $this->addTeams($project, $attributes['teams']);
+
+            return $project->fresh();
+        });
+    }
+
+    /**
+     * Adds team to entity.
+     *
+     * @param \App\Models\Translations\Project $entity
+     * @param array                            $teams
+     *
+     * @return \App\Models\Translations\Project
+     */
+    private function addTeams(Project $entity, array $teams)
+    {
+        $teams = $this->teamRepository->findAllWhereIn([
+            'uuid' => $teams,
+        ]);
+
+        $entity->setTeams($teams->pluck('id')->toArray());
+
+        return $entity->refresh();
     }
 }
