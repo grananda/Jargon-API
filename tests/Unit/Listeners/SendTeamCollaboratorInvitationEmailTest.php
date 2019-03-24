@@ -6,15 +6,17 @@ namespace Tests\Unit\Listeners;
 use App\Events\CollaboratorAddedToTeam;
 use App\Listeners\SendTeamCollaboratorInvitationEmail;
 use App\Mail\SendTeamCollaboratorEmail;
-use App\Models\Organization;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class SendTeamCollaboratorInvitationEmailTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function email_is_sent_after_collaborator_is_added_to_a_team()
     {

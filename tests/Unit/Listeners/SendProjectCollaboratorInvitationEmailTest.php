@@ -9,12 +9,15 @@ use App\Listeners\SendTeamCollaboratorInvitationEmail;
 use App\Mail\SendProjectCollaboratorEmail;
 use App\Models\Translations\Project;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class SendProjectCollaboratorInvitationEmailTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function email_is_sent_after_collaborator_is_added_to_a_project()
     {
