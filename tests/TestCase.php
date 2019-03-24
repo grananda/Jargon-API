@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -38,6 +39,8 @@ abstract class TestCase extends BaseTestCase
         }
         DB::beginTransaction();
         Artisan::call('db:seed');
+
+        Mail::fake();
     }
 
     public function tearDown(): void
