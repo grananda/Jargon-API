@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\CollaboratorAddedToProject;
 use App\Events\CollaboratorAddedToTeam;
+use App\Listeners\SendProjectCollaboratorInvitationEmail;
 use App\Listeners\SendTeamCollaboratorInvitationEmail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -21,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         CollaboratorAddedToTeam::class => [
             SendTeamCollaboratorInvitationEmail::class,
+        ],
+        CollaboratorAddedToProject::class => [
+            SendProjectCollaboratorInvitationEmail::class,
         ],
     ];
 

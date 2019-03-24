@@ -1,20 +1,14 @@
 <?php
 
-namespace App\Http\Requests\Team;
+namespace App\Http\Requests\Project;
 
 use App\Http\Requests\Request;
-use App\Models\Team;
+use App\Models\Translations\Project;
 use App\Rules\ValidMember;
+use App\Rules\ValidTeam;
 
-class UpdateTeamRequest extends Request
+class StoreProjectRequest extends Request
 {
-    /**
-     * The Team instance.
-     *
-     * @var \App\Models\Team
-     */
-    public $team;
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -22,12 +16,10 @@ class UpdateTeamRequest extends Request
      */
     public function authorize()
     {
-        $this->team = Team::findByUuidOrFail($this->route('id'));
-
         /** @var array $collaborators */
         $collaborators = $this->input('collaborators') ?? [];
 
-        return $this->user()->can('update', [$this->team, count($collaborators)]);
+        return $this->user()->can('create', [Project::class, count($collaborators)]);
     }
 
     /**
@@ -38,10 +30,12 @@ class UpdateTeamRequest extends Request
     public function rules()
     {
         return [
-            'name'            => ['required', 'string'],
+            'title'           => ['required', 'string'],
             'description'     => ['nullable', 'string', 'max:255'],
             'collaborators'   => ['array'],
             'collaborators.*' => ['array', new ValidMember()],
+            'teams'           => ['array'],
+            'teams.*'         => ['array', new ValidTeam($this->user())],
         ];
     }
 }

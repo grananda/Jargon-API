@@ -4,10 +4,12 @@ namespace App\Policies;
 
 use App\Models\Team;
 use App\Models\User;
-use Exception;
+use App\Policies\Traits\ActiveSubscriptionRestrictionsTrait;
 
 class TeamPolicy extends AbstractPolicy
 {
+    use ActiveSubscriptionRestrictionsTrait;
+
     /**
      * Determines is a user can list teams.
      *
@@ -33,36 +35,31 @@ class TeamPolicy extends AbstractPolicy
 
     /**
      * @param User $user
-     *
-     * @throws Exception
+     * @param int  $collaboratorsSize
      *
      * @return bool
      */
-    public function create(User $user)
+    public function create(User $user, int $collaboratorsSize)
     {
-        $subscriptionTeamCount = $user->activeSubscription->options()->where('option_key', 'team_count')->first()->option_value;
-
-        $userTeamCount = $user->teams->filter(function ($team) use ($user) {
-            /* @var $team \App\Models\Team */
-            return $team->isOwner($user) == true;
-        })->count();
-
-        if ($subscriptionTeamCount <= $userTeamCount && ! is_null($subscriptionTeamCount)) {
-            return false;
-        }
-
-        return true;
+        return $this->hasActiveSubscription($user)
+            && (bool) $this->getCurrentSubscriptionTeamQuota($user)
+            && $this->getCurrentSubscriptionCollaborationQuota($user) >= $collaboratorsSize;
     }
 
     /**
      * @param User             $user
      * @param \App\Models\Team $team
+     * @param int              $collaboratorsSize
      *
      * @return bool
      */
-    public function update(User $user, Team $team)
+    public function update(User $user, Team $team, int $collaboratorsSize)
     {
-        return $team->isOwner($user);
+        $currentSubscriptionCollaborationQuota = $this->getCurrentSubscriptionCollaborationQuota($user) + $team->members()->count();
+
+        return $this->hasActiveSubscription($user)
+            && (bool) $team->isOwner($user)
+            && $currentSubscriptionCollaborationQuota >= $collaboratorsSize;
     }
 
     /**

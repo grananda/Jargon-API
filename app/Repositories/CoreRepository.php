@@ -95,6 +95,24 @@ abstract class CoreRepository
     }
 
     /**
+     * Find all records within an array of values.
+     *
+     * @param array $values
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function findAllWhereIn(array $values)
+    {
+        $query = $this->getQuery();
+
+        foreach ($values as $column => $value) {
+            $query->whereIn($column, $value);
+        }
+
+        return $query->get();
+    }
+
+    /**
      * Find model by id.
      *
      * @param string $id
@@ -183,7 +201,7 @@ abstract class CoreRepository
             })
             ->orderByDesc('id')
             ->get()
-            ;
+        ;
     }
 
     /**
@@ -203,7 +221,7 @@ abstract class CoreRepository
             })
             ->orderByDesc('id')
             ->get()
-            ;
+        ;
     }
 
     /**

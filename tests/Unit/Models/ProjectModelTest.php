@@ -46,14 +46,14 @@ class ProjectModelTest extends TestCase
         $this->assertDatabaseHas('collaborators', [
             'user_id'     => $owner->id,
             'entity_id'   => $project->id,
-            'entity_type' => 'projects',
+            'entity_type' => 'project',
             'is_owner'    => true,
             'role_id'     => $roleOwner->id,
         ]);
         $this->assertDatabaseHas('collaborators', [
             'user_id'     => $member->id,
             'entity_id'   => $project->id,
-            'entity_type' => 'projects',
+            'entity_type' => 'project',
             'is_owner'    => false,
             'role_id'     => $roleMember->id,
         ]);

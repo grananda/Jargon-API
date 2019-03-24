@@ -3,11 +3,13 @@
 namespace Tests\Feature\Api\Team;
 
 use App\Events\CollaboratorAddedToTeam;
+use App\Mail\SendTeamCollaboratorEmail;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
@@ -30,6 +32,7 @@ class StoreTest extends TestCase
     public function a_403_will_be_returned_if_the_user_creates_a_new_team_without_team_quota()
     {
         // Given
+        Event::fake([CollaboratorAddedToTeam::class]);
 
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();
@@ -55,6 +58,8 @@ class StoreTest extends TestCase
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
+
+        Event::assertNotDispatched(CollaboratorAddedToTeam::class);
     }
 
     /** @test */
@@ -88,6 +93,7 @@ class StoreTest extends TestCase
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
+
         Event::assertNotDispatched(CollaboratorAddedToTeam::class);
     }
 

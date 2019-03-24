@@ -4,12 +4,9 @@ namespace App\Http\Requests\Organization;
 
 use App\Http\Requests\Request;
 use App\Models\Organization;
-use App\Policies\Traits\ActiveSubscriptionRestrictionsTrait;
 
 class UpdateOrganizationRequest extends Request
 {
-    use ActiveSubscriptionRestrictionsTrait;
-
     /**
      * The organization instance.
      *
@@ -26,8 +23,7 @@ class UpdateOrganizationRequest extends Request
     {
         $this->organization = Organization::findByUuidOrFail($this->route('id'));
 
-        return $this->hasActiveSubscription($this->user())
-            && $this->user()->can('update', $this->organization);
+        return $this->user()->can('update', $this->organization);
     }
 
     /**

@@ -41,7 +41,7 @@ class OrganizationApiController extends ApiController
     public function index(IndexOrganizationRequest $request)
     {
         try {
-            $organizations = $this->organizationRepository->findAllBymember($request->user());
+            $organizations = $this->organizationRepository->findAllByMember($request->user());
 
             return $this->responseOk(new OrganizationCollection($organizations));
         } catch (Exception $e) {

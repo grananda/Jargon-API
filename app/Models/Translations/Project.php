@@ -2,6 +2,7 @@
 
 namespace App\Models\Translations;
 
+use App\Events\CollaboratorAddedToProject;
 use App\Models\BaseEntity;
 use App\Models\Dialect;
 use App\Models\Organization;
@@ -17,13 +18,10 @@ class Project extends BaseEntity
 
     const ITEM_TOKEN_LENGTH = 50;
 
-    const PROJECT_OWNER_ROLE_ALIAS = 'project-admin';
-
-    const PROJECT_MANAGER_ROLE_ALIAS = 'project-manager';
-
+    const PROJECT_OWNER_ROLE_ALIAS      = 'project-admin';
+    const PROJECT_MANAGER_ROLE_ALIAS    = 'project-manager';
     const PROJECT_TRANSLATOR_ROLE_ALIAS = 'project-translator';
-
-    const PROJECT_DEFAULT_ROLE_ALIAS = 'project-manager';
+    const PROJECT_DEFAULT_ROLE_ALIAS    = 'project-manager';
 
     protected $fillable = [
         'title',
@@ -100,18 +98,6 @@ class Project extends BaseEntity
     }
 
     /**
-     * @param array $teams
-     *
-     * @return Project
-     */
-    public function setTeams(array $teams)
-    {
-        $this->teams()->sync($teams);
-
-        return $this->refresh();
-    }
-
-    /**
      * @param array $dialects
      *
      * @return Project
@@ -144,12 +130,24 @@ class Project extends BaseEntity
     }
 
     /**
-     * @param \App\Models\Project $project
-     * @param \App\Models\User    $user
-     * @param string              $invitationToken
+     * @param array $teams
+     *
+     * @return Project
+     */
+    public function setTeams(array $teams)
+    {
+        $this->teams()->sync($teams);
+
+        return $this->refresh();
+    }
+
+    /**
+     * @param self             $project
+     * @param \App\Models\User $user
+     * @param string           $invitationToken
      */
     public function createAddCollaboratorEvent(self $project, User $user, string $invitationToken)
     {
-//        event(new CollaboratorAddedToOrganization($organization, $user, $invitationToken));
+        event(new CollaboratorAddedToProject($this, $user, $invitationToken));
     }
 }

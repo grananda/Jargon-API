@@ -26,7 +26,7 @@ class TeamInvitationController extends ApiController
     /**
      * Accepts user invitation to organization.
      *
-     * @param \App\Http\Controllers\Team\UpdateTeamInvitationRequest $request
+     * @param \App\Http\Requests\Team\UpdateTeamInvitationRequest $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
