@@ -19,6 +19,10 @@ class User extends Authenticatable
         Notifiable,
         HasUuid;
 
+    const   SUPER_ADMIN_STAFF_MEMBER = 'super-admin';
+    const   SENIOR_STAFF_MEMBER = 'senior-staff';
+    const   JUNIOR_STAFF_MEMBER = 'junior-staff';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -81,8 +85,7 @@ class User extends Authenticatable
                 'role_id',
                 'validation_token',
             ])
-            ->withTimestamps()
-            ;
+            ->withTimestamps();
     }
 
     /**
@@ -97,8 +100,7 @@ class User extends Authenticatable
                 'role_id',
                 'validation_token',
             ])
-            ->withTimestamps()
-            ;
+            ->withTimestamps();
     }
 
     /**
@@ -107,8 +109,7 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class)
-            ->withTimestamps()
-            ;
+            ->withTimestamps();
     }
 
     /**
@@ -176,6 +177,18 @@ class User extends Authenticatable
     }
 
     /**
+     * Checkes is a user has a given role type.
+     *
+     * @param $roleTypeAlias
+     *
+     * @return bool
+     */
+    public function checkUserHasRoleType($roleTypeAlias)
+    {
+        return in_array($roleTypeAlias, array_column($this->roles->toArray(), 'role_type'));
+    }
+
+    /**
      * @param $roleAlias
      *
      * @return bool
@@ -204,6 +217,18 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    /**
+     * Checks if user is a staff member.
+     *
+     * @param \App\Models\User $user
+     *
+     * @return bool
+     */
+    public function isStaffMember()
+    {
+        return $this->checkUserHasRoleType('staff');
     }
 
     /**
@@ -244,6 +269,6 @@ class User extends Authenticatable
      */
     public function isActivated()
     {
-        return (bool) $this->activated_at;
+        return (bool)$this->activated_at;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\Models\Role;
 use App\Models\User;
 use Faker\Generator;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -63,6 +64,40 @@ abstract class TestCase extends BaseTestCase
         $this->actingAs($this->signedUser, 'api');
 
         return $this;
+    }
+
+    /**
+     * Creates a staff user.
+     *
+     * @param string $role
+     * @param array  $overrides
+     *
+     * @return \App\Models\User
+     */
+    public function staff(string $role = 'super-admin', array $overrides = [])
+    {
+        /** @var \App\Models\User $staff */
+        $staff = factory(User::class)->create($overrides);
+        $staff->setRole(Role::where('alias', $role)->first());
+
+        return $staff;
+    }
+
+    /**
+     * Creates a non-staff user.
+     *
+     * @param string $role
+     * @param array  $overrides
+     *
+     * @return \App\Models\User
+     */
+    public function user(string $role = 'registered-user', array $overrides = [])
+    {
+        /** @var \App\Models\User $staff */
+        $staff = factory(User::class)->create($overrides);
+        $staff->setRole(Role::where('alias', $role)->first());
+
+        return $staff;
     }
 
     /**
