@@ -8,10 +8,12 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
+use Tests\traits\CreateActiveSubscription;
 
 class DeleteTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase,
+        CreateActiveSubscription;
 
     /** @test */
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
@@ -49,6 +51,28 @@ class DeleteTest extends TestCase
 
         // When
         $response = $this->signIn($user)->delete(route('subscriptions.plans.destroy', [$subscriptionPlan->uuid]));
+
+        // Assert
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    /** @test */
+    public function a_403_will_be_returned_when_active_subscriptions_in_subscription_plan()
+    {
+        // Given
+        /** @var \App\Models\User $user */
+        $user = factory(User::class)->create();
+
+        /** @var \App\Models\User $user */
+        $staff = $this->staff(User::SENIOR_STAFF_MEMBER);
+
+        /** @var array $subscriptionPlan */
+        $subscriptionPlan = factory(SubscriptionPlan::class)->create();
+
+        $this->createActiveSubscription($user, $subscriptionPlan->alias);
+
+        // When
+        $response = $this->signIn($staff)->delete(route('subscriptions.plans.destroy', [$subscriptionPlan->uuid]));
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
