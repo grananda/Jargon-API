@@ -2,10 +2,16 @@
 
 namespace App\Http\Requests\SubscriptionPlan;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Request;
+use App\Models\Subscriptions\SubscriptionPlan;
 
-class DeleteSubscriptionPlanRequest extends FormRequest
+class DeleteSubscriptionPlanRequest extends Request
 {
+    /**
+     * @var SubscriptionPlan
+     */
+    public $subscriptionPlan;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,18 +19,8 @@ class DeleteSubscriptionPlanRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
-    }
+        $this->subscriptionPlan = SubscriptionPlan::findByUuidOrFail($this->route('id'));
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-            //
-        ];
+        return $this->user()->can('delete', $this->subscriptionPlan);
     }
 }

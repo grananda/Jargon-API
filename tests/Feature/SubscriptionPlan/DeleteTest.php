@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
-class UpdateTest extends TestCase
+class DeleteTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -17,7 +17,7 @@ class UpdateTest extends TestCase
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
         // When
-        $response = $this->put(route('subscriptions.plans.update', [123]));
+        $response = $this->delete(route('subscriptions.plans.destroy', [123]));
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -31,7 +31,7 @@ class UpdateTest extends TestCase
         $user = factory(User::class)->create();
 
         // When
-        $response = $this->signIn($user)->put(route('subscriptions.plans.update', [123]));
+        $response = $this->signIn($user)->delete(route('subscriptions.plans.destroy', [123]));
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -47,12 +47,8 @@ class UpdateTest extends TestCase
         /** @var array $subscriptionPlan */
         $subscriptionPlan = factory(SubscriptionPlan::class)->create();
 
-        $data = [
-            'status' => false,
-        ];
-
         // When
-        $response = $this->signIn($user)->put(route('subscriptions.plans.update', [$subscriptionPlan->uuid]), $data);
+        $response = $this->signIn($user)->delete(route('subscriptions.plans.destroy', [$subscriptionPlan->uuid]));
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -68,16 +64,13 @@ class UpdateTest extends TestCase
         /** @var array $subscriptionPlan */
         $subscriptionPlan = factory(SubscriptionPlan::class)->create();
 
-        $data = [
-            'status' => false,
-        ];
-
         // When
-        $response = $this->signIn($user)->put(route('subscriptions.plans.update', [$subscriptionPlan->uuid]), $data);
+        $response = $this->signIn($user)->delete(route('subscriptions.plans.destroy', [$subscriptionPlan->uuid]));
 
         // Assert
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonFragment(['alias' => $subscriptionPlan->alias]);
-        $response->assertJsonFragment(['status' => $data['status']]);
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $this->assertDatabaseMissing('subscription_plans', [
+            'uuid' => $subscriptionPlan->uuid,
+        ]);
     }
 }
