@@ -80,6 +80,8 @@ class RouteServiceProvider extends ServiceProvider
                 require base_path('routes/projects.php');
                 require base_path('routes/projectInvitations.php');
                 require base_path('routes/subscriptionPlans.php');
+                require base_path('routes/subscriptionPlanOptions.php');
+                require base_path('routes/options.php');
             })
         ;
     }

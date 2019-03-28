@@ -12,7 +12,7 @@ $factory->define(Option::class, function (Faker $faker) {
         'title'              => $faker->title,
         'description'        => $faker->text,
         'option_category_id' => function () {
-            return factory(OptionCategory::class)->create();
+            return factory(OptionCategory::class)->create()->uuid;
         },
         'option_key'   => $faker->word,
         'option_value' => $faker->word,

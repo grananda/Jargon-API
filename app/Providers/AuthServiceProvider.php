@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Options\Option;
 use App\Models\Organization;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\Team;
 use App\Models\Translations\Project;
+use App\Policies\OptionPolicy;
 use App\Policies\OrganizationPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\SubscriptionPlanPolicy;
@@ -25,6 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         Team::class             => TeamPolicy::class,
         Project::class          => ProjectPolicy::class,
         SubscriptionPlan::class => SubscriptionPlanPolicy::class,
+        Option::class           => OptionPolicy::class,
     ];
 
     /**
