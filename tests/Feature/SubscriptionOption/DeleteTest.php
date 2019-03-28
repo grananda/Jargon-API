@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Feature\SubscriptionPlanOption;
+namespace Tests\Feature\SubscriptionOption;
 
 
-use App\Events\SubscriptionPlanOptionWasDeleted;
+use App\Events\SubscriptionOption\SubscriptionOptionWasDeleted;
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,8 +18,12 @@ class DeleteTest extends TestCase
     /** @test */
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
+        // Given
+        /** @var \App\Models\Subscriptions\SubscriptionOption $option */
+        $option = factory(SubscriptionOption::class)->create();
+
         // When
-        $response = $this->delete(route('subscriptions.plans.options.destroy', [123]));
+        $response = $this->delete(route('subscriptions.options.destroy', [$option->uuid]));
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -32,8 +36,11 @@ class DeleteTest extends TestCase
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();
 
+        /** @var \App\Models\Subscriptions\SubscriptionOption $option */
+        $option = factory(SubscriptionOption::class)->create();
+
         // When
-        $response = $this->signIn($user)->delete(route('subscriptions.plans.options.destroy', [123]));
+        $response = $this->signIn($user)->delete(route('subscriptions.options.destroy', [$option->uuid]));
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -46,8 +53,11 @@ class DeleteTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->staff(User::JUNIOR_STAFF_MEMBER);
 
+        /** @var \App\Models\Subscriptions\SubscriptionOption $option */
+        $option = factory(SubscriptionOption::class)->create();
+
         // When
-        $response = $this->signIn($user)->delete(route('subscriptions.plans.options.destroy', [123]));
+        $response = $this->signIn($user)->delete(route('subscriptions.options.destroy', [$option->uuid]));
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -57,7 +67,7 @@ class DeleteTest extends TestCase
     public function a_200_code_will_be_returned_when_deleting_a_subscription_plan_option()
     {
         // Given
-        Event::faker();
+        Event::fake(SubscriptionOptionWasDeleted::class);
 
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
@@ -70,7 +80,7 @@ class DeleteTest extends TestCase
         ]);
 
         // When
-        $response = $this->signIn($user)->delete(route('subscriptions.plans.options.destroy', $subscriptionPlanOption->uuid));
+        $response = $this->signIn($user)->delete(route('subscriptions.options.destroy', $subscriptionPlanOption->uuid));
 
         // Then
         $response->assertStatus(Response::HTTP_NO_CONTENT);
@@ -78,6 +88,6 @@ class DeleteTest extends TestCase
             'uuid' => $subscriptionPlanOption->uuid,
         ]);
 
-        Event::assertDispatched(SubscriptionPlanOptionWasDeleted::class);
+        Event::assertDispatched(SubscriptionOptionWasDeleted::class);
     }
 }

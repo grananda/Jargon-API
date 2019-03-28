@@ -12,6 +12,16 @@ class SubscriptionPlanPolicy extends AbstractPolicy
      *
      * @return bool
      */
+    public function list(User $user)
+    {
+        return true;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return bool
+     */
     public function create(User $user)
     {
         return $user->hasRole(User::SENIOR_STAFF_MEMBER);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\SubscriptionPlanOption;
+namespace Tests\Feature\SubscriptionOption;
 
 
 use App\Events\SubscriptionPlanOptionWasCreated;

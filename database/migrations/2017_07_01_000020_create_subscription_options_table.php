@@ -10,6 +10,7 @@ class CreateSubscriptionOptionsTable extends Migration
     {
         Schema::create('subscription_options', function (Blueprint $table) {
             $table->increments('id');
+            $table->uuid('uuid');
             $table->string('title');
             $table->string('description');
             $table->string('description_template');
