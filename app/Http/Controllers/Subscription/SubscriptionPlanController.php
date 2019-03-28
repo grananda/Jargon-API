@@ -55,8 +55,9 @@ class SubscriptionPlanController extends ApiController
      *
      * @param \App\Http\Requests\SubscriptionPlan\StoreSubscriptionPlanRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreSubscriptionPlanRequest $request)
     {
@@ -89,12 +90,12 @@ class SubscriptionPlanController extends ApiController
      * Update the specified resource in storage.
      *
      * @param \App\Http\Requests\SubscriptionPlan\UpdateSubscriptionPlanRequest $request
-     * @param  int                                                              $id
+     *
+     * @throws \Throwable
      *
      * @return \Illuminate\Http\JsonResponse
-     * @throws \Throwable
      */
-    public function update(UpdateSubscriptionPlanRequest $request, $id)
+    public function update(UpdateSubscriptionPlanRequest $request)
     {
         try {
             $subscriptionPlan = $this->subscriptionPlanRepository->update($request->subscriptionPlan, $request->validated());
@@ -110,8 +111,9 @@ class SubscriptionPlanController extends ApiController
      *
      * @param \App\Http\Requests\SubscriptionPlan\DeleteSubscriptionPlanRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(DeleteSubscriptionPlanRequest $request)
     {

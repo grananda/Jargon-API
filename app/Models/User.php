@@ -20,8 +20,8 @@ class User extends Authenticatable
         HasUuid;
 
     const   SUPER_ADMIN_STAFF_MEMBER = 'super-admin';
-    const   SENIOR_STAFF_MEMBER = 'senior-staff';
-    const   JUNIOR_STAFF_MEMBER = 'junior-staff';
+    const   SENIOR_STAFF_MEMBER      = 'senior-staff';
+    const   JUNIOR_STAFF_MEMBER      = 'junior-staff';
 
     /**
      * The attributes that are mass assignable.
@@ -85,7 +85,8 @@ class User extends Authenticatable
                 'role_id',
                 'validation_token',
             ])
-            ->withTimestamps();
+            ->withTimestamps()
+        ;
     }
 
     /**
@@ -100,7 +101,8 @@ class User extends Authenticatable
                 'role_id',
                 'validation_token',
             ])
-            ->withTimestamps();
+            ->withTimestamps()
+        ;
     }
 
     /**
@@ -109,7 +111,8 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class)
-            ->withTimestamps();
+            ->withTimestamps()
+        ;
     }
 
     /**
@@ -269,6 +272,6 @@ class User extends Authenticatable
      */
     public function isActivated()
     {
-        return (bool)$this->activated_at;
+        return (bool) $this->activated_at;
     }
 }

@@ -9,7 +9,7 @@ class SubscriptionPlan extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return array
      */
@@ -21,7 +21,7 @@ class SubscriptionPlan extends JsonResource
             'description' => $this->description,
             'alias'       => $this->alias,
             'amount'      => $this->amount,
-            'status'      => (bool)$this->status,
+            'status'      => (bool) $this->status,
         ];
     }
 }

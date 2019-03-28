@@ -17,7 +17,6 @@ class StoreSubscriptionPlanRequest extends Request
         return $this->user()->can('create', SubscriptionPlan::class);
     }
 
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -30,6 +29,7 @@ class StoreSubscriptionPlanRequest extends Request
             'description' => ['required', 'string', 'max:255'],
             'alias'       => ['required', 'string'],
             'amount'      => ['required', 'numeric'],
+            'status'      => ['sometimes', 'boolean'],
         ];
     }
 }

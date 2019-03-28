@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
-class StoreTest extends TestCase
+class UpdateTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -17,7 +17,7 @@ class StoreTest extends TestCase
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
         // When
-        $response = $this->post(route('subscriptions.plans.store'));
+        $response = $this->put(route('subscriptions.plans.update', [123]));
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -31,7 +31,7 @@ class StoreTest extends TestCase
         $user = factory(User::class)->create();
 
         // When
-        $response = $this->signIn($user)->post(route('subscriptions.plans.store'));
+        $response = $this->put(route('subscriptions.plans.update', [123]));
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -44,11 +44,15 @@ class StoreTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->staff(User::JUNIOR_STAFF_MEMBER);
 
-        /** @var array $data */
-        $data = factory(SubscriptionPlan::class)->make()->toArray();
+        /** @var array $subscriptionPlan */
+        $subscriptionPlan = factory(SubscriptionPlan::class)->create();
+
+        $data = [
+            'status' => false,
+        ];
 
         // When
-        $response = $this->signIn($user)->post(route('subscriptions.plans.store'), $data);
+        $response = $this->signIn($user)->put(route('subscriptions.plans.update', [$subscriptionPlan->uuid]), $data);
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -61,14 +65,19 @@ class StoreTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
 
-        /** @var array $data */
-        $data = factory(SubscriptionPlan::class)->make()->toArray();
+        /** @var array $subscriptionPlan */
+        $subscriptionPlan = factory(SubscriptionPlan::class)->create();
+
+        $data = [
+            'status' => false,
+        ];
 
         // When
-        $response = $this->signIn($user)->post(route('subscriptions.plans.store'), $data);
+        $response = $this->signIn($user)->put(route('subscriptions.plans.update', [$subscriptionPlan->uuid]), $data);
 
         // Assert
-        $response->assertStatus(Response::HTTP_CREATED);
-        $response->assertJsonFragment(['alias' => $data['alias']]);
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonFragment(['alias' => $subscriptionPlan->alias]);
+        $response->assertJsonFragment(['status' => $data['status']]);
     }
 }

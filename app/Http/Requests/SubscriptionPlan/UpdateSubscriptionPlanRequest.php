@@ -2,10 +2,16 @@
 
 namespace App\Http\Requests\SubscriptionPlan;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Request;
+use App\Models\Subscriptions\SubscriptionPlan;
 
-class UpdateSubscriptionPlanRequest extends FormRequest
+class UpdateSubscriptionPlanRequest extends Request
 {
+    /**
+     * @var SubscriptionPlan
+     */
+    public $subscriptionPlan;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +19,9 @@ class UpdateSubscriptionPlanRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        $this->subscriptionPlan = SubscriptionPlan::findByUuidOrFail($this->route('id'));
+
+        return $this->user()->can('update', $this->subscriptionPlan);
     }
 
     /**
@@ -24,7 +32,11 @@ class UpdateSubscriptionPlanRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title'       => ['sometimes', 'string'],
+            'description' => ['sometimes', 'string', 'max:255'],
+            'alias'       => ['sometimes', 'string'],
+            'amount'      => ['sometimes', 'numeric'],
+            'status'      => ['sometimes', 'boolean'],
         ];
     }
 }

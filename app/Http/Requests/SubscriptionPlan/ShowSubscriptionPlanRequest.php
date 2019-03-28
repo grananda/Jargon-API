@@ -7,7 +7,6 @@ use App\Models\Subscriptions\SubscriptionPlan;
 
 class ShowSubscriptionPlanRequest extends Request
 {
-
     /**
      * @var \App\Models\Subscriptions\SubscriptionPlan
      */

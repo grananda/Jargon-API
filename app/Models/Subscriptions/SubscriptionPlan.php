@@ -26,6 +26,7 @@ class SubscriptionPlan extends BaseEntity
         'alias',
         'quantity',
         'rank',
+        'status',
     ];
 
     /**
