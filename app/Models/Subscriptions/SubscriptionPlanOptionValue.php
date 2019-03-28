@@ -22,6 +22,6 @@ class SubscriptionPlanOptionValue extends BaseEntity
      */
     public function key()
     {
-        return $this->hasOne(SubscriptionOptions::class, 'option_key', 'option_key');
+        return $this->hasOne(SubscriptionOption::class, 'option_key', 'option_key');
     }
 }

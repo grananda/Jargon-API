@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Subscriptions\SubscriptionOptions;
+use App\Models\Subscriptions\SubscriptionOption;
 
 class SubscriptionOptionsSeeder extends AbstractSeeder
 {
@@ -11,7 +11,7 @@ class SubscriptionOptionsSeeder extends AbstractSeeder
         $subscriptionOptions = $this->getSeedFileContents('subscriptionOptions');
 
         foreach ($subscriptionOptions as $subscriptionOption) {
-            factory(SubscriptionOptions::class)->create($subscriptionOption);
+            factory(SubscriptionOption::class)->create($subscriptionOption);
         }
     }
 }

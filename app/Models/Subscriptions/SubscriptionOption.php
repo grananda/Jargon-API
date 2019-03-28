@@ -4,7 +4,7 @@ namespace App\Models\Subscriptions;
 
 use App\Models\BaseEntity;
 
-class SubscriptionOptions extends BaseEntity
+class SubscriptionOption extends BaseEntity
 {
     protected $dates = [
         'created_at',
