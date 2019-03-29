@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\Option\OptionWasCreated;
+use App\Events\Option\OptionWasDeleted;
 use App\Models\Options\Option;
 use App\Models\Role;
 use App\Models\User;
@@ -10,7 +10,7 @@ use App\Repositories\OptionUserRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class AddOptionToUser implements ShouldQueue
+class DeleteOptionUser implements ShouldQueue
 {
     use InteractsWithQueue;
 
@@ -20,7 +20,7 @@ class AddOptionToUser implements ShouldQueue
     private $optionUserRepository;
 
     /**
-     * AddOptionToUser constructor.
+     * AddOptionUser constructor.
      *
      * @param \App\Repositories\OptionUserRepository $optionUserRepository
      */
@@ -32,11 +32,11 @@ class AddOptionToUser implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param \App\Events\Option\OptionWasCreated $event
+     * @param object $event
      *
      * @return void
      */
-    public function handle(OptionWasCreated $event)
+    public function handle(OptionWasDeleted $event)
     {
         /** @var \App\Models\Options\Option $option */
         $option = $event->option;
@@ -52,10 +52,12 @@ class AddOptionToUser implements ShouldQueue
             $query->chunk(100, function ($users) use ($option) {
                 /** @var \App\Models\User $user */
                 foreach ($users as $user) {
-                    $this->optionUserRepository->createUserOption($user, [
-                        'option_value' => $option->option_value,
-                        'option_key'   => $option->option_key,
-                    ]);
+                    /** @var \App\Models\Options\OptionUser $optionUser */
+                    $optionUser = $user->options()->where('option_key', $option->option_key)->first();
+
+                    if ($optionUser) {
+                        $this->optionUserRepository->delete($optionUser);
+                    }
                 }
             });
         }

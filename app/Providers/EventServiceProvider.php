@@ -5,9 +5,12 @@ namespace App\Providers;
 use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Events\Option\OptionWasCreated;
-use App\Listeners\AddOptionToUser;
+use App\Events\Option\OptionWasUpdated;
+use App\Listeners\AddOptionUser;
+use App\Listeners\DeleteOptionUser;
 use App\Listeners\SendProjectCollaboratorInvitationEmail;
 use App\Listeners\SendTeamCollaboratorInvitationEmail;
+use App\Listeners\UpdateOptionUser;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -34,7 +37,13 @@ class EventServiceProvider extends ServiceProvider
 
         // Option events
         OptionWasCreated::class => [
-            AddOptionToUser::class,
+            AddOptionUser::class,
+        ],
+        OptionWasUpdated::class => [
+            UpdateOptionUser::class,
+        ],
+        OptionWasUpdated::class => [
+            DeleteOptionUser::class,
         ],
     ];
 

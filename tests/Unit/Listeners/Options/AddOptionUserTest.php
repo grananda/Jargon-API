@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Listeners;
+namespace Tests\Unit\Listeners\Options;
 
 
 use App\Events\Option\OptionWasCreated;
-use App\Listeners\AddOptionToUser;
+use App\Listeners\AddOptionUser;
 use App\Models\Options\Option;
 use App\Models\User;
 use App\Repositories\OptionUserRepository;
@@ -12,7 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
-class AddOptionToUserTest extends TestCase
+class AddOptionUserTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -39,8 +39,8 @@ class AddOptionToUserTest extends TestCase
         /** @var OptionUserRepository $optionUserRepository */
         $optionUserRepository = resolve(OptionUserRepository::class);
 
-        /** @var AddOptionToUser $listener */
-        $listener = new AddOptionToUser($optionUserRepository);
+        /** @var AddOptionUser $listener */
+        $listener = new AddOptionUser($optionUserRepository);
 
         // When
         $listener->handle($event);
@@ -81,8 +81,8 @@ class AddOptionToUserTest extends TestCase
         /** @var OptionUserRepository $optionUserRepository */
         $optionUserRepository = resolve(OptionUserRepository::class);
 
-        /** @var AddOptionToUser $listener */
-        $listener = new AddOptionToUser($optionUserRepository);
+        /** @var AddOptionUser $listener */
+        $listener = new AddOptionUser($optionUserRepository);
 
         // When
         $listener->handle($event);
