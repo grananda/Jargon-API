@@ -3,7 +3,7 @@
 namespace Tests\Unit\Listeners;
 
 
-use App\Events\CollaboratorAddedToTeam;
+use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Listeners\SendTeamCollaboratorInvitationEmail;
 use App\Mail\SendTeamCollaboratorEmail;
 use App\Models\Team;
@@ -31,7 +31,7 @@ class SendTeamCollaboratorInvitationEmailTest extends TestCase
 
         $invitationToken = Str::random(Team::ITEM_TOKEN_LENGTH);
 
-        /** @var \App\Events\CollaboratorAddedToTeam $event */
+        /** @var \App\Events\Collaborator\CollaboratorAddedToTeam $event */
         $event = new CollaboratorAddedToTeam($team, $user, $invitationToken);
 
         /** @var SendTeamCollaboratorInvitationEmail $listener */

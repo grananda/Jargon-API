@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\CollaboratorAddedToTeam;
+use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Mail\SendTeamCollaboratorEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -15,7 +15,7 @@ class SendTeamCollaboratorInvitationEmail implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param \App\Events\CollaboratorAddedToTeam $event
+     * @param \App\Events\Collaborator\CollaboratorAddedToTeam $event
      *
      * @return void
      */

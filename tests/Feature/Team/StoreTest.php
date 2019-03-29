@@ -2,14 +2,12 @@
 
 namespace Tests\Feature\Api\Team;
 
-use App\Events\CollaboratorAddedToTeam;
-use App\Mail\SendTeamCollaboratorEmail;
+use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 

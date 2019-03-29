@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Collaborator;
 
 use App\Models\Translations\Project;
 use App\Models\User;
