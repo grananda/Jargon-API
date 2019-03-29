@@ -32,7 +32,10 @@ class UpdateSubscriptionOptionRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title'                => ['sometimes', 'string'],
+            'description'          => ['sometimes', 'string'],
+            'description_template' => ['sometimes', 'string'],
+            'option_key'           => ['sometimes', 'string'],
         ];
     }
 }

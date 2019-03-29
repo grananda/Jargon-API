@@ -20,6 +20,7 @@ class SubscriptionOption extends BaseEntity
     protected $fillable = [
         'title',
         'description',
+        'description_template',
         'option_key',
     ];
 

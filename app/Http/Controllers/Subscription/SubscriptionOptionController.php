@@ -81,7 +81,7 @@ class SubscriptionOptionController extends ApiController
     public function update(UpdateSubscriptionOptionRequest $request)
     {
         try {
-            $subscriptionOption = $this->subscriptionOption->update($request->option, $request->validated());
+            $subscriptionOption = $this->subscriptionOption->update($request->subscriptionOption, $request->validated());
 
             return $this->responseOk(new SubscriptionPlanOptionResource($subscriptionOption));
         } catch (Exception $e) {

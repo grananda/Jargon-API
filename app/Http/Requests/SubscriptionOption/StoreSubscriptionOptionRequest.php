@@ -30,7 +30,10 @@ class StoreSubscriptionOptionRequest extends Request
     public function rules()
     {
         return [
-            //
+            'title'                => ['required', 'string'],
+            'description'          => ['required', 'string'],
+            'description_template' => ['required', 'string'],
+            'option_key'           => ['required', 'string'],
         ];
     }
 }

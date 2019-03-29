@@ -3,7 +3,7 @@
 namespace Tests\Feature\SubscriptionOption;
 
 
-use App\Events\SubscriptionPlanOptionWasUpdated;
+use App\Events\SubscriptionOption\SubscriptionOptionWasUpdated;
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,7 +19,7 @@ class UpdateTest extends TestCase
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
         // When
-        $response = $this->put(route('subscriptions.plans.options.update'), []);
+        $response = $this->put(route('subscriptions.options.update', [123]), []);
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -32,8 +32,11 @@ class UpdateTest extends TestCase
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();
 
+        /** @var \App\Models\Subscriptions\SubscriptionOption $options */
+        $options = factory(SubscriptionOption::class)->create();
+
         // When
-        $response = $this->signIn($user)->put(route('subscriptions.plans.options.update'), []);
+        $response = $this->signIn($user)->put(route('subscriptions.options.update', [$options->uuid]), []);
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -46,8 +49,11 @@ class UpdateTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->staff(User::JUNIOR_STAFF_MEMBER);
 
+        /** @var \App\Models\Subscriptions\SubscriptionOption $options */
+        $options = factory(SubscriptionOption::class)->create();
+
         // When
-        $response = $this->signIn($user)->put(route('subscriptions.plans.options.update'), []);
+        $response = $this->signIn($user)->put(route('subscriptions.options.update', [$options->uuid]), []);
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -57,33 +63,30 @@ class UpdateTest extends TestCase
     public function a_200_code_will_be_returned_when_creating_a_subscription_plan_option()
     {
         // Given
-        Event::faker();
+        Event::fake(SubscriptionOptionWasUpdated::class);
 
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
 
         $optionKey = $this->faker->word;
-        $optionValue = 5;
-        $newOptionValue = 10;
+        $newOptionKey = $this->faker->word;
 
-        /** @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
-        $subscriptionPlanOption = factory(SubscriptionOption::class)->create([
-            'option_key'           => $optionKey,
-            'option_value'         => $optionValue,
-            'update_subscriptions' => false,
+        /** @var \App\Models\Subscriptions\SubscriptionOption $options */
+        $options = factory(SubscriptionOption::class)->create([
+            'option_key'   => $optionKey,
         ]);
 
         $data = [
-            'option_value' => $newOptionValue,
+            'option_key' => $newOptionKey,
         ];
 
         // When
-        $response = $this->signIn($user)->put(route('subscriptions.plans.options.update'), $data);
+        $response = $this->signIn($user)->put(route('subscriptions.options.update', [$options->uuid]), $data);
 
         // Then
-        $response->assertStatus(Response::HTTP_CREATED);
-        $response->assertJsonFragment(['option_key' => $subscriptionPlanOption->option_key]);
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonFragment(['option_key' => $newOptionKey]);
 
-        Event::assertDispatched(SubscriptionPlanOptionWasUpdated::class);
+        Event::assertDispatched(SubscriptionOptionWasUpdated::class);
     }
 }
