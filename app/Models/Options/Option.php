@@ -14,6 +14,9 @@ class Option extends BaseEntity
 {
     use HasUuid;
 
+    const USER_OPTION = 'user';
+    const APP_OPTION  = 'staff';
+
     /**
      * @var array
      */

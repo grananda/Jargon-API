@@ -3,6 +3,7 @@
 namespace App\Models\Options;
 
 use App\Models\BaseEntity;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OptionUser extends BaseEntity
@@ -30,5 +31,13 @@ class OptionUser extends BaseEntity
     protected function option()
     {
         return $this->belongsTo(Option::class, 'option_key', 'option_key');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    protected function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

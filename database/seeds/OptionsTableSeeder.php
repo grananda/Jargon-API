@@ -2,12 +2,19 @@
 
 use App\Models\Options\Option;
 use App\Models\Options\OptionCategory;
+use Illuminate\Support\Facades\Event;
 
 class OptionsTableSeeder extends AbstractSeeder
 {
     public function run()
     {
         $this->truncateTables(['option_categories', 'options']);
+
+        Event::fake([
+            \App\Events\Option\OptionWasCreated::class,
+            \App\Events\Option\OptionWasUpdated::class,
+            \App\Events\Option\OptionWasDeleted::class,
+        ]);
 
         $optionCategories = $this->getSeedFileContents('options');
 

@@ -2,32 +2,22 @@
 
 namespace App\Events\Option;
 
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
+use App\Models\Options\Option;
 
 class OptionWasUpdated
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    /**
+     * @var \App\Models\Options\Option
+     */
+    public $option;
 
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param \App\Models\Options\Option $option
      */
-    public function __construct()
+    public function __construct(Option $option)
     {
-        //
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('channel-name');
+        $this->option = $option;
     }
 }

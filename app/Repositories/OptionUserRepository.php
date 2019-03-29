@@ -47,6 +47,24 @@ class OptionUserRepository extends CoreRepository
     }
 
     /**
+     * @param \App\Models\User $user
+     * @param array            $attributes
+     *
+     * @throws \Throwable
+     *
+     * @return mixed
+     */
+    public function createUserOption(User $user, array $attributes)
+    {
+        return $this->dbConnection->transaction(function () use ($user, $attributes) {
+            $option = $this->create($attributes);
+            $user->options()->save($option);
+
+            return $option;
+        });
+    }
+
+    /**
      * Add UserOptions to user current options pool.
      *
      * @param \App\Models\User $user

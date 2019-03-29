@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use App\Events\CollaboratorAddedToProject;
-use App\Events\CollaboratorAddedToTeam;
+use App\Events\Collaborator\CollaboratorAddedToProject;
+use App\Events\Collaborator\CollaboratorAddedToTeam;
+use App\Events\Option\OptionWasCreated;
+use App\Listeners\AddOptionToUser;
 use App\Listeners\SendProjectCollaboratorInvitationEmail;
 use App\Listeners\SendTeamCollaboratorInvitationEmail;
 use Illuminate\Auth\Events\Registered;
@@ -21,11 +23,18 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        // Collaborator events
         CollaboratorAddedToTeam::class => [
             SendTeamCollaboratorInvitationEmail::class,
         ],
         CollaboratorAddedToProject::class => [
             SendProjectCollaboratorInvitationEmail::class,
+        ],
+
+        // Option events
+        OptionWasCreated::class => [
+            AddOptionToUser::class,
         ],
     ];
 

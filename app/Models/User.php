@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Options\OptionUser;
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Traits\HasUuid;
 use App\Models\Translations\Project;
@@ -137,6 +138,14 @@ class User extends Authenticatable
     public function memos()
     {
         return $this->hasMany(Memo::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function options()
+    {
+        return $this->hasMany(OptionUser::class);
     }
 
     /**
