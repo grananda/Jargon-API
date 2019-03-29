@@ -7,7 +7,6 @@ use App\Events\Option\OptionWasDeleted;
 use App\Listeners\DeleteOptionUser;
 use App\Models\Options\Option;
 use App\Repositories\OptionUserRepository;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class DeleteOptionUserTest extends TestCase
@@ -16,8 +15,6 @@ class DeleteOptionUserTest extends TestCase
     public function an_option_is_deleted_from_user()
     {
         // Given
-        Event::fake(OptionWasDeleted::class);
-
         /** @var \App\Models\User $user */
         $user = $this->user();
 
@@ -44,7 +41,7 @@ class DeleteOptionUserTest extends TestCase
             'option_key'   => $option2->option_key,
         ]);
 
-        /** @var \App\Events\Option\OptionWasCreated $event */
+        /** @var \App\Events\Option\OptionWasDeleted $event */
         $event = new OptionWasDeleted($option1);
 
         /** @var OptionUserRepository $optionUserRepository */

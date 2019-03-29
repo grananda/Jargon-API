@@ -9,7 +9,6 @@ use App\Models\Options\Option;
 use App\Models\User;
 use App\Repositories\OptionUserRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class AddOptionUserTest extends TestCase
@@ -20,8 +19,6 @@ class AddOptionUserTest extends TestCase
     public function a_new_option_is_added_to_user_options()
     {
         // Given
-        Event::fake(OptionWasCreated::class);
-
         /** @var \App\Models\User $user */
         $user = $this->user();
 
@@ -61,8 +58,6 @@ class AddOptionUserTest extends TestCase
     /** @test */
     public function a_new_app_option_is_not_added_to_user_options()
     {
-        Event::fake(OptionWasCreated::class);
-
         // Given
         /** @var \App\Models\User $user */
         $user = factory(User::class)->create();

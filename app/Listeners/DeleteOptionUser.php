@@ -32,7 +32,7 @@ class DeleteOptionUser implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param object $event
+     * @param \App\Events\Option\OptionWasDeleted $event
      *
      * @return void
      */
