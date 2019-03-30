@@ -7,10 +7,13 @@ use App\Events\Option\OptionWasDeleted;
 use App\Listeners\DeleteOptionUser;
 use App\Models\Options\Option;
 use App\Repositories\OptionUserRepository;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class DeleteOptionUserTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function an_option_is_deleted_from_user()
     {

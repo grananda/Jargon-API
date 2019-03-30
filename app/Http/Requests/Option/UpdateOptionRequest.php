@@ -38,13 +38,12 @@ class UpdateOptionRequest extends Request
         return [
             'title'              => ['sometimes', 'string'],
             'description'        => ['sometimes', 'string', 'max:255'],
-            'option_key'         => ['sometimes', 'string'],
             'option_value'       => ['sometimes'],
-            'option_scope'       => ['sometimes', Rule::in(['user', 'staff'])],
-            'is_private'         => ['sometimes', 'boolean'],
             'option_category_id' => ['sometimes', new ValidOptionCategory()],
-            'option_type'        => ['sometimes', Rule::in(['check', 'value'])],
-            'option_enum'        => ['sometimes', 'array'],
+            'option_key'         => ['sometimes', Rule::in([null])],
+            'option_type'        => ['sometimes', Rule::in([null])],
+            'option_enum'        => ['sometimes', Rule::in([null])],
+            'option_scope'       => ['sometimes', Rule::in([null])],
         ];
     }
 }

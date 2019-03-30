@@ -66,11 +66,30 @@ class UpdateTest extends TestCase
     }
 
     /** @test */
-    public function a_200_code_will_be_returned_when_creating_a_subscription_plan_option()
+    public function a_422_code_will_be_returned_when_providing_a_forbidden_param()
     {
         // Given
-        Event::fake(OptionWasUpdated::class);
+        /** @var \App\Models\User $user */
+        $user = $this->staff(User::SENIOR_STAFF_MEMBER);
 
+        /** @var \App\Models\Options\Option $option */
+        $option = factory(Option::class)->create();
+
+        $data = [
+            'option_key'   => $this->faker->word,
+        ];
+
+        // When
+        $response = $this->signIn($user)->put(route('options.update', [$option->uuid]), $data);
+
+        // Then
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /** @test */
+    public function a_200_code_will_be_returned_when_updating_a_subscription_plan_option()
+    {
+        // Given
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
 
@@ -79,6 +98,7 @@ class UpdateTest extends TestCase
 
         $data = [
             'option_value' => 10,
+            'option_scope' => null,
         ];
 
         // When
@@ -87,8 +107,6 @@ class UpdateTest extends TestCase
         // Then
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment(['option_value' => $data['option_value']]);
-
-        Event::assertDispatched(OptionWasUpdated::class);
-
+        $response->assertJsonFragment(['option_scope' => $option->option_scope]);
     }
 }

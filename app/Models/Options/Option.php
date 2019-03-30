@@ -4,7 +4,6 @@ namespace App\Models\Options;
 
 use App\Events\Option\OptionWasCreated;
 use App\Events\Option\OptionWasDeleted;
-use App\Events\Option\OptionWasUpdated;
 use App\Models\BaseEntity;
 use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,7 +33,6 @@ class Option extends BaseEntity
         'option_key',
         'option_value',
         'option_type',
-        'is_private',
         'option_category_id',
         'option_scope',
     ];
@@ -44,7 +42,6 @@ class Option extends BaseEntity
      */
     protected $dispatchesEvents = [
         'created' => OptionWasCreated::class,
-        'updated' => OptionWasUpdated::class,
         'deleted' => OptionWasDeleted::class,
     ];
 

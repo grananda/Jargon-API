@@ -18,7 +18,6 @@ $factory->define(Option::class, function (Faker $faker) {
         'option_value' => $faker->word,
         'option_scope' => $faker->randomElement(['user', 'staff']),
         'option_type'  => $faker->randomElement(['check', 'text']),
-        'is_private'   => $faker->boolean,
         'created_at'   => Carbon::now(),
         'updated_at'   => Carbon::now(),
     ];

@@ -34,7 +34,6 @@ class StoreOptionRequest extends Request
             'option_value'       => ['required'],
             'option_scope'       => ['required', 'string', Rule::in(['user', 'staff'])],
             'option_type'        => ['required', 'string', Rule::in(['check', 'text'])],
-            'is_private'         => ['required', 'boolean'],
             'option_enum'        => ['sometimes', 'array'],
         ];
     }
