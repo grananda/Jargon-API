@@ -6,6 +6,7 @@ use App\Events\Option\OptionWasDeleted;
 use App\Models\Options\Option;
 use App\Models\Role;
 use App\Models\User;
+use App\Repositories\OptionAppRepository;
 use App\Repositories\OptionUserRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -20,19 +21,28 @@ class DeleteOptionUser implements ShouldQueue
     private $optionUserRepository;
 
     /**
-     * AddOptionUser constructor.
+     * @var \App\Repositories\OptionAppRepository
+     */
+    private $optionAppRepository;
+
+    /**
+     * DeleteOptionUser constructor.
      *
      * @param \App\Repositories\OptionUserRepository $optionUserRepository
+     * @param \App\Repositories\OptionAppRepository  $optionAppRepository
      */
-    public function __construct(OptionUserRepository $optionUserRepository)
+    public function __construct(OptionUserRepository $optionUserRepository, OptionAppRepository $optionAppRepository)
     {
         $this->optionUserRepository = $optionUserRepository;
+        $this->optionAppRepository  = $optionAppRepository;
     }
 
     /**
      * Handle the event.
      *
      * @param \App\Events\Option\OptionWasDeleted $event
+     *
+     * @throws \Throwable
      *
      * @return void
      */
@@ -60,6 +70,10 @@ class DeleteOptionUser implements ShouldQueue
                     }
                 }
             });
+        } elseif ($option->option_scope === Option::APP_OPTION) {
+            $option = $this->optionAppRepository->findBy(['option_key' => $option->option_key]);
+
+            $this->optionAppRepository->delete($option);
         }
     }
 }

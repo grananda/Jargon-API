@@ -4,41 +4,42 @@ namespace Tests\Feature;
 
 use App\Models\Options\Option;
 use App\Models\User;
+use App\Repositories\OptionAppRepository;
 use App\Repositories\OptionRepository;
 use App\Repositories\OptionUserRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class OptionUserRepositoryTest extends TestCase
+class OptionAppRepositoryTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function create_user_options_for_new_user()
+    public function create_app_options()
     {
         // Given
-        /** @var OptionUserRepository $optionUserRepository */
-        $optionUserRepository = resolve(OptionUserRepository::class);
+        /** @var OptionAppRepository $optionAppRepository */
+        $optionAppRepository = resolve(OptionAppRepository::class);
 
         /** @var OptionRepository $optionsRepository */
         $optionsRepository = resolve(OptionRepository::class);
 
-        /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        factory(Option::class, 5)->create([
+            'option_scope' => 'staff',
+        ]);
 
         /** @var \Illuminate\Database\Eloquent\Collection $options */
         $options = $optionsRepository->findAllBy([
-            'option_scope' => 'user',
+            'option_scope' => 'staff',
         ]);
 
         // When
-        $optionUserRepository->createUserOptions($user);
+        $optionAppRepository->createUserOptions();
 
         // Then
         foreach ($options as $option) {
-            $this->assertDatabaseHas('option_users', [
+            $this->assertDatabaseHas('option_apps', [
                 'option_key' => $option->option_key,
-                'user_id'    => $user->id,
             ]);
         }
     }
@@ -47,30 +48,30 @@ class OptionUserRepositoryTest extends TestCase
     public function remove_user_options()
     {
         // Given
-        /** @var OptionUserRepository $optionUserRepository */
-        $optionUserRepository = resolve(OptionUserRepository::class);
+        /** @var OptionAppRepository $optionAppRepository */
+        $optionAppRepository = resolve(OptionAppRepository::class);
 
         /** @var OptionRepository $optionsRepository */
         $optionsRepository = resolve(OptionRepository::class);
 
-        /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        factory(Option::class, 5)->create([
+            'option_scope' => 'staff',
+        ]);
 
         /** @var \Illuminate\Database\Eloquent\Collection $options */
         $options = $optionsRepository->findAllBy([
-            'option_scope' => 'user',
+            'option_scope' => 'staff',
         ]);
 
-        $optionUserRepository->createUserOptions($user);
+        $optionAppRepository->createUserOptions();
 
         // When
-        $optionUserRepository->removeUserOptions($user);
+        $optionAppRepository->removeUserOptions();
 
         // Then
         foreach ($options as $option) {
-            $this->assertDatabaseMissing('option_users', [
+            $this->assertDatabaseMissing('option_apps', [
                 'option_key' => $option->option_key,
-                'user_id'    => $user->id,
             ]);
         }
     }
@@ -79,21 +80,22 @@ class OptionUserRepositoryTest extends TestCase
     public function update_user_options()
     {
         // Given
-        /** @var OptionUserRepository $optionUserRepository */
-        $optionUserRepository = resolve(OptionUserRepository::class);
+        /** @var OptionAppRepository $optionAppRepository */
+        $optionAppRepository = resolve(OptionAppRepository::class);
 
         /** @var OptionRepository $optionsRepository */
         $optionsRepository = resolve(OptionRepository::class);
 
-        /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        factory(Option::class, 5)->create([
+            'option_scope' => 'staff',
+        ]);
 
         /** @var \Illuminate\Database\Eloquent\Collection $options */
         $options = $optionsRepository->findAllBy([
-            'option_scope' => 'user',
+            'option_scope' => 'staff',
         ]);
 
-        $optionUserRepository->createUserOptions($user);
+        $optionAppRepository->createUserOptions();
 
         $optionKey = $options->first()->option_key;
         $optionValue = $this->faker->word;
@@ -103,13 +105,12 @@ class OptionUserRepositoryTest extends TestCase
         ];
 
         // When
-        $optionUserRepository->updateUserOptions($user, $attributes);
+        $optionAppRepository->updateUserOptions($attributes);
 
         // Then
-        $this->assertDatabaseHas('option_users', [
+        $this->assertDatabaseHas('option_apps', [
             'option_key'   => $optionKey,
             'option_value' => $optionValue,
-            'user_id'      => $user->id,
         ]);
     }
 
@@ -117,28 +118,28 @@ class OptionUserRepositoryTest extends TestCase
     public function rebuild_user_options()
     {
         // Given
-        /** @var OptionUserRepository $optionUserRepository */
-        $optionUserRepository = resolve(OptionUserRepository::class);
+        /** @var OptionAppRepository $optionAppRepository */
+        $optionAppRepository = resolve(OptionAppRepository::class);
 
         /** @var OptionRepository $optionsRepository */
         $optionsRepository = resolve(OptionRepository::class);
 
-        /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        factory(Option::class, 5)->create([
+            'option_scope' => 'staff',
+        ]);
 
         /** @var \Illuminate\Database\Eloquent\Collection $options */
         $options = $optionsRepository->findAllBy([
-            'option_scope' => 'user',
+            'option_scope' => 'staff',
         ]);
 
         // When
-        $optionUserRepository->rebuildUserOptions($user);
+        $optionAppRepository->rebuildAppOptions();
 
         // Then
         foreach ($options as $option) {
-            $this->assertDatabaseHas('option_users', [
+            $this->assertDatabaseHas('option_apps', [
                 'option_key' => $option->option_key,
-                'user_id'    => $user->id,
             ]);
         }
     }

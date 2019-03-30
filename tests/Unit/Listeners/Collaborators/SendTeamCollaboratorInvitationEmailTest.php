@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Listeners;
+namespace Tests\Unit\Listeners\Collaborators;
 
 
 use App\Events\Collaborator\CollaboratorAddedToTeam;

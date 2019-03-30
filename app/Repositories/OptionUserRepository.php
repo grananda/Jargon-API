@@ -18,8 +18,9 @@ class OptionUserRepository extends CoreRepository
     /**
      * ProjectRepository constructor.
      *
-     * @param \Illuminate\Database\Connection $dbConnection
-     * @param \App\Models\Options\OptionUser  $model
+     * @param \Illuminate\Database\Connection    $dbConnection
+     * @param \App\Models\Options\OptionUser     $model
+     * @param \App\Repositories\OptionRepository $optionRepository
      */
     public function __construct(Connection $dbConnection, OptionUser $model, OptionRepository $optionRepository)
     {
@@ -79,7 +80,6 @@ class OptionUserRepository extends CoreRepository
             /** @var \Illuminate\Database\Eloquent\Collection $options */
             $options = $this->optionsRepository->findAllBy([
                 'option_scope' => 'user',
-                'is_private'   => false,
             ]);
 
             /** @var \Illuminate\Database\Eloquent\Collection $options */

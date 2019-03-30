@@ -6,6 +6,7 @@ use App\Events\Option\OptionWasCreated;
 use App\Models\Options\Option;
 use App\Models\Role;
 use App\Models\User;
+use App\Repositories\OptionAppRepository;
 use App\Repositories\OptionUserRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -20,19 +21,28 @@ class AddOptionUser implements ShouldQueue
     private $optionUserRepository;
 
     /**
-     * AddOptionUser constructor.
+     * @var \App\Repositories\OptionAppRepository
+     */
+    private $optionAppRepository;
+
+    /**
+     * DeleteOptionUser constructor.
      *
      * @param \App\Repositories\OptionUserRepository $optionUserRepository
+     * @param \App\Repositories\OptionAppRepository  $optionAppRepository
      */
-    public function __construct(OptionUserRepository $optionUserRepository)
+    public function __construct(OptionUserRepository $optionUserRepository, OptionAppRepository $optionAppRepository)
     {
         $this->optionUserRepository = $optionUserRepository;
+        $this->optionAppRepository  = $optionAppRepository;
     }
 
     /**
      * Handle the event.
      *
      * @param \App\Events\Option\OptionWasCreated $event
+     *
+     * @throws \Throwable
      *
      * @return void
      */
@@ -58,6 +68,11 @@ class AddOptionUser implements ShouldQueue
                     ]);
                 }
             });
+        } elseif ($option->option_scope === Option::APP_OPTION) {
+            $this->optionAppRepository->create([
+                'option_value' => $option->option_value,
+                'option_key'   => $option->option_key,
+            ]);
         }
     }
 }
