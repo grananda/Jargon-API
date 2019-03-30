@@ -30,6 +30,8 @@ class StoreSubscriptionPlanRequest extends Request
             'alias'       => ['required', 'string'],
             'amount'      => ['required', 'numeric'],
             'status'      => ['sometimes', 'boolean'],
+            'options'     => ['required', 'array'],
+            'options.*'   => ['required'],
         ];
     }
 }

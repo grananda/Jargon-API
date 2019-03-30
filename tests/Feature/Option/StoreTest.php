@@ -5,6 +5,8 @@ namespace Tests\Feature\Option;
 
 use App\Events\Option\OptionWasCreated;
 use App\Models\Options\Option;
+use App\Models\Options\OptionCategory;
+use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
@@ -64,9 +66,13 @@ class StoreTest extends TestCase
 
         $optionKey = $this->faker->word;
 
+        /** @var \App\Models\Options\OptionCategory $cat */
+        $optionCategory = OptionCategory::inRandomOrder()->first();
+
         /** @var \App\Models\Options\Option $option */
         $option = factory(Option::class)->make([
-            'option_key'   => $optionKey,
+            'option_key'         => $optionKey,
+            'option_category_id' => $optionCategory->uuid,
         ]);
 
         // When
@@ -75,6 +81,10 @@ class StoreTest extends TestCase
         // Then
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonFragment(['option_key' => $option->option_key]);
+        $this->assertDatabaseHas('options', [
+            'option_key'         => $option->option_key,
+            'option_category_id' => $optionCategory->id,
+        ]);
 
         Event::assertDispatched(OptionWasCreated::class);
     }

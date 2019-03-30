@@ -62,7 +62,7 @@ class SubscriptionPlanController extends ApiController
     public function store(StoreSubscriptionPlanRequest $request)
     {
         try {
-            $subscriptionPlan = $this->subscriptionPlanRepository->create($request->validated());
+            $subscriptionPlan = $this->subscriptionPlanRepository->createSubscriptionPlan($request->validated());
 
             return $this->responseCreated(new SubscriptionPlanResource($subscriptionPlan));
         } catch (Exception $e) {
@@ -98,7 +98,7 @@ class SubscriptionPlanController extends ApiController
     public function update(UpdateSubscriptionPlanRequest $request)
     {
         try {
-            $subscriptionPlan = $this->subscriptionPlanRepository->update($request->subscriptionPlan, $request->validated());
+            $subscriptionPlan = $this->subscriptionPlanRepository->updateSubscriptionPlan($request->subscriptionPlan, $request->validated());
 
             return $this->responseOk(new SubscriptionPlanResource($subscriptionPlan));
         } catch (Exception $e) {

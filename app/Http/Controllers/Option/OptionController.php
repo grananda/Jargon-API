@@ -61,7 +61,7 @@ class OptionController extends ApiController
     public function store(StoreOptionRequest $request)
     {
         try {
-            $subscriptionPlan = $this->optionRepository->create($request->validated());
+            $subscriptionPlan = $this->optionRepository->createOption($request->validated());
 
             return $this->responseCreated(new OptionResource($subscriptionPlan));
         } catch (Exception $e) {

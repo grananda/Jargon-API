@@ -3,7 +3,9 @@
 namespace Tests\Feature\SubscriptionPlan;
 
 
+use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\Subscriptions\SubscriptionPlan;
+use App\Models\Subscriptions\SubscriptionPlanOptionValue;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
@@ -85,8 +87,12 @@ class DeleteTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
 
-        /** @var array $subscriptionPlan */
+        /** @var \App\Models\Subscriptions\SubscriptionOption $option */
+        $option = factory(SubscriptionOption::class)->create();
+
+        /** @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
         $subscriptionPlan = factory(SubscriptionPlan::class)->create();
+        $subscriptionPlan->addOption($option, 10);
 
         // When
         $response = $this->signIn($user)->delete(route('subscriptions.plans.destroy', [$subscriptionPlan->uuid]));
@@ -95,6 +101,9 @@ class DeleteTest extends TestCase
         $response->assertStatus(Response::HTTP_NO_CONTENT);
         $this->assertDatabaseMissing('subscription_plans', [
             'uuid' => $subscriptionPlan->uuid,
+        ]);
+        $this->assertDatabaseMissing('subscription_plan_option_values', [
+            'subscription_plan_id' => $subscriptionPlan->id,
         ]);
     }
 }

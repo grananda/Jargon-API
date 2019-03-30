@@ -12,14 +12,31 @@ use Illuminate\Database\Eloquent\Model;
 class OptionRepository extends CoreRepository
 {
     /**
+     * @var \App\Repositories\OptionCategoryRepository
+     */
+    private $optionCategoryRepository;
+
+    /**
      * ProjectRepository constructor.
      *
-     * @param \Illuminate\Database\Connection $dbConnection
-     * @param \App\Models\Options\Option      $model
+     * @param \Illuminate\Database\Connection            $dbConnection
+     * @param \App\Models\Options\Option                 $model
+     * @param \App\Repositories\OptionCategoryRepository $optionCategoryRepository
      */
-    public function __construct(Connection $dbConnection, Option $model)
+    public function __construct(Connection $dbConnection, Option $model, OptionCategoryRepository $optionCategoryRepository)
     {
         parent::__construct($dbConnection, $model);
+
+        $this->optionCategoryRepository = $optionCategoryRepository;
+    }
+
+    public function createOption(array $attributes)
+    {
+        return $this->dbConnection->transaction(function () use ($attributes) {
+            $attributes['option_category_id'] = $this->optionCategoryRepository->findByUuIdOrFail($attributes['option_category_id'])->id;
+
+            return $this->create($attributes);
+        });
     }
 
     public function updateOption(Option $option, array $attributes)
@@ -34,6 +51,10 @@ class OptionRepository extends CoreRepository
 
             foreach ($forbidden as $item) {
                 unset($attributes[$item]);
+            }
+
+            if (isset($attributes['option_category_id'])) {
+                $attributes['option_category_id'] = $this->optionCategoryRepository->findByUuIdOrFail($attributes['option_category_id'])->id;
             }
 
             $option = $this->update($option, $attributes);

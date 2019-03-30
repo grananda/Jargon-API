@@ -37,6 +37,8 @@ class UpdateSubscriptionPlanRequest extends Request
             'alias'       => ['sometimes', 'string'],
             'amount'      => ['sometimes', 'numeric'],
             'status'      => ['sometimes', 'boolean'],
+            'options'     => ['sometimes', 'array'],
+            'options.*'   => ['required'],
         ];
     }
 }

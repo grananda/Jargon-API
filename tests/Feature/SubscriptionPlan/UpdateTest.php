@@ -3,6 +3,7 @@
 namespace Tests\Feature\SubscriptionPlan;
 
 
+use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -65,11 +66,31 @@ class UpdateTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
 
-        /** @var array $subscriptionPlan */
+        /** @var \App\Models\Subscriptions\SubscriptionOption $option */
+        $option = factory(SubscriptionOption::class)->create();
+
+        /** @var \App\Models\Subscriptions\SubscriptionOption $option2 */
+        $option2 = factory(SubscriptionOption::class)->create();
+
+        $optionValue = $this->faker->numberBetween(1, 5);
+        $newOptionValue = $this->faker->numberBetween(6, 10);
+
+        /** @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
         $subscriptionPlan = factory(SubscriptionPlan::class)->create();
+        $subscriptionPlan->addOption($option, $optionValue);
 
         $data = [
-            'status' => false,
+            'status'  => false,
+            'options' => [
+                [
+                    'option_key'   => $option->option_key,
+                    'option_value' => $newOptionValue,
+                ],
+                [
+                    'option_key'   => $option2->option_key,
+                    'option_value' => $newOptionValue,
+                ],
+            ],
         ];
 
         // When
@@ -79,5 +100,15 @@ class UpdateTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment(['alias' => $subscriptionPlan->alias]);
         $response->assertJsonFragment(['status' => $data['status']]);
+        $this->assertDatabaseHas('subscription_plan_option_values', [
+            'subscription_plan_id' => $subscriptionPlan->id,
+            'option_key'           => $option->option_key,
+            'option_value'         => $newOptionValue,
+        ]);
+        $this->assertDatabaseHas('subscription_plan_option_values', [
+            'subscription_plan_id' => $subscriptionPlan->id,
+            'option_key'           => $option2->option_key,
+            'option_value'         => $newOptionValue,
+        ]);
     }
 }
