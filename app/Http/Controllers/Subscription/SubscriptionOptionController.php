@@ -7,8 +7,8 @@ use App\Http\Requests\SubscriptionOption\DeleteSubscriptionOptionRequest;
 use App\Http\Requests\SubscriptionOption\IndexSubscriptionOptionRequest;
 use App\Http\Requests\SubscriptionOption\StoreSubscriptionOptionRequest;
 use App\Http\Requests\SubscriptionOption\UpdateSubscriptionOptionRequest;
-use App\Http\Resources\SubscriptionPlanOption\SubscriptionPlanOption as SubscriptionPlanOptionResource;
-use App\Http\Resources\SubscriptionPlanOption\SubscriptionPlanOptionCollection;
+use App\Http\Resources\SubscriptionOption\SubscriptionOption as SubscriptionPlanOptionResource;
+use App\Http\Resources\SubscriptionOption\SubscriptionOptionCollection;
 use App\Repositories\SubscriptionOptionRepository;
 use Exception;
 
@@ -43,7 +43,7 @@ class SubscriptionOptionController extends ApiController
         try {
             $subscriptionOptions = $this->subscriptionOption->findAllBy([]);
 
-            return $this->responseOk(new SubscriptionPlanOptionCollection($subscriptionOptions));
+            return $this->responseOk(new SubscriptionOptionCollection($subscriptionOptions));
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
         }

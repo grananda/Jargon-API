@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Subscriptions;
 
+use App\Http\Resources\SubscriptionPlanOptionValue\SubscriptionPlanOptionValueCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SubscriptionPlan extends JsonResource
@@ -22,6 +23,7 @@ class SubscriptionPlan extends JsonResource
             'alias'       => $this->alias,
             'amount'      => $this->amount,
             'status'      => (bool) $this->status,
+            'options'     => new SubscriptionPlanOptionValueCollection($this->options),
         ];
     }
 }

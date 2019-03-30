@@ -25,5 +25,6 @@ class ListTest extends TestCase
         // Then
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment(['alias' => $subscriptionPlan->alias]);
+        $response->assertJsonFragment(['alias' => 'freemium']);
     }
 }
