@@ -67,8 +67,6 @@ class DeleteTest extends TestCase
     public function a_200_code_will_be_returned_when_deleting_a_subscription_plan_option()
     {
         // Given
-        Event::fake(SubscriptionOptionWasDeleted::class);
-
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
 
@@ -87,7 +85,5 @@ class DeleteTest extends TestCase
         $this->assertDatabaseMissing('options', [
             'uuid' => $subscriptionPlanOption->uuid,
         ]);
-
-        Event::assertDispatched(SubscriptionOptionWasDeleted::class);
     }
 }

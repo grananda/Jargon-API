@@ -57,8 +57,6 @@ class StoreTest extends TestCase
     public function a_200_code_will_be_returned_when_creating_a_subscription_plan_option()
     {
         // Given
-        Event::fake(SubscriptionOptionWasCreated::class);
-
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
 
@@ -75,7 +73,5 @@ class StoreTest extends TestCase
         // Then
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonFragment(['option_key' => $option->option_key]);
-
-        Event::assertDispatched(SubscriptionOptionWasCreated::class);
     }
 }

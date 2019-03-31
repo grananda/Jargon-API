@@ -2,8 +2,6 @@
 
 namespace App\Models\Subscriptions;
 
-use App\Events\SubscriptionOption\SubscriptionOptionWasCreated;
-use App\Events\SubscriptionOption\SubscriptionOptionWasDeleted;
 use App\Models\BaseEntity;
 use App\Models\Traits\HasUuid;
 
@@ -21,13 +19,5 @@ class SubscriptionOption extends BaseEntity
         'description',
         'description_template',
         'option_key',
-    ];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected $dispatchesEvents = [
-        'created' => SubscriptionOptionWasCreated::class,
-        'deleted' => SubscriptionOptionWasDeleted::class,
     ];
 }

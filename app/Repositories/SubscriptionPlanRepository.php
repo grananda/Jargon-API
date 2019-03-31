@@ -30,7 +30,7 @@ class SubscriptionPlanRepository extends CoreRepository
     {
         parent::__construct($dbConnection, $model);
 
-        $this->subscriptionOptionRepository = $subscriptionOptionRepository;
+        $this->subscriptionOptionRepository          = $subscriptionOptionRepository;
         $this->subscriptionPlanOptionValueRepository = $subscriptionPlanOptionValueRepository;
     }
 
@@ -39,9 +39,9 @@ class SubscriptionPlanRepository extends CoreRepository
      *
      * @param array $attributes
      *
-     * @return mixed
      * @throws \Throwable
      *
+     * @return mixed
      */
     public function createSubscriptionPlan(array $attributes)
     {
@@ -69,9 +69,9 @@ class SubscriptionPlanRepository extends CoreRepository
      * @param \App\Models\Subscriptions\SubscriptionPlan $entity
      * @param array                                      $attributes
      *
-     * @return mixed
      * @throws \Throwable
      *
+     * @return mixed
      */
     public function updateSubscriptionPlan(SubscriptionPlan $entity, array $attributes)
     {

@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\Subscriptions\SubscriptionPlanOptionValue;
 use Faker\Generator as Faker;
 use Illuminate\Database\Eloquent\Factory;

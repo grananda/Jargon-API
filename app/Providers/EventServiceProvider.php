@@ -6,12 +6,8 @@ use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Events\Option\OptionWasCreated;
 use App\Events\Option\OptionWasDeleted;
-use App\Events\SubscriptionOption\SubscriptionOptionWasCreated;
-use App\Events\SubscriptionOption\SubscriptionOptionWasDeleted;
 use App\Listeners\AddOptionUser;
-use App\Listeners\AddSubscriptionPlanOptionValue;
 use App\Listeners\DeleteOptionUser;
-use App\Listeners\DeleteSubscriptionPlanOptionValue;
 use App\Listeners\SendProjectCollaboratorInvitationEmail;
 use App\Listeners\SendTeamCollaboratorInvitationEmail;
 use Illuminate\Auth\Events\Registered;
@@ -44,14 +40,6 @@ class EventServiceProvider extends ServiceProvider
         ],
         OptionWasDeleted::class => [
             DeleteOptionUser::class,
-        ],
-
-        // SubscriptionOption events
-        SubscriptionOptionWasCreated::class => [
-            AddSubscriptionPlanOptionValue::class,
-        ],
-        SubscriptionOptionWasDeleted::class => [
-            DeleteSubscriptionPlanOptionValue::class,
         ],
     ];
 
