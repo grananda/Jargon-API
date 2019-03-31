@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\User\DeleteUserRequest;
 use App\Http\Requests\UserRegistrationRequest;
 use App\Repositories\UserRepository;
 use Exception;
@@ -32,9 +33,9 @@ class UserController extends ApiController
      *
      * @param \App\Http\Requests\UserRegistrationRequest $request
      *
+     * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(UserRegistrationRequest $request)
     {
@@ -57,5 +58,25 @@ class UserController extends ApiController
     public function show(Request $request)
     {
         return $this->responseOk($request->user());
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param \App\Http\Requests\User\DeleteUserRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
+     */
+    public function destroy(DeleteUserRequest $request)
+    {
+        try {
+            $this->userRepository->delete($request->user);
+
+            return $this->responseNoContent();
+        } catch (Exception $e) {
+            return $this->responseInternalError($e->getMessage());
+
+        }
     }
 }

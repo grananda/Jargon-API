@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Events\User\UserWasDeleted;
 use App\Models\Options\OptionUser;
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Traits\HasUuid;
 use App\Models\Translations\Project;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -23,6 +25,14 @@ class User extends Authenticatable
     const   SUPER_ADMIN_STAFF_MEMBER = 'super-admin';
     const   SENIOR_STAFF_MEMBER      = 'senior-staff';
     const   JUNIOR_STAFF_MEMBER      = 'junior-staff';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $dispatchesEvents = [
+        'created' => Registered::class,
+        'deleted' => UserWasDeleted::class,
+    ];
 
     /**
      * The attributes that are mass assignable.

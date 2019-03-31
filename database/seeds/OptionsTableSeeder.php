@@ -15,7 +15,6 @@ class OptionsTableSeeder extends AbstractSeeder
 
         Event::fake([
             OptionWasCreated::class,
-            OptionWasUpdated::class,
             OptionWasDeleted::class,
         ]);
 

@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\User\UserWasCreated;
+use App\Events\User\UserWasDeleted;
 use App\Models\Options\Option;
 use App\Models\Options\OptionUser;
 use App\Models\Role;
@@ -8,6 +10,8 @@ use App\Models\Subscriptions\ActiveSubscriptionOptionValue;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\User;
 use App\Models\UserProfile;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends AbstractSeeder
@@ -28,12 +32,16 @@ class UserSeeder extends AbstractSeeder
             'active_subscription_option_values',
         ]);
 
+        Event::fake([
+            Registered::class,
+            UserWasDeleted::class,
+        ]);
+
         $users = $this->getSeedFileContents('users');
 
         $options = Option::where('option_scope', 'user')
-            ->where('is_private', false)
-            ->get()
-        ;
+            ->where('option_scope', Option::USER_OPTION)
+            ->get();
 
         foreach ($users as $user) {
             /** @var \App\Models\Role $role */

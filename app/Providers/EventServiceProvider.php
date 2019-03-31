@@ -6,6 +6,8 @@ use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Events\Option\OptionWasCreated;
 use App\Events\Option\OptionWasDeleted;
+use App\Events\User\UserWasCreated;
+use App\Events\User\UserWasDeleted;
 use App\Listeners\AddOptionUser;
 use App\Listeners\DeleteOptionUser;
 use App\Listeners\SendProjectCollaboratorInvitationEmail;
@@ -22,12 +24,16 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        Registered::class => [
+        // User events
+        Registered::class                 => [
             SendEmailVerificationNotification::class,
+        ],
+        UserWasDeleted::class             => [
+
         ],
 
         // Collaborator events
-        CollaboratorAddedToTeam::class => [
+        CollaboratorAddedToTeam::class    => [
             SendTeamCollaboratorInvitationEmail::class,
         ],
         CollaboratorAddedToProject::class => [
@@ -35,10 +41,10 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // Option events
-        OptionWasCreated::class => [
+        OptionWasCreated::class           => [
             AddOptionUser::class,
         ],
-        OptionWasDeleted::class => [
+        OptionWasDeleted::class           => [
             DeleteOptionUser::class,
         ],
     ];
