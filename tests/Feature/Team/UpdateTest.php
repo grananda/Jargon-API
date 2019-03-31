@@ -3,7 +3,7 @@
 namespace Tests\Feature\Api\Team;
 
 
-use App\Events\CollaboratorAddedToTeam;
+use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;

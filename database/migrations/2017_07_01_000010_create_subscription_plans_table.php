@@ -16,7 +16,7 @@ class CreateSubscriptionPlansTable extends Migration
             $table->string('alias')->unique();
             $table->double('amount')->default(0);
             $table->boolean('trial')->default(false);
-            $table->unsignedInteger('rank');
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }

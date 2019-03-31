@@ -4,7 +4,6 @@
         "description": "FREE and Ideal for developers with a  small project",
         "alias": "freemium",
         "trial": true,
-        "rank": 0,
         "amount": 0,
         "options": [
             {
@@ -41,7 +40,6 @@
         "title": "Premium",
         "description": "Ideal for small start-ups and freelancers",
         "alias": "premium",
-        "rank": 10,
         "amount": 8.00,
         "options": [
             {
@@ -78,7 +76,6 @@
         "title": "Professional",
         "description": "Perfect for medium size businesses or professional freelancers",
         "alias": "professional",
-        "rank": 20,
         "amount": 25.00,
         "options": [
             {
@@ -115,7 +112,6 @@
         "title": "Enterprise",
         "description": "Full package for big sized business",
         "alias": "enterprise",
-        "rank": 30,
         "amount": 45.00,
         "options": [
             {

@@ -18,7 +18,6 @@ class SubscriptionPlansSeeder extends AbstractSeeder
                 'alias'       => $plan['alias'],
                 'amount'      => $plan['amount'],
                 'trial'       => false,
-                'rank'        => $plan['rank'],
             ]);
 
             foreach ($plan['options'] as $option) {

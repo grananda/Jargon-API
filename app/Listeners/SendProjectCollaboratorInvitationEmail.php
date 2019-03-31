@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\CollaboratorAddedToProject;
+use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Mail\SendProjectCollaboratorEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -15,7 +15,7 @@ class SendProjectCollaboratorInvitationEmail implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param \App\Events\CollaboratorAddedToProject $event
+     * @param \App\Events\Collaborator\CollaboratorAddedToProject $event
      *
      * @return void
      */

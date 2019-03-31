@@ -1,13 +1,23 @@
 <?php
 
+use App\Events\Option\OptionWasCreated;
+use App\Events\Option\OptionWasDeleted;
+use App\Events\Option\OptionWasUpdated;
 use App\Models\Options\Option;
 use App\Models\Options\OptionCategory;
+use Illuminate\Support\Facades\Event;
 
 class OptionsTableSeeder extends AbstractSeeder
 {
     public function run()
     {
         $this->truncateTables(['option_categories', 'options']);
+
+        Event::fake([
+            OptionWasCreated::class,
+            OptionWasUpdated::class,
+            OptionWasDeleted::class,
+        ]);
 
         $optionCategories = $this->getSeedFileContents('options');
 
@@ -27,7 +37,6 @@ class OptionsTableSeeder extends AbstractSeeder
                     'option_value'       => $option['option_value'],
                     'option_scope'       => $option['option_scope'],
                     'option_type'        => $option['option_type'],
-                    'is_private'         => $option['is_private'],
                 ]);
             }
         }

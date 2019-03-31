@@ -3,9 +3,12 @@
 namespace App\Models\Subscriptions;
 
 use App\Models\BaseEntity;
+use App\Models\Traits\HasUuid;
 
-class SubscriptionOptions extends BaseEntity
+class SubscriptionOption extends BaseEntity
 {
+    use HasUuid;
+
     protected $dates = [
         'created_at',
         'updated_at',
@@ -14,6 +17,7 @@ class SubscriptionOptions extends BaseEntity
     protected $fillable = [
         'title',
         'description',
+        'description_template',
         'option_key',
     ];
 }

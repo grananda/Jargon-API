@@ -8,6 +8,9 @@ class Role extends BaseEntity
 {
     use HasAlias;
 
+    const ROLE_USER_TYPE  = 'user';
+    const ROLE_STAFF_TYPE = 'staff';
+
     protected $dates = [
         'created_at',
         'updated_at',

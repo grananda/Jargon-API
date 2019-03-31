@@ -2,7 +2,7 @@
 
 namespace App\Models\Translations;
 
-use App\Events\CollaboratorAddedToProject;
+use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Models\BaseEntity;
 use App\Models\Dialect;
 use App\Models\Organization;

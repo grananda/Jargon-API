@@ -13,7 +13,7 @@ $factory->define(SubscriptionPlan::class, function (Faker $faker) {
         'alias'       => $faker->word,
         'amount'      => $faker->numberBetween(0, 50),
         'trial'       => false,
-        'rank'        => $faker->numberBetween(0, 50),
+        'status'      => true,
         'created_at'  => Carbon::now(),
         'updated_at'  => Carbon::now(),
     ];

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Events\CollaboratorAddedToTeam;
+use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Models\Traits\HasCollaborators;
 use App\Models\Traits\HasUuid;
 use App\Models\Translations\Project;

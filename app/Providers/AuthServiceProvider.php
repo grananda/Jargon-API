@@ -2,11 +2,17 @@
 
 namespace App\Providers;
 
+use App\Models\Options\Option;
 use App\Models\Organization;
+use App\Models\Subscriptions\SubscriptionOption;
+use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\Team;
 use App\Models\Translations\Project;
+use App\Policies\OptionPolicy;
 use App\Policies\OrganizationPolicy;
 use App\Policies\ProjectPolicy;
+use App\Policies\SubscriptionOptionPolicy;
+use App\Policies\SubscriptionPlanPolicy;
 use App\Policies\TeamPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
@@ -19,9 +25,12 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Organization::class => OrganizationPolicy::class,
-        Team::class         => TeamPolicy::class,
-        Project::class      => ProjectPolicy::class,
+        Organization::class       => OrganizationPolicy::class,
+        Team::class               => TeamPolicy::class,
+        Project::class            => ProjectPolicy::class,
+        SubscriptionPlan::class   => SubscriptionPlanPolicy::class,
+        SubscriptionOption::class => SubscriptionOptionPolicy::class,
+        Option::class             => OptionPolicy::class,
     ];
 
     /**

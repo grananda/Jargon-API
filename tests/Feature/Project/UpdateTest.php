@@ -3,7 +3,7 @@
 namespace Tests\Feature\Project;
 
 
-use App\Events\CollaboratorAddedToProject;
+use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Models\Organization;
 use App\Models\Team;
 use App\Models\Translations\Project;

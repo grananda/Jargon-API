@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Options\OptionUser;
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Traits\HasUuid;
 use App\Models\Translations\Project;
@@ -18,6 +19,10 @@ class User extends Authenticatable
     use HasApiTokens,
         Notifiable,
         HasUuid;
+
+    const   SUPER_ADMIN_STAFF_MEMBER = 'super-admin';
+    const   SENIOR_STAFF_MEMBER      = 'senior-staff';
+    const   JUNIOR_STAFF_MEMBER      = 'junior-staff';
 
     /**
      * The attributes that are mass assignable.
@@ -82,7 +87,7 @@ class User extends Authenticatable
                 'validation_token',
             ])
             ->withTimestamps()
-            ;
+        ;
     }
 
     /**
@@ -98,7 +103,7 @@ class User extends Authenticatable
                 'validation_token',
             ])
             ->withTimestamps()
-            ;
+        ;
     }
 
     /**
@@ -108,7 +113,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class)
             ->withTimestamps()
-            ;
+        ;
     }
 
     /**
@@ -133,6 +138,14 @@ class User extends Authenticatable
     public function memos()
     {
         return $this->hasMany(Memo::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function options()
+    {
+        return $this->hasMany(OptionUser::class);
     }
 
     /**
@@ -176,6 +189,18 @@ class User extends Authenticatable
     }
 
     /**
+     * Checkes is a user has a given role type.
+     *
+     * @param $roleTypeAlias
+     *
+     * @return bool
+     */
+    public function checkUserHasRoleType($roleTypeAlias)
+    {
+        return in_array($roleTypeAlias, array_column($this->roles->toArray(), 'role_type'));
+    }
+
+    /**
      * @param $roleAlias
      *
      * @return bool
@@ -204,6 +229,18 @@ class User extends Authenticatable
         }
 
         return false;
+    }
+
+    /**
+     * Checks if user is a staff member.
+     *
+     * @param \App\Models\User $user
+     *
+     * @return bool
+     */
+    public function isStaffMember()
+    {
+        return $this->checkUserHasRoleType('staff');
     }
 
     /**

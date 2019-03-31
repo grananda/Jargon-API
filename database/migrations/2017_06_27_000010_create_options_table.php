@@ -19,13 +19,11 @@ class CreateOptionsTable extends Migration
             $table->string('option_scope')->default('user');
             $table->string('option_type')->default('check');
             $table->string('option_enum')->nullable();
-            $table->boolean('is_private')->default(false);
             $table->timestamps();
         });
 
         Schema::table('options', function (Blueprint $table) {
             $table->index('option_scope');
-            $table->index('is_private');
             $table->unique('option_key');
         });
     }

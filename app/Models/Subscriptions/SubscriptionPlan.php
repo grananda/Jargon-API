@@ -26,7 +26,18 @@ class SubscriptionPlan extends BaseEntity
         'alias',
         'quantity',
         'rank',
+        'status',
     ];
+
+    /** {@inheritdoc} */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function (self $model) {
+            $model->options()->delete();
+        });
+    }
 
     /**
      * @return HasMany
@@ -47,5 +58,17 @@ class SubscriptionPlan extends BaseEntity
     public function getAmount()
     {
         return money_format('%.2n', $this->amount).'€';
+    }
+
+    /**
+     * @param \App\Models\Subscriptions\SubscriptionPlanOptionValue $optionValue
+     *
+     * @return \App\Models\Subscriptions\SubscriptionPlan|null
+     */
+    public function addOption(SubscriptionPlanOptionValue $optionValue)
+    {
+        $this->options()->save($optionValue);
+
+        return $this->fresh();
     }
 }

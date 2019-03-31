@@ -10,7 +10,7 @@ class CreateOptionUsersTable extends Migration
     {
         Schema::create('option_users', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable(true);
             $table->string('option_key');
             $table->string('option_value');
             $table->timestamps();

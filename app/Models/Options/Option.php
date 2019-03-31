@@ -2,6 +2,8 @@
 
 namespace App\Models\Options;
 
+use App\Events\Option\OptionWasCreated;
+use App\Events\Option\OptionWasDeleted;
 use App\Models\BaseEntity;
 use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Option extends BaseEntity
 {
     use HasUuid;
+
+    const USER_OPTION = 'user';
+    const APP_OPTION  = 'staff';
 
     /**
      * @var array
@@ -28,9 +33,16 @@ class Option extends BaseEntity
         'option_key',
         'option_value',
         'option_type',
-        'is_private',
         'option_category_id',
         'option_scope',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $dispatchesEvents = [
+        'created' => OptionWasCreated::class,
+        'deleted' => OptionWasDeleted::class,
     ];
 
     /**

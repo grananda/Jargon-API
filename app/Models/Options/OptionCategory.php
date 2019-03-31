@@ -3,10 +3,13 @@
 namespace App\Models\Options;
 
 use App\Models\BaseEntity;
+use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OptionCategory extends BaseEntity
 {
+    use HasUuid;
+
     /**
      * @var array
      */

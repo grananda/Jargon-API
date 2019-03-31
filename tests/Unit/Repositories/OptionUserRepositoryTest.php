@@ -29,7 +29,6 @@ class OptionUserRepositoryTest extends TestCase
         /** @var \Illuminate\Database\Eloquent\Collection $options */
         $options = $optionsRepository->findAllBy([
             'option_scope' => 'user',
-            'is_private'   => false,
         ]);
 
         // When
@@ -60,7 +59,6 @@ class OptionUserRepositoryTest extends TestCase
         /** @var \Illuminate\Database\Eloquent\Collection $options */
         $options = $optionsRepository->findAllBy([
             'option_scope' => 'user',
-            'is_private'   => false,
         ]);
 
         $optionUserRepository->createUserOptions($user);
@@ -93,7 +91,6 @@ class OptionUserRepositoryTest extends TestCase
         /** @var \Illuminate\Database\Eloquent\Collection $options */
         $options = $optionsRepository->findAllBy([
             'option_scope' => 'user',
-            'is_private'   => false,
         ]);
 
         $optionUserRepository->createUserOptions($user);
@@ -132,7 +129,6 @@ class OptionUserRepositoryTest extends TestCase
         /** @var \Illuminate\Database\Eloquent\Collection $options */
         $options = $optionsRepository->findAllBy([
             'option_scope' => 'user',
-            'is_private'   => false,
         ]);
 
         // When
