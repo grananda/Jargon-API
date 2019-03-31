@@ -63,8 +63,6 @@ class UpdateTest extends TestCase
     public function a_200_code_will_be_returned_when_creating_a_subscription_plan_option()
     {
         // Given
-        Event::fake(SubscriptionOptionWasUpdated::class);
-
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
 
@@ -86,7 +84,5 @@ class UpdateTest extends TestCase
         // Then
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment(['option_key' => $newOptionKey]);
-
-        Event::assertDispatched(SubscriptionOptionWasUpdated::class);
     }
 }

@@ -5,12 +5,15 @@ namespace App\Providers;
 use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Events\Option\OptionWasCreated;
-use App\Events\Option\OptionWasUpdated;
+use App\Events\Option\OptionWasDeleted;
+use App\Events\SubscriptionOption\SubscriptionOptionWasCreated;
+use App\Events\SubscriptionOption\SubscriptionOptionWasDeleted;
 use App\Listeners\AddOptionUser;
+use App\Listeners\AddSubscriptionPlanOptionValue;
 use App\Listeners\DeleteOptionUser;
+use App\Listeners\DeleteSubscriptionPlanOptionValue;
 use App\Listeners\SendProjectCollaboratorInvitationEmail;
 use App\Listeners\SendTeamCollaboratorInvitationEmail;
-use App\Listeners\UpdateOptionUser;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -39,11 +42,16 @@ class EventServiceProvider extends ServiceProvider
         OptionWasCreated::class => [
             AddOptionUser::class,
         ],
-        OptionWasUpdated::class => [
-            UpdateOptionUser::class,
-        ],
-        OptionWasUpdated::class => [
+        OptionWasDeleted::class => [
             DeleteOptionUser::class,
+        ],
+
+        // SubscriptionOption events
+        SubscriptionOptionWasCreated::class => [
+            AddSubscriptionPlanOptionValue::class,
+        ],
+        SubscriptionOptionWasDeleted::class => [
+            DeleteSubscriptionPlanOptionValue::class,
         ],
     ];
 

@@ -5,6 +5,7 @@ namespace Tests\Feature\SubscriptionPlan;
 
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\Subscriptions\SubscriptionPlan;
+use App\Models\Subscriptions\SubscriptionPlanOptionValue;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
@@ -77,7 +78,14 @@ class UpdateTest extends TestCase
 
         /** @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
         $subscriptionPlan = factory(SubscriptionPlan::class)->create();
-        $subscriptionPlan->addOption($option, $optionValue);
+
+        /** @var \App\Models\Subscriptions\SubscriptionPlanOptionValue $subscriptionPlanOptionValue */
+        $subscriptionPlanOptionValue = factory(SubscriptionPlanOptionValue::class)->make([
+            'option_key'   => $option->option_key,
+            'option_value' => $optionValue,
+        ]);
+
+        $subscriptionPlan->addOption($subscriptionPlanOptionValue);
 
         $data = [
             'status'  => false,

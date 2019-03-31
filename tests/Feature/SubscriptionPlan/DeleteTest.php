@@ -92,7 +92,13 @@ class DeleteTest extends TestCase
 
         /** @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
         $subscriptionPlan = factory(SubscriptionPlan::class)->create();
-        $subscriptionPlan->addOption($option, 10);
+
+        /** @var \App\Models\Subscriptions\SubscriptionPlanOptionValue $subcriptionPlanOptionValue */
+        $subcriptionPlanOptionValue = factory(SubscriptionPlanOptionValue::class)->make([
+            'option_key'   => $option->option_key,
+        ]);
+
+        $subscriptionPlan->addOption($subcriptionPlanOptionValue);
 
         // When
         $response = $this->signIn($user)->delete(route('subscriptions.plans.destroy', [$subscriptionPlan->uuid]));

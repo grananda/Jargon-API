@@ -8,9 +8,6 @@ use Illuminate\Database\Eloquent\Factory;
 /* @var Factory $factory */
 $factory->define(SubscriptionPlanOptionValue::class, function (Faker $faker) {
     return [
-        'subscription_plan_id' => function () {
-            return SubscriptionPlan::inRandomOrder()->first()->id;
-        },
         'option_key'   => $faker->word,
         'option_value' => $faker->word,
     ];

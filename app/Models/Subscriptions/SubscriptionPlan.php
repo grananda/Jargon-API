@@ -61,20 +61,13 @@ class SubscriptionPlan extends BaseEntity
     }
 
     /**
-     * @param \App\Models\Subscriptions\SubscriptionOption $option
-     * @param int                                          $optionValue
+     * @param \App\Models\Subscriptions\SubscriptionPlanOptionValue $optionValue
      *
      * @return \App\Models\Subscriptions\SubscriptionPlan|null
      */
-    public function addOption(SubscriptionOption $option, int $optionValue)
+    public function addOption(SubscriptionPlanOptionValue $optionValue)
     {
-        /** @var \App\Models\Subscriptions\SubscriptionPlanOptionValue $optionValue */
-        $planOptionValue = factory(SubscriptionPlanOptionValue::class)->make([
-            'option_value' => $optionValue,
-            'option_key'   => $option->option_key,
-        ]);
-
-        $this->options()->save($planOptionValue);
+        $this->options()->save($optionValue);
 
         return $this->fresh();
     }

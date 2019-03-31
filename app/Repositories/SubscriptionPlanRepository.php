@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Subscriptions\SubscriptionPlan;
+use App\Models\Subscriptions\SubscriptionPlanOptionValue;
 use Illuminate\Database\Connection;
 
 class SubscriptionPlanRepository extends CoreRepository
@@ -13,17 +14,24 @@ class SubscriptionPlanRepository extends CoreRepository
     private $subscriptionOptionRepository;
 
     /**
+     * @var \App\Models\Subscriptions\SubscriptionPlanOptionValue
+     */
+    private $subscriptionPlanOptionValueRepository;
+
+    /**
      * ProjectRepository constructor.
      *
-     * @param \Illuminate\Database\Connection                $dbConnection
-     * @param \App\Models\Subscriptions\SubscriptionPlan     $model
-     * @param \App\Repositories\SubscriptionOptionRepository $subscriptionOptionRepository
+     * @param \Illuminate\Database\Connection                         $dbConnection
+     * @param \App\Models\Subscriptions\SubscriptionPlan              $model
+     * @param \App\Repositories\SubscriptionOptionRepository          $subscriptionOptionRepository
+     * @param \App\Repositories\SubscriptionPlanOptionValueRepository $subscriptionPlanOptionValueRepository
      */
-    public function __construct(Connection $dbConnection, SubscriptionPlan $model, SubscriptionOptionRepository $subscriptionOptionRepository)
+    public function __construct(Connection $dbConnection, SubscriptionPlan $model, SubscriptionOptionRepository $subscriptionOptionRepository, SubscriptionPlanOptionValueRepository $subscriptionPlanOptionValueRepository)
     {
         parent::__construct($dbConnection, $model);
 
         $this->subscriptionOptionRepository = $subscriptionOptionRepository;
+        $this->subscriptionPlanOptionValueRepository = $subscriptionPlanOptionValueRepository;
     }
 
     /**
@@ -31,9 +39,9 @@ class SubscriptionPlanRepository extends CoreRepository
      *
      * @param array $attributes
      *
+     * @return mixed
      * @throws \Throwable
      *
-     * @return mixed
      */
     public function createSubscriptionPlan(array $attributes)
     {
@@ -45,7 +53,10 @@ class SubscriptionPlanRepository extends CoreRepository
                 foreach ($attributes['options'] as $item) {
                     /** @var \App\Models\Subscriptions\SubscriptionOption $option */
                     if ($option = $this->subscriptionOptionRepository->findBy(['option_key' => $item['option_key']])) {
-                        $entity->addOption($option, $item['option_value']);
+                        $this->subscriptionPlanOptionValueRepository->createOptionValue($entity, [
+                            'option_value' => $item['option_value'],
+                            'option_key'   => $option->option_key,
+                        ]);
                     }
                 }
             }
@@ -58,9 +69,9 @@ class SubscriptionPlanRepository extends CoreRepository
      * @param \App\Models\Subscriptions\SubscriptionPlan $entity
      * @param array                                      $attributes
      *
+     * @return mixed
      * @throws \Throwable
      *
-     * @return mixed
      */
     public function updateSubscriptionPlan(SubscriptionPlan $entity, array $attributes)
     {
@@ -70,12 +81,15 @@ class SubscriptionPlanRepository extends CoreRepository
 
             if (isset($attributes['options'])) {
                 foreach ($attributes['options'] as $item) {
+                    /** @var SubscriptionPlanOptionValue $option */
                     if ($option = $entity->options()->where('option_key', $item['option_key'])->first()) {
-                        $option->option_value = $item['option_value'];
-                        $option->save();
+                        $this->subscriptionPlanOptionValueRepository->update($option, $item);
                     } /* @var \App\Models\Subscriptions\SubscriptionOption $option */
                     elseif ($option = $this->subscriptionOptionRepository->findBy(['option_key' => $item['option_key']])) {
-                        $entity->addOption($option, $item['option_value']);
+                        $this->subscriptionPlanOptionValueRepository->createOptionValue($entity, [
+                            'option_value' => $item['option_value'],
+                            'option_key'   => $option->option_key,
+                        ]);
                     }
                 }
             }
