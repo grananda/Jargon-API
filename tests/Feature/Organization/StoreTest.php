@@ -28,7 +28,7 @@ class StoreTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
 
         $this->createActiveSubscription(
@@ -53,7 +53,7 @@ class StoreTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         $this->createActiveSubscription($user, 'professional');
 

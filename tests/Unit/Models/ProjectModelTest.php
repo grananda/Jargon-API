@@ -63,15 +63,11 @@ class ProjectModelTest extends TestCase
     public function a_project_can_be_added()
     {
         // Given
-        /** @var \App\Models\Role $role */
-        $role = Role::findByAliasOrFail('registered-user');
-
         /** @var SubscriptionPlan | null $subscriptionPlan */
         $subscriptionPlan = SubscriptionPlan::findByAliasOrFail('professional');
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
-        $user->setRole($role);
+        $user = $this->user('registered-user');
 
         /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         $activeSubscription = factory(ActiveSubscription::class)->create([

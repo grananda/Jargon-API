@@ -32,7 +32,7 @@ class StoreTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         // When
         $response = $this->signIn($user)->post(route('options.store'), []);

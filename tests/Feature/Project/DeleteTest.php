@@ -18,7 +18,7 @@ class DeleteTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();
@@ -36,7 +36,7 @@ class DeleteTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
@@ -57,7 +57,7 @@ class DeleteTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();

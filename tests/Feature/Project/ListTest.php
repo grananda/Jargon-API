@@ -33,7 +33,7 @@ class ListTest extends TestCase
         $owner = factory(User::class)->create();
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
@@ -60,7 +60,7 @@ class ListTest extends TestCase
         $owner = factory(User::class)->create();
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
@@ -88,7 +88,7 @@ class ListTest extends TestCase
         $owner = factory(User::class)->create();
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
@@ -114,7 +114,7 @@ class ListTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
@@ -141,7 +141,7 @@ class ListTest extends TestCase
         $owner = factory(User::class)->create();
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
@@ -176,7 +176,7 @@ class ListTest extends TestCase
         $owner = factory(User::class)->create();
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();

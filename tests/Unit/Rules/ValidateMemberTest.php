@@ -17,7 +17,7 @@ class ValidateMemberTest extends TestCase
     public function run_validator()
     {
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         $this->assertTrue($this->validator(['collaborators' => [$user->uuid, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS]])->passes());
         $this->assertFalse($this->validator(['collaborators' => [$user->id, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS]])->passes());

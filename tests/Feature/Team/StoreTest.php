@@ -33,7 +33,7 @@ class StoreTest extends TestCase
         Event::fake([CollaboratorAddedToTeam::class]);
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\User $collaborator */
         $collaborator = factory(User::class)->create();
@@ -67,7 +67,7 @@ class StoreTest extends TestCase
         Event::fake([CollaboratorAddedToTeam::class]);
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\User $collaborator */
         $collaborator = factory(User::class)->create();
@@ -102,7 +102,7 @@ class StoreTest extends TestCase
         Event::fake([CollaboratorAddedToTeam::class]);
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\User $collaborator */
         $collaborator = factory(User::class)->create();

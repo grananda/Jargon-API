@@ -30,7 +30,7 @@ class UpdateTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         // When
         $response = $this->signIn($user)->put(route('subscriptions.plans.update', [123]));

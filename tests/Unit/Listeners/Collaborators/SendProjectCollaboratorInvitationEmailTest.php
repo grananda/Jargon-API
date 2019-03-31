@@ -25,7 +25,7 @@ class SendProjectCollaboratorInvitationEmailTest extends TestCase
         Mail::fake();
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();

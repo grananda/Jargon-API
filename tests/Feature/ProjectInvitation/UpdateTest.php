@@ -39,7 +39,7 @@ class UpdateTest extends TestCase
         $this->signIn($owner);
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();
@@ -66,7 +66,7 @@ class UpdateTest extends TestCase
         $this->signIn($owner);
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();

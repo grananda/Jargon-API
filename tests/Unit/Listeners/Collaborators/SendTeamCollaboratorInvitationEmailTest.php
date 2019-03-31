@@ -24,7 +24,7 @@ class SendTeamCollaboratorInvitationEmailTest extends TestCase
         Mail::fake();
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();

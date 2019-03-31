@@ -16,7 +16,7 @@ class ValidateCollaboratorTest extends TestCase
     public function run_validator()
     {
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         $this->assertTrue($this->validator(['collaborators' => $user->uuid])->passes());
         $this->assertFalse($this->validator(['collaborators' => $user->id])->passes());

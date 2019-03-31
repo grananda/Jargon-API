@@ -17,7 +17,7 @@ class ShowTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
@@ -34,7 +34,7 @@ class ShowTest extends TestCase
     public function a_403_will_be_returned_if_the_user_has_no_team_access()
     {
         // Given
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
@@ -54,7 +54,7 @@ class ShowTest extends TestCase
     public function a_403_will_be_returned_when_showing_a_team_to_a_non_validated_team_member()
     {
         // Given
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
@@ -75,7 +75,7 @@ class ShowTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
@@ -95,7 +95,7 @@ class ShowTest extends TestCase
     public function a_200_will_be_returned_when_showing_a_team_to_a_member()
     {
         // Given
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();

@@ -32,7 +32,7 @@ class DeleteTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         // When
         $response = $this->signIn($user)->delete(route('subscriptions.plans.destroy', [123]));
@@ -63,7 +63,7 @@ class DeleteTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\User $user */
         $staff = $this->staff(User::SENIOR_STAFF_MEMBER);
