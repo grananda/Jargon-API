@@ -8,12 +8,14 @@ use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\Team;
 use App\Models\Translations\Project;
+use App\Models\User;
 use App\Policies\OptionPolicy;
 use App\Policies\OrganizationPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\SubscriptionOptionPolicy;
 use App\Policies\SubscriptionPlanPolicy;
 use App\Policies\TeamPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
 
@@ -27,6 +29,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Organization::class       => OrganizationPolicy::class,
         Team::class               => TeamPolicy::class,
+        User::class               => UserPolicy::class,
         Project::class            => ProjectPolicy::class,
         SubscriptionPlan::class   => SubscriptionPlanPolicy::class,
         SubscriptionOption::class => SubscriptionOptionPolicy::class,

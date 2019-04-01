@@ -1,6 +1,5 @@
 <?php
 
-use App\Events\User\UserWasCreated;
 use App\Events\User\UserWasDeleted;
 use App\Models\Options\Option;
 use App\Models\Options\OptionUser;
@@ -41,7 +40,8 @@ class UserSeeder extends AbstractSeeder
 
         $options = Option::where('option_scope', 'user')
             ->where('option_scope', Option::USER_OPTION)
-            ->get();
+            ->get()
+        ;
 
         foreach ($users as $user) {
             /** @var \App\Models\Role $role */

@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\UserActivationTokenExpired;
+use App\Exceptions\UserAlreadyActivated;
+use App\Exceptions\UserNotActivated;
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\Auth\ResendUserActivationRequest;
+use App\Http\Requests\Auth\UserActivationRequest;
+use App\Http\Requests\Auth\UserDeactivationRequest;
 use App\Http\Requests\LoginRequest;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
@@ -81,5 +87,68 @@ class AuthController extends ApiController
         $request->user()->token()->revoke();
 
         return $this->responseOk(trans('Successfully logged out'));
+    }
+
+    /**
+     * Activates pending user.
+     *
+     * @param \App\Http\Requests\Auth\UserActivationRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function activate(UserActivationRequest $request)
+    {
+        try {
+            /** @var \App\Models\User $user */
+            $user = $request->user->activate();
+
+            return $this->responseOk($user->activated_at);
+        } catch (UserActivationTokenExpired $userActivationTokenExpiredException) {
+            return $this->responseInternalError($userActivationTokenExpiredException->getMessage());
+        } catch (UserAlreadyActivated $userAlreadyActivatedException) {
+            return $this->responseInternalError($userAlreadyActivatedException->getMessage());
+        } catch (Exception $runtimeException) {
+            return $this->responseInternalError($runtimeException->getMessage());
+        }
+    }
+
+    /**
+     * Recreates a new activation token and send email.
+     *
+     * @param \App\Http\Requests\Auth\ResendUserActivationRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function resendActivation(ResendUserActivationRequest $request)
+    {
+        try {
+            $request->user->generateActivationToken();
+
+            return $this->responseNoContent();
+        } catch (UserAlreadyActivated $userAlreadyActivatedException) {
+            return $this->responseInternalError($userAlreadyActivatedException->getMessage());
+        } catch (Exception $runtimeException) {
+            return $this->responseInternalError($runtimeException->getMessage());
+        }
+    }
+
+    /**
+     * Deactivates an active user.
+     *
+     * @param \App\Http\Requests\Auth\UserDeactivationRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deactivate(UserDeactivationRequest $request)
+    {
+        try {
+            $request->user->deactivate();
+
+            return $this->responseNoContent();
+        } catch (UserNotActivated $userNotActivatedException) {
+            return $this->responseInternalError($userNotActivatedException->getMessage());
+        } catch (Exception $runtimeException) {
+            return $this->responseInternalError($runtimeException->getMessage());
+        }
     }
 }

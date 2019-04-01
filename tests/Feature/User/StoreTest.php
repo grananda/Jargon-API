@@ -4,8 +4,7 @@
 namespace Tests\Feature\User;
 
 
-use App\Events\User\UserWasCreated;
-use Illuminate\Auth\Events\Registered;
+use App\Events\User\UserActivationTokenGenerated;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
@@ -19,7 +18,7 @@ class StoreTest extends TestCase
     public function a_200_will_be_returned_when_a_user_is_created()
     {
         // Given
-       // Event::fake(Registered::class);
+        Event::fake(UserActivationTokenGenerated::class);
 
         $password = $this->faker->password;
         $data = [
@@ -39,6 +38,6 @@ class StoreTest extends TestCase
             'email' => $data['email'],
         ]);
 
-       // Event::assertDispatched(Registered::class);
+        Event::assertDispatched(UserActivationTokenGenerated::class);
     }
 }
