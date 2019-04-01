@@ -69,25 +69,6 @@ class LoginTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
-    }
-
-    /** @test */
-    public function a_user_can_logout()
-    {
-        // Given
-        Artisan::call('passport:install');
-
-        $password = $this->faker->password;
-
-        /** @var \App\Models\User $user */
-        $user = $this->user('registered-user', [
-            'password' => bcrypt($password),
-        ]);
-
-        // When
-        $response = $this->signIn($user)->post(route('auth.logout'));
-
-        // Then
-        $response->assertStatus(Response::HTTP_OK);
+        $this->assertEquals(auth()->user()->id, $user->id);
     }
 }

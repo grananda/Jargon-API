@@ -82,13 +82,6 @@ class AuthController extends ApiController
         }
     }
 
-    public function logout(Request $request)
-    {
-        $request->user()->token()->revoke();
-
-        return $this->responseOk(trans('Successfully logged out'));
-    }
-
     /**
      * Activates pending user.
      *
