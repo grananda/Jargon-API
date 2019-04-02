@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-class SendUserActivationEmail
+class SendUserDeactivationNotification
 {
     /**
      * Create the event listener.

@@ -14,10 +14,11 @@ use App\Listeners\AddOptionUser;
 use App\Listeners\DeleteOptionUser;
 use App\Listeners\InitializeActiveSubscription;
 use App\Listeners\InitializeUserOptions;
-use App\Listeners\SendEmailActivationNotification;
-use App\Listeners\SendProjectCollaboratorInvitationEmail;
-use App\Listeners\SendTeamCollaboratorInvitationEmail;
-use App\Listeners\SendUserActivationEmail;
+use App\Listeners\SendProjectCollaboratorNotification;
+use App\Listeners\SendTeamCollaboratorNotification;
+use App\Listeners\SendUserActivationNotification;
+use App\Listeners\SendUserDeactivationNotification;
+use App\Listeners\SendUserDeletionNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -30,26 +31,25 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         // User events
         UserActivationTokenGenerated::class => [
-            SendUserActivationEmail::class,
+            SendUserActivationNotification::class,
         ],
         UserWasActivated::class => [
             InitializeActiveSubscription::class,
             InitializeUserOptions::class,
-            SendEmailActivationNotification::class,
         ],
         UserWasDeactivated::class => [
-            SendEmailDeactivationNotification::class,
+            SendUserDeactivationNotification::class,
         ],
         UserWasDeleted::class => [
-            SendEmailDeletionNotification::class,
+            SendUserDeletionNotification::class,
         ],
 
         // Collaborator events
         CollaboratorAddedToTeam::class => [
-            SendTeamCollaboratorInvitationEmail::class,
+            SendTeamCollaboratorNotification::class,
         ],
         CollaboratorAddedToProject::class => [
-            SendProjectCollaboratorInvitationEmail::class,
+            SendProjectCollaboratorNotification::class,
         ],
 
         // Option events

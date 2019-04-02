@@ -4,7 +4,7 @@ namespace Tests\Unit\Listeners\Collaborators;
 
 
 use App\Events\Collaborator\CollaboratorAddedToTeam;
-use App\Listeners\SendTeamCollaboratorInvitationEmail;
+use App\Listeners\SendTeamCollaboratorNotification;
 use App\Mail\SendTeamCollaboratorEmail;
 use App\Models\Team;
 use App\Models\User;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
-class SendTeamCollaboratorInvitationEmailTest extends TestCase
+class SendTeamCollaboratorNotificationTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -34,8 +34,8 @@ class SendTeamCollaboratorInvitationEmailTest extends TestCase
         /** @var \App\Events\Collaborator\CollaboratorAddedToTeam $event */
         $event = new CollaboratorAddedToTeam($team, $user, $invitationToken);
 
-        /** @var SendTeamCollaboratorInvitationEmail $listener */
-        $listener = new SendTeamCollaboratorInvitationEmail();
+        /** @var SendTeamCollaboratorNotification $listener */
+        $listener = new SendTeamCollaboratorNotification();
 
         // When
         $listener->handle($event);

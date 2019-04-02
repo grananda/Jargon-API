@@ -2,32 +2,22 @@
 
 namespace App\Events\User;
 
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
+use App\Models\User;
 
 class UserActivationTokenGenerated
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    /**
+     * @var \App\Models\User
+     */
+    public $user;
 
     /**
-     * Create a new event instance.
+     * UserWasCreated constructor.
      *
-     * @return void
+     * @param \App\Models\User $user
      */
-    public function __construct()
+    public function __construct(User $user)
     {
-        //
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    public function broadcastOn()
-    {
-        return new PrivateChannel('channel-name');
+        $this->user = $user;
     }
 }
