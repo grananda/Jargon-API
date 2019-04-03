@@ -5,6 +5,7 @@ namespace Tests\Feature\User;
 
 
 use App\Events\User\UserWasDeleted;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
@@ -23,8 +24,11 @@ class DeleteTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->user();
 
+        /** @var \App\Models\User $user */
+        $staff = $this->staff(User::SENIOR_STAFF_MEMBER);
+
         // When
-        $response = $this->delete(route('users.destroy', [$user->uuid]));
+        $response = $this->signIn($staff)->delete(route('users.destroy', [$user->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_NO_CONTENT);

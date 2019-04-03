@@ -15,4 +15,14 @@ class UserPolicy extends AbstractPolicy
     {
         return $user->hasRole(User::SENIOR_STAFF_MEMBER);
     }
+
+    /**
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function delete(User $user)
+    {
+        return $user->hasRole(User::SENIOR_STAFF_MEMBER);
+    }
 }

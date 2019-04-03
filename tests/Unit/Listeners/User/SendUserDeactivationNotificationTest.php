@@ -3,20 +3,16 @@
 
 namespace Tests\Unit\Listeners\User;
 
-
-use App\Events\User\UserActivationTokenGenerated;
 use App\Events\User\UserWasDeactivated;
-use App\Listeners\SendUserActivationNotification;
 use App\Listeners\SendUserDeactivationNotification;
-use App\Mail\SendUserActivationEmail;
 use App\Mail\SendUserDeactivationEmail;
-use Illuminate\Foundation\Auth\RedirectsUsers;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class SendUserDeactivationNotificationTest extends TestCase
 {
-    use RedirectsUsers;
+    use RefreshDatabase;
 
     /** @test */
     public function a_mail_is_send_for_user_deactivation()
@@ -27,7 +23,7 @@ class SendUserDeactivationNotificationTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->user();
 
-        /** @var UserActivationTokenGenerated $event */
+        /** @var UserWasDeactivated $event */
         $event = new UserWasDeactivated($user);
 
         /** @var \App\Listeners\SendUserDeactivationNotification $listener */

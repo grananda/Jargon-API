@@ -2,27 +2,23 @@
 
 namespace App\Listeners;
 
+use App\Events\User\UserWasDeleted;
+use App\Mail\SendUserDeletionEmail;
+use Illuminate\Support\Facades\Mail;
+
 class SendUserDeletionNotification
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the event.
      *
-     * @param object $event
+     * @param \App\Events\User\UserWasDeleted $event
      *
      * @return void
      */
-    public function handle($event)
+    public function handle(UserWasDeleted $event)
     {
-        //
+        Mail::to($event->user)
+            ->send(new SendUserDeletionEmail($event->user))
+        ;
     }
 }
