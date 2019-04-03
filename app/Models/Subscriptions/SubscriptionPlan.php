@@ -14,6 +14,7 @@ class SubscriptionPlan extends BaseEntity
 
     const ITEM_TOKEN_LENGTH         = 50;
     const DEFAULT_SUBSCRIPTION_NAME = 'JARGON';
+    const DEFAULT_SUBSCRIPTION_PLAN = 'freemium';
 
     protected $dates = [
         'created_at',

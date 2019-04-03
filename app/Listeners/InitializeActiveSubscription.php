@@ -2,27 +2,48 @@
 
 namespace App\Listeners;
 
+use App\Events\User\UserWasActivated;
+use App\Models\Subscriptions\SubscriptionPlan;
+use App\Repositories\ActiveSubscriptionRepository;
+use App\Repositories\SubscriptionPlanRepository;
+
 class InitializeActiveSubscription
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
+     * @var \App\Repositories\SubscriptionPlanRepository
      */
-    public function __construct()
+    private $subscriptionPlanRepository;
+
+    /**
+     * @var \App\Repositories\ActiveSubscriptionRepository;
+     */
+    private $activeSubscriptionRepository;
+
+    /**
+     * InitializeActiveSubscription constructor.
+     *
+     * @param \App\Repositories\SubscriptionPlanRepository   $subscriptionPlanRepository
+     * @param \App\Repositories\ActiveSubscriptionRepository $activeSubscriptionRepository
+     */
+    public function __construct(SubscriptionPlanRepository $subscriptionPlanRepository,
+                                ActiveSubscriptionRepository $activeSubscriptionRepository)
     {
-        //
+        $this->subscriptionPlanRepository   = $subscriptionPlanRepository;
+        $this->activeSubscriptionRepository = $activeSubscriptionRepository;
     }
 
     /**
      * Handle the event.
      *
-     * @param object $event
+     * @param \App\Events\User\UserWasActivated $event
      *
      * @return void
      */
-    public function handle($event)
+    public function handle(UserWasActivated $event)
     {
-        //
+        /** @var \App\Models\Subscriptions\SubscriptionPlan $subscription */
+        $subscription = $this->subscriptionPlanRepository->findBy(['alias' => SubscriptionPlan::DEFAULT_SUBSCRIPTION_PLAN]);
+
+        $this->activeSubscriptionRepository->createActiveSubscription($subscription, $event->user);
     }
 }

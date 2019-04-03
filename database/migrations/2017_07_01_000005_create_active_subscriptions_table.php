@@ -10,8 +10,8 @@ class CreateActiveSubscriptionsTable extends Migration
     {
         Schema::create('active_subscriptions', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedInteger('subscription_plan_id');
+            $table->unsignedBigInteger('user_id')->nullable(true);
+            $table->unsignedInteger('subscription_plan_id')->nullable(true);
             $table->boolean('subscription_active')->default(false);
             $table->timestamp('ends_at')->nullable();
             $table->timestamps();

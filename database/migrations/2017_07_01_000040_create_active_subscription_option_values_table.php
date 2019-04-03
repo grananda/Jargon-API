@@ -10,7 +10,7 @@ class CreateActiveSubscriptionOptionValuesTable extends Migration
     {
         Schema::create('active_subscription_option_values', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('active_subscription_id');
+            $table->unsignedInteger('active_subscription_id')->nullable(true);
             $table->string('option_key');
             $table->string('option_value')->nullable();
 
