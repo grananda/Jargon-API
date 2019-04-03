@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\User\UserActivationTokenGenerated;
 use App\Events\User\UserWasDeleted;
 use App\Models\Options\Option;
 use App\Models\Options\OptionUser;
@@ -9,7 +10,6 @@ use App\Models\Subscriptions\ActiveSubscriptionOptionValue;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\User;
 use App\Models\UserProfile;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 
@@ -32,7 +32,7 @@ class UserSeeder extends AbstractSeeder
         ]);
 
         Event::fake([
-            Registered::class,
+            UserActivationTokenGenerated::class,
             UserWasDeleted::class,
         ]);
 
