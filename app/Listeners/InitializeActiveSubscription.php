@@ -44,6 +44,10 @@ class InitializeActiveSubscription
         /** @var \App\Models\Subscriptions\SubscriptionPlan $subscription */
         $subscription = $this->subscriptionPlanRepository->findBy(['alias' => SubscriptionPlan::DEFAULT_SUBSCRIPTION_PLAN]);
 
-        $this->activeSubscriptionRepository->createActiveSubscription($subscription, $event->user);
+        if ($event->user->activeSubscription) {
+            $event->user->activeSubscription->activate();
+        } else {
+            $this->activeSubscriptionRepository->createActiveSubscription($subscription, $event->user);
+        }
     }
 }
