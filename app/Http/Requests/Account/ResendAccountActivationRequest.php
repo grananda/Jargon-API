@@ -5,7 +5,7 @@ namespace App\Http\Requests\Account;
 use App\Http\Requests\Request;
 use App\Models\User;
 
-class ResendUserActivationRequest extends Request
+class ResendAccountActivationRequest extends Request
 {
     /**
      * @var \App\Models\User
