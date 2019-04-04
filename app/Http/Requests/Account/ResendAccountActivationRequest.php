@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Account;
 
 use App\Http\Requests\Request;
 use App\Models\User;
 
-class UserCancellationRequest extends Request
+class ResendAccountActivationRequest extends Request
 {
     /**
      * @var \App\Models\User
@@ -19,8 +19,8 @@ class UserCancellationRequest extends Request
      */
     public function authorize()
     {
-        $this->user = User::findByUuidOrFail($this->input('id'));
+        $this->user = User::where('email', $this->input('email'))->firstOrFail();
 
-        return $this->user()->can('cancel', $this->user);
+        return ! $this->user->isActivated();
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Account;
 
 use App\Http\Requests\Request;
 use App\Models\User;
 
-class UserDeactivationRequest extends Request
+class AccountActivationRequest extends Request
 {
     /**
      * @var \App\Models\User
@@ -19,8 +19,8 @@ class UserDeactivationRequest extends Request
      */
     public function authorize()
     {
-        $this->user = User::findByUuidOrFail($this->input('id'));
+        $this->user = User::findByUuidOrFail($this->route('id'));
 
-        return $this->user()->can('deactivate', $this->user);
+        return $this->user->activation_token === $this->route('token');
     }
 }

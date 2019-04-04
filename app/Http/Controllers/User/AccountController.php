@@ -6,10 +6,10 @@ use App\Exceptions\UserActivationTokenExpired;
 use App\Exceptions\UserAlreadyActivated;
 use App\Exceptions\UserNotActivated;
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Auth\ResendUserActivationRequest;
-use App\Http\Requests\Auth\UserActivationRequest;
-use App\Http\Requests\Auth\UserCancellationRequest;
-use App\Http\Requests\Auth\UserDeactivationRequest;
+use App\Http\Requests\Account\AccountActivationRequest;
+use App\Http\Requests\Account\AccountCancellationRequest;
+use App\Http\Requests\Account\AccountDeactivationRequest;
+use App\Http\Requests\Account\ResendAccountActivationRequest;
 use App\Repositories\UserRepository;
 use Exception;
 
@@ -35,11 +35,11 @@ class AccountController extends ApiController
     /**
      * Activates pending user.
      *
-     * @param \App\Http\Requests\Auth\UserActivationRequest $request
+     * @param \App\Http\Requests\Account\AccountActivationRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function activate(UserActivationRequest $request)
+    public function activate(AccountActivationRequest $request)
     {
         try {
             /** @var \App\Models\User $user */
@@ -58,11 +58,11 @@ class AccountController extends ApiController
     /**
      * Recreates a new activation token and send email.
      *
-     * @param \App\Http\Requests\Auth\ResendUserActivationRequest $request
+     * @param \App\Http\Requests\Account\ResendAccountActivationRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function resendActivation(ResendUserActivationRequest $request)
+    public function resendActivation(ResendAccountActivationRequest $request)
     {
         try {
             $request->user->generateActivationToken();
@@ -78,11 +78,11 @@ class AccountController extends ApiController
     /**
      * Deactivates an active user.
      *
-     * @param \App\Http\Requests\Auth\UserDeactivationRequest $request
+     * @param \App\Http\Requests\Account\AccountDeactivationRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deactivate(UserDeactivationRequest $request)
+    public function deactivate(AccountDeactivationRequest $request)
     {
         try {
             $request->user->deactivate();
@@ -98,13 +98,13 @@ class AccountController extends ApiController
     /**
      * Cancels a user account.
      *
-     * @param \App\Http\Requests\Auth\UserCancellationRequest $request
+     * @param \App\Http\Requests\Account\AccountCancellationRequest $request
      *
-     * @throws \Throwable
+     *@throws \Throwable
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function cancel(UserCancellationRequest $request)
+    public function cancel(AccountCancellationRequest $request)
     {
         try {
             $this->userRepository->delete($request->user);

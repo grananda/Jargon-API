@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Account;
 
 use App\Http\Requests\Request;
 use App\Models\User;
 
-class UserActivationRequest extends Request
+class AccountCancellationRequest extends Request
 {
     /**
      * @var \App\Models\User
@@ -21,6 +21,6 @@ class UserActivationRequest extends Request
     {
         $this->user = User::findByUuidOrFail($this->route('id'));
 
-        return $this->user->activation_token === $this->route('token');
+        return $this->user()->can('cancel', $this->user);
     }
 }
