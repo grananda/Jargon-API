@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Account\AccountActivationRequest;
 use App\Http\Requests\Account\AccountCancellationRequest;
 use App\Http\Requests\Account\AccountDeactivationRequest;
+use App\Http\Requests\Account\AccountRegistrationRequest;
 use App\Http\Requests\Account\ResendAccountActivationRequest;
 use App\Repositories\UserRepository;
 use Exception;
@@ -30,6 +31,26 @@ class AccountController extends ApiController
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
+    }
+
+    /**
+     * Registers user.
+     *
+     * @param \App\Http\Requests\Account\AccountRegistrationRequest $request
+     *
+     * @throws \Throwable
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(AccountRegistrationRequest $request)
+    {
+        try {
+            $this->userRepository->create($request->validated());
+
+            return $this->responseCreated(trans('Successfully created user'));
+        } catch (Exception $exception) {
+            return $this->responseInternalError($exception->getMessage());
+        }
     }
 
     /**
@@ -100,7 +121,7 @@ class AccountController extends ApiController
      *
      * @param \App\Http\Requests\Account\AccountCancellationRequest $request
      *
-     *@throws \Throwable
+     * @throws \Throwable
      *
      * @return \Illuminate\Http\JsonResponse
      */

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::post('/register', 'User\AccountController@register')->name('account.register');
+
 Route::get('activate/{id}/{token}', 'User\AccountController@activate')->name('account.activate');
 Route::post('resend-activation', 'User\AccountController@resendActivation')->name('account.activate.resend');
 

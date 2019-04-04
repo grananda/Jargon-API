@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\Account\AccountRequestPasswordResetRequest;
 use App\Http\Requests\LoginRequest;
+use App\Repositories\PasswordResetRepository;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +13,21 @@ use Laravel\Passport\Passport;
 
 class AuthController extends ApiController
 {
+    /**
+     * @var \App\Repositories\PasswordResetRepository
+     */
+    private $passwordResetRepository;
+
+    /**
+     * AuthController constructor.
+     *
+     * @param \App\Repositories\PasswordResetRepository $passwordResetRepository
+     */
+    public function __construct(PasswordResetRepository $passwordResetRepository)
+    {
+        $this->passwordResetRepository = $passwordResetRepository;
+    }
+
     /**
      * Login user and returns credential token.
      *
@@ -64,7 +81,23 @@ class AuthController extends ApiController
         }
     }
 
+    public function requestPasswordReset(AccountRequestPasswordResetRequest $request)
+    {
+        try {
+            // vendor/laravel/framework/src/Illuminate/Auth/Passwords/DatabaseTokenRepository.php
+            $this->passwordResetRepository->createPasswordReset($request->validated());
+
+            return $this->responseNoContent();
+        } catch (Exception $runtimeException) {
+            return $this->responseInternalError($runtimeException->getMessage());
+        }
+    }
+
     public function resetPassword()
     {
+        try {
+        } catch (Exception $runtimeException) {
+            return $this->responseInternalError($runtimeException->getMessage());
+        }
     }
 }
