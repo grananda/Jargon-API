@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\User\DeleteUserRequest;

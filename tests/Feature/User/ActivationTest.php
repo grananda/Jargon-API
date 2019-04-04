@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Feature\Auth;
+namespace Tests\Feature\User;
 
 
 use App\Events\User\UserWasActivated;
@@ -26,7 +26,7 @@ class ActivationTest extends TestCase
         $user = $this->user('registered-user', ['activated_at' => null]);
 
         // When
-        $response = $this->get(route('auth.activate', [
+        $response = $this->get(route('account.activate', [
             'id'    => $user->uuid,
             'token' => 123,
         ]));
@@ -47,7 +47,7 @@ class ActivationTest extends TestCase
         $user = $this->user('registered-user', ['activated_at' => null]);
 
         // When
-        $response = $this->get(route('auth.activate', [
+        $response = $this->get(route('account.activate', [
             'id'    => 123,
             'token' => $user->activation_token,
         ]));
@@ -68,7 +68,7 @@ class ActivationTest extends TestCase
         $user = $this->user();
 
         // When
-        $response = $this->get(route('auth.activate', [
+        $response = $this->get(route('account.activate', [
             'id'    => $user->uuid,
             'token' => $user->activation_token,
         ]));
@@ -91,7 +91,7 @@ class ActivationTest extends TestCase
         ]);
 
         // When
-        $response = $this->get(route('auth.activate', [
+        $response = $this->get(route('account.activate', [
             'id'    => $user->uuid,
             'token' => $user->activation_token,
         ]));
@@ -112,7 +112,7 @@ class ActivationTest extends TestCase
         $user = $this->user('registered-user', ['activated_at' => null]);
 
         // When
-        $response = $this->get(route('auth.activate', [
+        $response = $this->get(route('account.activate', [
             'id'    => $user->uuid,
             'token' => $user->activation_token,
         ]));

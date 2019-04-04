@@ -16,6 +16,20 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $namespace = 'App\Http\Controllers';
 
+    protected $routes = [
+        'account',
+        'auth',
+        'users',
+        'organizations',
+        'teams',
+        'teamInvitations',
+        'projects',
+        'projectInvitations',
+        'subscriptionPlans',
+        'subscriptionOptions',
+        'options',
+    ];
+
     /**
      * Define your route model bindings, pattern filters, etc.
      *
@@ -23,8 +37,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-
         parent::boot();
     }
 
@@ -36,27 +48,6 @@ class RouteServiceProvider extends ServiceProvider
     public function map()
     {
         $this->mapApiRoutes();
-
-        $this->mapWebRoutes();
-
-        //
-    }
-
-    /**
-     * Define the "web" routes for the application.
-     *
-     * These routes all receive session state, CSRF protection, etc.
-     *
-     * @return void
-     */
-    protected function mapWebRoutes()
-    {
-        Route::middleware('web')
-            ->namespace($this->namespace)
-            ->group(function () {
-                require base_path('routes/web.php');
-            })
-        ;
     }
 
     /**
@@ -72,16 +63,9 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware('api')
             ->namespace($this->namespace)
             ->group(function () {
-                require base_path('routes/auth.php');
-                require base_path('routes/users.php');
-                require base_path('routes/organizations.php');
-                require base_path('routes/teams.php');
-                require base_path('routes/teamInvitations.php');
-                require base_path('routes/projects.php');
-                require base_path('routes/projectInvitations.php');
-                require base_path('routes/subscriptionPlans.php');
-                require base_path('routes/subscriptionOptions.php');
-                require base_path('routes/options.php');
+                foreach ($this->routes as $route) {
+                    require base_path("routes/{$route}.php");
+                }
             })
         ;
     }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Feature\Auth;
+namespace Tests\Feature\User;
 
 use App\Events\User\UserWasDeactivated;
 use App\Models\User;
@@ -29,7 +29,7 @@ class DeactivationTest extends TestCase
         ]);
 
         // When
-        $response = $this->signIn($staff)->post(route('auth.deactivate'), [
+        $response = $this->signIn($staff)->post(route('account.deactivate'), [
             'id' => $user->uuid,
         ]);
 
@@ -54,7 +54,7 @@ class DeactivationTest extends TestCase
         ]);
 
         // When
-        $response = $this->signIn($staff)->post(route('auth.deactivate'), [
+        $response = $this->signIn($staff)->post(route('account.deactivate'), [
             'id' => $user->uuid,
         ]);
 
@@ -79,7 +79,7 @@ class DeactivationTest extends TestCase
         ]);
 
         // When
-        $response = $this->signIn($staff)->post(route('auth.deactivate'), [
+        $response = $this->signIn($staff)->post(route('account.deactivate'), [
             'id' => $user->uuid,
         ]);
 
@@ -102,7 +102,7 @@ class DeactivationTest extends TestCase
         $user = $this->user();
 
         // When
-        $response = $this->signIn($staff)->post(route('auth.deactivate'), [
+        $response = $this->signIn($staff)->post(route('account.deactivate'), [
             'id' => $user->uuid,
         ]);
 

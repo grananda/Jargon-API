@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Feature\Auth;
+namespace Tests\Feature\User;
 
 
 use App\Events\User\UserActivationTokenGenerated;
@@ -26,7 +26,7 @@ class ReactivationTest extends TestCase
         Event::fake(UserActivationTokenGenerated::class);
 
         // When
-        $response = $this->post(route('auth.activate.resend'), [
+        $response = $this->post(route('account.activate.resend'), [
             'email' => $this->faker->email,
         ]);
 
@@ -47,7 +47,7 @@ class ReactivationTest extends TestCase
         Event::fake(UserActivationTokenGenerated::class);
 
         // When
-        $response = $this->post(route('auth.activate.resend'), [
+        $response = $this->post(route('account.activate.resend'), [
             'email' => $user->email,
         ]);
 
@@ -72,7 +72,7 @@ class ReactivationTest extends TestCase
         ]);
 
         // When
-        $response = $this->post(route('auth.activate.resend'), [
+        $response = $this->post(route('account.activate.resend'), [
             'email' => $user->email,
         ]);
 

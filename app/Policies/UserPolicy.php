@@ -25,4 +25,15 @@ class UserPolicy extends AbstractPolicy
     {
         return $user->hasRole(User::SENIOR_STAFF_MEMBER);
     }
+
+    /**
+     * @param \App\Models\User $authUser
+     * @param User             $user
+     *
+     * @return bool
+     */
+    public function cancel(User $authUser, User $user)
+    {
+        return $authUser->uuid === $user->uuid;
+    }
 }

@@ -13,7 +13,7 @@ class LoginRequest extends Request
     {
         return [
             'email'       => ['required', 'email'],
-            'password'    => ['required', 'min:6'],
+            'password'    => ['required', 'string'],
             'remember_me' => ['sometimes', 'boolean'],
         ];
     }

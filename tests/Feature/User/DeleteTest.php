@@ -21,7 +21,30 @@ class DeleteTest extends TestCase
         CreateOptionUsers;
 
     /** @test */
-    public function a_200_will_be_returned_when_a_user_is_created()
+    public function a_403_will_be_returned_when_a_user_is_deleted_by_a_non_senior_staff()
+    {
+        // Given
+        Event::fake(UserWasDeleted::class);
+
+        /** @var \App\Models\User $user */
+        $user = $this->user();
+
+
+
+        /** @var \App\Models\User $user */
+        $staff = $this->staff(User::JUNIOR_STAFF_MEMBER);
+
+        // When
+        $response = $this->signIn($staff)->delete(route('users.destroy', [$user->uuid]));
+
+        // Then
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+
+        Event::assertNotDispatched(UserWasDeleted::class);
+    }
+
+    /** @test */
+    public function a_200_will_be_returned_when_a_user_is_deleted()
     {
         // Given
         Event::fake(UserWasDeleted::class);
