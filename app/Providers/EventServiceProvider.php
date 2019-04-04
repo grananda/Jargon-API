@@ -11,6 +11,7 @@ use App\Events\User\UserWasActivated;
 use App\Events\User\UserWasDeactivated;
 use App\Events\User\UserWasDeleted;
 use App\Listeners\AddOptionUser;
+use App\Listeners\DeactivateActiveSubscription;
 use App\Listeners\DeleteOptionUser;
 use App\Listeners\InitializeActiveSubscription;
 use App\Listeners\InitializeUserOptions;
@@ -38,6 +39,7 @@ class EventServiceProvider extends ServiceProvider
             InitializeUserOptions::class,
         ],
         UserWasDeactivated::class => [
+            DeactivateActiveSubscription::class,
             SendUserDeactivationNotification::class,
         ],
         UserWasDeleted::class => [

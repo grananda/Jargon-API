@@ -56,6 +56,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
             $model->fireModelEvent('activation-token-generated');
         });
+        static::deleting(function (self $model) {
+            $model->activeSubscription()->delete();
+            $model->options()->delete();
+        });
     }
 
     /**

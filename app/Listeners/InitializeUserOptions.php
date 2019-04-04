@@ -33,6 +33,8 @@ class InitializeUserOptions
      */
     public function handle(UserWasActivated $event)
     {
-        $this->optionUserRepository->rebuildUserOptions($event->user);
+        if (! (bool) $event->user->options()->count()) {
+            $this->optionUserRepository->rebuildUserOptions($event->user);
+        }
     }
 }
