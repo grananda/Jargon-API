@@ -2,22 +2,30 @@
 
 namespace App\Events\User;
 
-use App\Models\PasswordReset;
+use App\Models\User;
 
 class PasswordResetRequested
 {
     /**
-     * @var \App\Models\PasswordReset
+     * @var \App\Models\USer
      */
-    public $passwordReset;
+    public $user;
+
+    /**
+     * @var string
+     */
+    public $token;
 
     /**
      * Create a new event instance.
      *
-     * @param \App\Models\PasswordReset $passwordReset
+     * @param \App\Models\User $user
+     * @param string           $token
      */
-    public function __construct(PasswordReset $passwordReset)
+    public function __construct(User $user, string $token)
     {
-        $this->passwordReset = $passwordReset;
+        $this->user = $user;
+
+        $this->token = $token;
     }
 }

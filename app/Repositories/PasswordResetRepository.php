@@ -4,49 +4,65 @@ namespace App\Repositories;
 
 use App\Events\User\PasswordResetRequested;
 use App\Models\PasswordReset;
+use App\Models\User;
+use Illuminate\Auth\Passwords\DatabaseTokenRepository;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class PasswordResetRepository extends CoreRepository
 {
+    /**
+     * @var \Illuminate\Contracts\Foundation\Application
+     */
+    private $app;
+
     /**
      * ProjectRepository constructor.
      *
      * @param \Illuminate\Database\Connection $dbConnection
      * @param \App\Models\PasswordReset       $model
      */
-    public function __construct(Connection $dbConnection, PasswordReset $model)
+    public function __construct(Connection $dbConnection, PasswordReset $model, Application $app)
     {
         parent::__construct($dbConnection, $model);
+
+        $this->app = $app;
     }
 
     /**
-     * @param array $attributes
+     * Generates a password recovery token.
      *
-     * @throws \Throwable
+     * @param \App\Models\User $user
      *
-     * @return \App\Models\PasswordReset
+     * @return string
      */
-    public function createPasswordReset(array $attributes)
+    public function createPasswordReset(User $user)
     {
-        return $this->dbConnection->transaction(function () use ($attributes) {
-            $token = $this->model->generateToken();
+        $key = $this->app['config']['app.key'];
 
-            $this->dbConnection
-                ->table($this->model->getTable())
-                ->insert([
-                    'email'      => $attributes['email'],
-                    'token'      => $token,
-                    'created_at' => now(),
-                ])
-            ;
+        if (Str::startsWith($key, 'base64:')) {
+            $key = base64_decode(substr($key, 7));
+        }
 
-            /** @var \App\Models\PasswordReset $entity */
-            $entity = $this->findBy(['token' => $token]);
+        /** @var DatabaseTokenRepository $databaseTokenRepository */
+        $databaseTokenRepository = new DatabaseTokenRepository(
+            $this->dbConnection,
+            $this->app['hash'],
+            $this->model->getTable(),
+            $key,
+            PasswordReset::TOKEN_EXPIRATION_PERIOD
+        );
 
-            Event::dispatch(new PasswordResetRequested($entity));
+        $token = $databaseTokenRepository->create($user);
 
-            return $entity;
-        });
+        /** @var \App\Models\PasswordReset $entity */
+        $entity = $this->findBy(['email' => $user->email]);
+
+        Event::dispatch(new PasswordResetRequested($user, $token));
+
+        return $token;
     }
 }

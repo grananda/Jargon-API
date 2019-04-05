@@ -21,8 +21,8 @@ class SendPasswordRecoveryNotification implements ShouldQueue
      */
     public function handle(PasswordResetRequested $event)
     {
-        Mail::to($event->passwordReset)
-            ->send(new SendPasswordRecoveryEmail($event->passwordReset))
+        Mail::to($event->user)
+            ->send(new SendPasswordRecoveryEmail($event->user, $event->token))
         ;
     }
 }

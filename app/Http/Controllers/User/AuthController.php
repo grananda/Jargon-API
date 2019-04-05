@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\Account\AccountPasswordRequestRequest;
 use App\Http\Requests\Account\AccountRequestPasswordResetRequest;
 use App\Http\Requests\LoginRequest;
 use App\Repositories\PasswordResetRepository;
@@ -84,8 +85,7 @@ class AuthController extends ApiController
     public function requestPasswordReset(AccountRequestPasswordResetRequest $request)
     {
         try {
-            // vendor/laravel/framework/src/Illuminate/Auth/Passwords/DatabaseTokenRepository.php
-            $this->passwordResetRepository->createPasswordReset($request->validated());
+            $this->passwordResetRepository->createPasswordReset($request->user);
 
             return $this->responseNoContent();
         } catch (Exception $runtimeException) {
@@ -93,7 +93,7 @@ class AuthController extends ApiController
         }
     }
 
-    public function resetPassword()
+    public function PasswordReset(AccountPasswordRequestRequest $request)
     {
         try {
         } catch (Exception $runtimeException) {

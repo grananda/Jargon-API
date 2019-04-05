@@ -6,6 +6,8 @@ use Illuminate\Support\Str;
 
 class PasswordReset extends BaseEntity
 {
+    const TOKEN_EXPIRATION_PERIOD = 60;
+
     protected $table = 'password_resets';
 
     protected $dates = [

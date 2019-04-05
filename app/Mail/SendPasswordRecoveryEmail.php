@@ -3,23 +3,32 @@
 namespace App\Mail;
 
 use App\Models\PasswordReset;
+use App\Models\User;
 use Illuminate\Mail\Mailable;
 
 class SendPasswordRecoveryEmail extends Mailable
 {
     /**
-     * @var \App\Models\PasswordReset
+     * @var \App\Models\User
      */
-    private $passwordReset;
+    private $user;
+
+    /**
+     * @var string
+     */
+    public $token;
 
     /**
      * Create a new message instance.
      *
-     * @param \App\Models\PasswordReset $passwordReset
+     * @param \App\Models\User $user
+     * @param string           $token
      */
-    public function __construct(PasswordReset $passwordReset)
+    public function __construct(User $user, string $token)
     {
-        $this->passwordReset = $passwordReset;
+        $this->user = $user;
+
+        $this->token = $token;
     }
 
     /**
@@ -29,10 +38,10 @@ class SendPasswordRecoveryEmail extends Mailable
      */
     public function build()
     {
-        $app     = env('APP_NAME');
+        $app = env('APP_NAME');
         $subject = trans(':app Password Recovery Request', ['app' => $app]);
-        $link    = route('account.password.reset', [
-            'token' => $this->passwordReset->token,
+        $link = route('account.password.reset', [
+            'token' => $this->token,
         ]);
 
         return $this->view('emails.auth.passwordRecovery')
@@ -40,9 +49,8 @@ class SendPasswordRecoveryEmail extends Mailable
             ->with([
                 'app'     => $app,
                 'subject' => $subject,
-                'email'   => $this->passwordReset->email,
+                'user'    => $this->user,
                 'link'    => $link,
-            ])
-        ;
+            ]);
     }
 }
