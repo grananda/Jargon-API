@@ -58,9 +58,6 @@ class PasswordResetRepository extends CoreRepository
 
         $token = $databaseTokenRepository->create($user);
 
-        /** @var \App\Models\PasswordReset $entity */
-        $entity = $this->findBy(['email' => $user->email]);
-
         Event::dispatch(new PasswordResetRequested($user, $token));
 
         return $token;

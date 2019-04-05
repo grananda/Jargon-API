@@ -3,9 +3,15 @@
 namespace App\Http\Requests\Account;
 
 use App\Http\Requests\Request;
+use App\Models\User;
 
 class AccountPasswordRequestRequest extends Request
 {
+    /**
+     * @var \App\Models\User
+     */
+    public $user;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +19,9 @@ class AccountPasswordRequestRequest extends Request
      */
     public function authorize()
     {
-        return false;
+        $this->user = User::where('email', $this->input('email'))->firstOrFail();
+
+        return true;
     }
 
     /**
@@ -24,7 +32,9 @@ class AccountPasswordRequestRequest extends Request
     public function rules()
     {
         return [
-            //
+            'token'    => 'required',
+            'email'    => 'required|email',
+            'password' => 'required|confirmed|min:8',
         ];
     }
 }

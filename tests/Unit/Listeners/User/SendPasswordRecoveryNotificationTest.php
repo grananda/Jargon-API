@@ -34,12 +34,8 @@ class SendPasswordRecoveryNotificationTest extends TestCase
         /** @var array $passwordResetArray */
         $token = $passwordResetRepository->createPasswordReset($user);
 
-        /** @var \App\Models\PasswordReset $passwordReset */
-        $passwordReset = $passwordResetArray['entity'];
-
-
         /** @var PasswordResetRequested $event */
-        $event = new PasswordResetRequested($passwordReset, $token);
+        $event = new PasswordResetRequested($user, $token);
 
         /** @var SendPasswordRecoveryNotification $listener */
         $listener = new SendPasswordRecoveryNotification();

@@ -27,11 +27,9 @@ class PasswordResetTest extends TestCase
         /** @var PasswordResetRepository $passwordResetRepository */
         $passwordResetRepository = resolve(PasswordResetRepository::class);
 
-        /** @var array $passwordResetArray */
-        $passwordResetArray = $passwordResetRepository->createPasswordReset($user);
+        $token = $passwordResetRepository->createPasswordReset($user);
 
         $password = $this->faker->password;
-        $token = $passwordResetArray['token'];
 
         // When
         $response = $this->post(route('account.password.reset'),

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Exceptions\UnauthorizedUserException;
+use App\Exceptions\UserNotActivated;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Account\AccountPasswordRequestRequest;
 use App\Http\Requests\Account\AccountRequestPasswordResetRequest;
 use App\Http\Requests\LoginRequest;
 use App\Repositories\PasswordResetRepository;
+use App\Services\AuthService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +17,11 @@ use Laravel\Passport\Passport;
 
 class AuthController extends ApiController
 {
+    /**
+     * @var \App\Services\AuthService
+     */
+    private $authService;
+
     /**
      * @var \App\Repositories\PasswordResetRepository
      */
@@ -23,10 +31,13 @@ class AuthController extends ApiController
      * AuthController constructor.
      *
      * @param \App\Repositories\PasswordResetRepository $passwordResetRepository
+     * @param \App\Services\AuthService                 $authService
      */
-    public function __construct(PasswordResetRepository $passwordResetRepository)
+    public function __construct(PasswordResetRepository $passwordResetRepository, AuthService $authService)
     {
         $this->passwordResetRepository = $passwordResetRepository;
+
+        $this->authService = $authService;
     }
 
     /**
@@ -43,14 +54,16 @@ class AuthController extends ApiController
             $credentials = request(['email', 'password']);
 
             if (! Auth::attempt($credentials, $request->remember_me)) {
-                return $this->responseUnauthorized(trans('Unauthorized'));
+                throw new UnauthorizedUserException(trans('Unauthorized'));
             }
 
             /** @var \App\Models\User $user */
             $user = $request->user();
 
+//            $tokenResult = $this->authService->userLogin($credentials $request->remember_me);
+//
             if (! $user->isActivated()) {
-                return $this->responseForbidden(trans('User is not active'));
+                throw new UserNotActivated(trans('User is not active'));
             }
 
             // Force the user password to be rehashed, only if it's required
@@ -70,18 +83,28 @@ class AuthController extends ApiController
 
             $token->save();
 
-            return response()->json([
+            return $this->responseOk([
                 'access_token' => $tokenResult->accessToken,
                 'token_type'   => 'Bearer',
                 'expires_at'   => Carbon::parse(
-                    $tokenResult->token->expires_at)
-                    ->toDateTimeString(),
+                    $tokenResult->token->expires_at),
             ]);
+        } catch (UnauthorizedUserException $unauthorizedUserException) {
+            return $this->responseInternalError($unauthorizedUserException->getMessage());
+        } catch (UserNotActivated $userNotActivated) {
+            return $this->responseInternalError($userNotActivated->getMessage());
         } catch (Exception $runtimeException) {
             return $this->responseInternalError($runtimeException->getMessage());
         }
     }
 
+    /**
+     * Requests a password recovery link.
+     *
+     * @param \App\Http\Requests\Account\AccountRequestPasswordResetRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function requestPasswordReset(AccountRequestPasswordResetRequest $request)
     {
         try {
@@ -93,9 +116,21 @@ class AuthController extends ApiController
         }
     }
 
+    /**
+     * Securely resets password.
+     *
+     * @param \App\Http\Requests\Account\AccountPasswordRequestRequest $request
+     *
+     * @throws \Throwable
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function PasswordReset(AccountPasswordRequestRequest $request)
     {
         try {
+            $this->authService->resetPassword($request->validated());
+
+            return $this->responseNoContent();
         } catch (Exception $runtimeException) {
             return $this->responseInternalError($runtimeException->getMessage());
         }
