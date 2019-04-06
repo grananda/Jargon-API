@@ -28,6 +28,7 @@ class RouteServiceProvider extends ServiceProvider
         'subscriptionPlans',
         'subscriptionOptions',
         'options',
+        'activeSubscriptions',
     ];
 
     /**

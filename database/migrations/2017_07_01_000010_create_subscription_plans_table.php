@@ -14,6 +14,7 @@ class CreateSubscriptionPlansTable extends Migration
             $table->string('title');
             $table->string('description');
             $table->string('alias')->unique();
+            $table->integer('level')->nullable(false);
             $table->double('amount')->default(0);
             $table->boolean('trial')->default(false);
             $table->boolean('status')->default(true);

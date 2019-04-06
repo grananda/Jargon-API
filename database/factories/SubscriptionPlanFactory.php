@@ -12,6 +12,7 @@ $factory->define(SubscriptionPlan::class, function (Faker $faker) {
         'description' => $faker->text,
         'alias'       => $faker->word,
         'amount'      => $faker->numberBetween(0, 50),
+        'level'       => $faker->numberBetween(50, 100),
         'trial'       => false,
         'status'      => true,
         'created_at'  => Carbon::now(),
