@@ -37,4 +37,16 @@ class AccountPasswordRequestRequest extends Request
             'password' => 'required|confirmed|min:8',
         ];
     }
+
+    /**
+     * Get the password reset credentials from the request.
+     *
+     * @return array
+     */
+    public function credentials()
+    {
+        return $this->only(
+            'email', 'password', 'password_confirmation', 'token'
+        );
+    }
 }

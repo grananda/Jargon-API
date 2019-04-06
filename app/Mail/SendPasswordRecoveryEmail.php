@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\PasswordReset;
 use App\Models\User;
 use Illuminate\Mail\Mailable;
 
@@ -38,9 +37,9 @@ class SendPasswordRecoveryEmail extends Mailable
      */
     public function build()
     {
-        $app = env('APP_NAME');
+        $app     = env('APP_NAME');
         $subject = trans(':app Password Recovery Request', ['app' => $app]);
-        $link = route('account.password.reset', [
+        $link    = route('account.password.reset', [
             'token' => $this->token,
         ]);
 
@@ -51,6 +50,7 @@ class SendPasswordRecoveryEmail extends Mailable
                 'subject' => $subject,
                 'user'    => $this->user,
                 'link'    => $link,
-            ]);
+            ])
+        ;
     }
 }

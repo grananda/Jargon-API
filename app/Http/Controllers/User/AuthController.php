@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Exceptions\PasswordResetFailException;
 use App\Exceptions\UnauthorizedUserException;
 use App\Exceptions\UserNotActivated;
 use App\Http\Controllers\Api\ApiController;
@@ -12,8 +13,7 @@ use App\Repositories\PasswordResetRepository;
 use App\Services\AuthService;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Passport\Passport;
+use Illuminate\Contracts\Auth\PasswordBroker;
 
 class AuthController extends ApiController
 {
@@ -53,35 +53,9 @@ class AuthController extends ApiController
             /** @var array $credentials */
             $credentials = request(['email', 'password']);
 
-            if (! Auth::attempt($credentials, $request->remember_me)) {
-                throw new UnauthorizedUserException(trans('Unauthorized'));
-            }
+            $rememberMe = $request->remember_me ?? false;
 
-            /** @var \App\Models\User $user */
-            $user = $request->user();
-
-//            $tokenResult = $this->authService->userLogin($credentials $request->remember_me);
-//
-            if (! $user->isActivated()) {
-                throw new UserNotActivated(trans('User is not active'));
-            }
-
-            // Force the user password to be rehashed, only if it's required
-            if (password_needs_rehash($user->password, PASSWORD_DEFAULT)) {
-                $user->update(compact('password'));
-            }
-
-            /** @var \Laravel\Passport\PersonalAccessTokenResult $tokenResult */
-            $tokenResult = $user->createToken('Personal Access Token');
-
-            /** @var \Laravel\Passport\Token $token */
-            $token = $tokenResult->token;
-
-            if ($request->remember_me) {
-                $token->expires_at = Carbon::now()->add(Passport::tokensExpireIn());
-            }
-
-            $token->save();
+            $tokenResult = $this->authService->userLogin($credentials, $rememberMe);
 
             return $this->responseOk([
                 'access_token' => $tokenResult->accessToken,
@@ -90,9 +64,9 @@ class AuthController extends ApiController
                     $tokenResult->token->expires_at),
             ]);
         } catch (UnauthorizedUserException $unauthorizedUserException) {
-            return $this->responseInternalError($unauthorizedUserException->getMessage());
+            return $this->responseUnauthorized($unauthorizedUserException->getMessage());
         } catch (UserNotActivated $userNotActivated) {
-            return $this->responseInternalError($userNotActivated->getMessage());
+            return $this->responseUnauthorized($userNotActivated->getMessage());
         } catch (Exception $runtimeException) {
             return $this->responseInternalError($runtimeException->getMessage());
         }
@@ -125,12 +99,27 @@ class AuthController extends ApiController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function PasswordReset(AccountPasswordRequestRequest $request)
+    public function passwordReset(AccountPasswordRequestRequest $request)
     {
         try {
-            $this->authService->resetPassword($request->validated());
+            $response = $this->authService->resetPassword($request->credentials());
 
-            return $this->responseNoContent();
+            if ($response !== PasswordBroker::PASSWORD_RESET) {
+                throw new PasswordResetFailException(trans('The password reset process has failed.'));
+            }
+
+            $credentials = request(['email', 'password']);
+
+            $tokenResult = $this->authService->userLogin($credentials);
+
+            return $this->responseOk([
+                'access_token' => $tokenResult->accessToken,
+                'token_type'   => 'Bearer',
+                'expires_at'   => Carbon::parse(
+                    $tokenResult->token->expires_at),
+            ]);
+        } catch (PasswordResetFailException $passwordResetFailException) {
+            return $this->responseInternalError($passwordResetFailException->getMessage());
         } catch (Exception $runtimeException) {
             return $this->responseInternalError($runtimeException->getMessage());
         }

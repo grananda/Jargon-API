@@ -45,7 +45,7 @@ class LoginTest extends TestCase
         ]);
 
         // Then
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /** @test */

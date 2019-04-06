@@ -8,6 +8,7 @@ use App\Events\User\PasswordResetRequested;
 use App\Repositories\PasswordResetRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
@@ -19,6 +20,7 @@ class PasswordResetTest extends TestCase
     public function user_can_reset_password_with_token()
     {
         // Given
+        Artisan::call('passport:install');
         Event::fake(PasswordResetRequested::class);
 
         /** @var \App\Models\User $user */
@@ -29,7 +31,7 @@ class PasswordResetTest extends TestCase
 
         $token = $passwordResetRepository->createPasswordReset($user);
 
-        $password = $this->faker->password;
+        $password = $this->faker->password(10);
 
         // When
         $response = $this->post(route('account.password.reset'),
@@ -42,7 +44,7 @@ class PasswordResetTest extends TestCase
         );
 
         // Then
-        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $response->assertStatus(Response::HTTP_OK);
 
         Event::assertDispatched(PasswordResetRequested::class);
     }

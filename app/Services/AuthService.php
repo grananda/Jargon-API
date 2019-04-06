@@ -4,11 +4,10 @@ namespace App\Services;
 
 use App\Exceptions\UnauthorizedUserException;
 use App\Exceptions\UserNotActivated;
-use App\Models\User;
 use App\Repositories\PasswordResetRepository;
 use App\Repositories\UserRepository;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\AuthManager;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -27,31 +26,40 @@ class AuthService
     private $passwordResetRepository;
 
     /**
+     * @var \Illuminate\Auth\AuthManager
+     */
+    private $authManager;
+
+    /**
      * AuthService constructor.
      *
      * @param \App\Repositories\UserRepository          $userRepository
      * @param \App\Repositories\PasswordResetRepository $passwordResetRepository
      */
-    public function __construct(UserRepository $userRepository, PasswordResetRepository $passwordResetRepository)
+    public function __construct(UserRepository $userRepository, PasswordResetRepository $passwordResetRepository, AuthManager $authManager)
     {
         $this->userRepository          = $userRepository;
         $this->passwordResetRepository = $passwordResetRepository;
+        $this->authManager             = $authManager;
     }
 
     /**
      * @param array $credentials
      * @param bool  $rememberMe
      *
-     * @throws \App\Exceptions\UnauthorizedUserException
      * @throws \App\Exceptions\UserNotActivated
+     * @throws \App\Exceptions\UnauthorizedUserException
      *
      * @return \Laravel\Passport\PersonalAccessTokenResult
      */
-    public function userLogin(array $credentials, bool $rememberMe)
+    public function userLogin(array $credentials, bool $rememberMe = false)
     {
-        if (! Auth::attempt($credentials, $rememberMe)) {
+        if (! $this->authManager->attempt($credentials, $rememberMe)) {
             throw new UnauthorizedUserException(trans('Unauthorized'));
         }
+
+        /** @var \App\Models\User $user */
+        $user = $this->authManager->user();
 
         if (! $user->isActivated()) {
             throw new UserNotActivated(trans('User is not active'));
@@ -67,7 +75,7 @@ class AuthService
         /** @var \Laravel\Passport\Token $token */
         $token = $tokenResult->token;
 
-        if ($request->remember_me) {
+        if ($rememberMe) {
             $token->expires_at = Carbon::now()->add(Passport::tokensExpireIn());
         }
 
@@ -92,8 +100,6 @@ class AuthService
                 $this->writePassword($user, $password);
             });
 
-        $this->clearPasswordReserRequest($credentials['email']);
-
         return $response;
     }
 
@@ -113,23 +119,6 @@ class AuthService
             'password'       => Hash::make($password),
             'remember_token' => Str::random(60),
         ]);
-
-        return $this->userLogin($user);
-    }
-
-    /**
-     * Removes current user password reset request.
-     *
-     * @param string $email
-     *
-     * @throws \Throwable
-     */
-    private function clearPasswordReserRequest(string $email)
-    {
-        /** @var \App\Models\PasswordReset $passwordReset */
-        $passwordReset = $this->passwordResetRepository->findBy(['email' => $email]);
-
-        $this->passwordResetRepository->delete($passwordReset);
     }
 
     /**
