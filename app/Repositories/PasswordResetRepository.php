@@ -5,12 +5,10 @@ namespace App\Repositories;
 use App\Events\User\PasswordResetRequested;
 use App\Models\PasswordReset;
 use App\Models\User;
-use Illuminate\Auth\Passwords\DatabaseTokenRepository;
+use App\Services\DatabaseTokenRepositoryFactory;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
 
 class PasswordResetRepository extends CoreRepository
 {
@@ -20,16 +18,25 @@ class PasswordResetRepository extends CoreRepository
     private $app;
 
     /**
+     * @var \App\Services\DatabaseTokenRepositoryFactory
+     */
+    private $databaseTokenRepositoryFactory;
+
+    /**
      * ProjectRepository constructor.
      *
-     * @param \Illuminate\Database\Connection $dbConnection
-     * @param \App\Models\PasswordReset       $model
+     * @param \Illuminate\Database\Connection              $dbConnection
+     * @param \App\Models\PasswordReset                    $model
+     * @param \Illuminate\Contracts\Foundation\Application $app
+     * @param \App\Services\DatabaseTokenRepositoryFactory $databaseTokenRepositoryFactory
      */
-    public function __construct(Connection $dbConnection, PasswordReset $model, Application $app)
+    public function __construct(Connection $dbConnection, PasswordReset $model, Application $app, DatabaseTokenRepositoryFactory $databaseTokenRepositoryFactory)
     {
         parent::__construct($dbConnection, $model);
 
         $this->app = $app;
+
+        $this->databaseTokenRepositoryFactory = $databaseTokenRepositoryFactory;
     }
 
     /**
@@ -41,22 +48,7 @@ class PasswordResetRepository extends CoreRepository
      */
     public function createPasswordReset(User $user)
     {
-        $key = $this->app['config']['app.key'];
-
-        if (Str::startsWith($key, 'base64:')) {
-            $key = base64_decode(substr($key, 7));
-        }
-
-        /** @var DatabaseTokenRepository $databaseTokenRepository */
-        $databaseTokenRepository = new DatabaseTokenRepository(
-            $this->dbConnection,
-            $this->app['hash'],
-            $this->model->getTable(),
-            $key,
-            PasswordReset::TOKEN_EXPIRATION_PERIOD
-        );
-
-        $token = $databaseTokenRepository->create($user);
+        $token = $this->databaseTokenRepositoryFactory->instance()->create($user);
 
         Event::dispatch(new PasswordResetRequested($user, $token));
 
