@@ -38,4 +38,23 @@ class ActiveSubscriptionPlanOptionValueRepository extends CoreRepository
             return $entity->fresh();
         });
     }
+
+    /**
+     * @param \App\Models\Subscriptions\ActiveSubscription $activeSubscription
+     * @param array                                        $attributes
+     *
+     * @throws \Throwable
+     *
+     * @return mixed
+     */
+    public function updateActiveSubscriptionPlanOptionValue(ActiveSubscription $activeSubscription, array $attributes)
+    {
+        return $this->dbConnection->transaction(function () use ($activeSubscription, $attributes) {
+            /** @var \App\Models\Subscriptions\ActiveSubscriptionOptionValue $entity */
+            $entity = $activeSubscription->options()->where('option_key', $attributes['option_key'])->first();
+
+            /** @var \App\Models\Subscriptions\ActiveSubscriptionOptionValue $entity */
+            return $this->update($entity, $attributes);
+        });
+    }
 }

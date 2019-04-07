@@ -48,4 +48,26 @@ class SubscriptionPlanPolicy extends AbstractPolicy
     {
         return $user->hasRole(User::SENIOR_STAFF_MEMBER) && $subscriptionPlan->activeSubscriptions()->count() === 0;
     }
+
+    /**
+     * @param \App\Models\User                           $user
+     * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
+     *
+     * @return bool
+     */
+    public function upgrade(User $user, SubscriptionPlan $subscriptionPlan)
+    {
+        return true;
+    }
+
+    /**
+     * @param \App\Models\User                           $user
+     * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
+     *
+     * @return bool
+     */
+    public function downgrade(User $user, SubscriptionPlan $subscriptionPlan)
+    {
+        return true;
+    }
 }

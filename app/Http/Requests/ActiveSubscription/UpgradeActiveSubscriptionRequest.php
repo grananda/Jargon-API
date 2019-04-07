@@ -19,7 +19,7 @@ class UpgradeActiveSubscriptionRequest extends Request
      */
     public function authorize()
     {
-        $this->subscriptionPlan = SubscriptionPlan::findByUuidOrFail($this->route('id'));
+        $this->subscriptionPlan = SubscriptionPlan::findByUuidOrFail($this->input('id'));
 
         return $this->user()->can('upgrade', $this->subscriptionPlan);
     }

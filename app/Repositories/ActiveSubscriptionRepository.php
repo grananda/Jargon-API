@@ -38,6 +38,14 @@ class ActiveSubscriptionRepository extends CoreRepository
         $this->activeSubscriptionPlanOptionValueRepository = $activeSubscriptionPlanOptionValueRepository;
     }
 
+    /**
+     * @param \App\Models\Subscriptions\SubscriptionPlan $subscription
+     * @param \App\Models\User                           $user
+     *
+     * @throws \Throwable
+     *
+     * @return mixed
+     */
     public function createActiveSubscription(SubscriptionPlan $subscription, User $user)
     {
         return $this->dbConnection->transaction(function () use ($subscription, $user) {
@@ -54,6 +62,35 @@ class ActiveSubscriptionRepository extends CoreRepository
             foreach ($subscription->options as $option) {
                 /** @var \App\Models\Subscriptions\SubscriptionPlanOptionValue $optionValue */
                 $optionValue = $this->activeSubscriptionPlanOptionValueRepository->createActiveSubscriptionPlanOptionValue($activeSubscription, [
+                    'option_key'   => $option->option_key,
+                    'option_value' => $option->option_value,
+                ]);
+            }
+
+            return $activeSubscription->fresh();
+        });
+    }
+
+    /**
+     * @param \App\Models\Subscriptions\SubscriptionPlan $subscription
+     * @param \App\Models\User                           $user
+     *
+     * @throws \Throwable
+     *
+     * @return mixed
+     */
+    public function updateActiveSubscription(SubscriptionPlan $subscription, User $user)
+    {
+        return $this->dbConnection->transaction(function () use ($subscription, $user) {
+            /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
+            $activeSubscription = $user->activeSubscription;
+
+            $subscription->activeSubscriptions()->save($activeSubscription);
+
+            /** @var \App\Models\Subscriptions\SubscriptionPlanOptionValue $option */
+            foreach ($subscription->options as $option) {
+                /** @var \App\Models\Subscriptions\SubscriptionPlanOptionValue $optionValue */
+                $optionValue = $this->activeSubscriptionPlanOptionValueRepository->updateActiveSubscriptionPlanOptionValue($activeSubscription, [
                     'option_key'   => $option->option_key,
                     'option_value' => $option->option_value,
                 ]);

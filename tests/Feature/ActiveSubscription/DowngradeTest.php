@@ -25,15 +25,15 @@ class DowngradeTest extends TestCase
         $activeSubscription = $this->createActiveSubscription($user, 'professional');
 
         /** @var \App\Models\Subscriptions\SubscriptionPlan $subscription */
-        $subscription = SubscriptionPlan::where('alias', SubscriptionPlan::DEFAULT_SUBSCRIPTION_PLAN);
+        $subscription = SubscriptionPlan::where('alias', SubscriptionPlan::DEFAULT_SUBSCRIPTION_PLAN)->first();
 
         // When
         $response = $this->signIn($user)->put(route('activeSubscriptions.upgrade.update'), [
-            'uuid' => $subscription->uuid,
+            'id' => $subscription->uuid,
         ]);
 
         // Then
-        $response->assertStatus(Response::HTTP_OK);
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
 
         $this->assertDatabaseHas('active_subscriptions', [
             'subscription_plan_id' => $subscription->id,
