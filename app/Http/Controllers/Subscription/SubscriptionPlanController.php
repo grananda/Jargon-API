@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Subscription;
 
+use App\Exceptions\SubscriptionPlanDeleteException;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\SubscriptionPlan\DeleteSubscriptionPlanRequest;
 use App\Http\Requests\SubscriptionPlan\IndexSubscriptionPlanRequest;
@@ -118,9 +119,11 @@ class SubscriptionPlanController extends ApiController
     public function destroy(DeleteSubscriptionPlanRequest $request)
     {
         try {
-            $this->subscriptionPlanRepository->delete($request->subscriptionPlan);
+            $this->subscriptionPlanRepository->deleteSubscriptionplan($request->subscriptionPlan);
 
             return $this->responseNoContent();
+        } catch (SubscriptionPlanDeleteException $subscriptionPlanDeleteException) {
+            return $this->responseInternalError($subscriptionPlanDeleteException->getMessage());
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
         }

@@ -10,8 +10,9 @@ class SubscriptionServiceProvider extends ServiceProvider
     /**
      * Bootstrap services.
      *
-     * @return void
      * @throws \Exception
+     *
+     * @return void
      */
     public function boot()
     {

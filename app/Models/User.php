@@ -30,11 +30,11 @@ class User extends Authenticatable implements MustVerifyEmail
         HasUuid,
         Billable;
 
-    const ACTIVATION_EXPIRES_AT = 48;
-    const ACTIVATION_TOKEN_LENGTH = 32;
+    const ACTIVATION_EXPIRES_AT      = 48;
+    const ACTIVATION_TOKEN_LENGTH    = 32;
     const   SUPER_ADMIN_STAFF_MEMBER = 'super-admin';
-    const   SENIOR_STAFF_MEMBER = 'senior-staff';
-    const   JUNIOR_STAFF_MEMBER = 'junior-staff';
+    const   SENIOR_STAFF_MEMBER      = 'senior-staff';
+    const   JUNIOR_STAFF_MEMBER      = 'junior-staff';
 
     /**
      * {@inheritdoc}
@@ -126,7 +126,8 @@ class User extends Authenticatable implements MustVerifyEmail
                 'role_id',
                 'validation_token',
             ])
-            ->withTimestamps();
+            ->withTimestamps()
+        ;
     }
 
     /**
@@ -141,7 +142,8 @@ class User extends Authenticatable implements MustVerifyEmail
                 'role_id',
                 'validation_token',
             ])
-            ->withTimestamps();
+            ->withTimestamps()
+        ;
     }
 
     /**
@@ -150,7 +152,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function roles()
     {
         return $this->belongsToMany(Role::class)
-            ->withTimestamps();
+            ->withTimestamps()
+        ;
     }
 
     /**

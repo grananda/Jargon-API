@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\SubscriptionPlanDeleteException;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\Subscriptions\SubscriptionPlanOptionValue;
 use Illuminate\Database\Connection;
@@ -95,6 +96,26 @@ class SubscriptionPlanRepository extends CoreRepository
             }
 
             return $entity->fresh();
+        });
+    }
+
+    /**
+     * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
+     *
+     * @throws \App\Exceptions\SubscriptionPlanDeleteException
+     * @throws \Throwable
+     *
+     * @return mixed
+     */
+    public function deleteSubscriptionPlan(SubscriptionPlan $subscriptionPlan)
+    {
+        if ((bool) $subscriptionPlan->activeSubscriptions()->count()) {
+            throw new SubscriptionPlanDeleteException(trans('Cannot delete active subscription.'));
+        }
+
+        return $this->dbConnection->transaction(function () use ($subscriptionPlan) {
+            /** @var SubscriptionPlan $entity */
+            return $this->delete($subscriptionPlan);
         });
     }
 }

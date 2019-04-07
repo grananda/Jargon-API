@@ -107,4 +107,23 @@ abstract class TestCase extends BaseTestCase
     {
         Auth::logout();
     }
+
+    /**
+     * Reads the contents of the given test fixture.
+     *
+     * @param string $name
+     *
+     * @return array
+     * @throws \Exception
+     */
+    protected function loadFixture(string $name)
+    {
+        $file = __DIR__ . "/fixtures/{$name}.json";
+
+        if (file_exists($file)) {
+            return json_decode(file_get_contents($file), true);
+        }
+
+        throw new \Exception('Fixture was not found!');
+    }
 }

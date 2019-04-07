@@ -3,6 +3,7 @@
 namespace App\Models\Subscriptions;
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
+use App\Events\SubscriptionPlanWasDeleted;
 use App\Models\BaseEntity;
 use App\Models\Traits\HasAlias;
 use App\Models\Traits\HasUuid;
@@ -13,9 +14,13 @@ class SubscriptionPlan extends BaseEntity
     use HasUuid,
         HasAlias;
 
-    const ITEM_TOKEN_LENGTH = 50;
+    const ITEM_TOKEN_LENGTH         = 50;
     const DEFAULT_SUBSCRIPTION_NAME = 'JARGON';
     const DEFAULT_SUBSCRIPTION_PLAN = 'freemium';
+
+    const STANDARD_STRIPE_TYPE_LABEL         = 'service';
+    const STANDARD_STRIPE_BILLING_PERIOD     = 'month';
+    const STANDARD_STRIPE_BILLING_USAGE_TYPE = 'licensed';
 
     protected $dates = [
         'created_at',
@@ -37,6 +42,7 @@ class SubscriptionPlan extends BaseEntity
      */
     protected $dispatchesEvents = [
         'created' => SubscriptionPlanWasCreated::class,
+        'deleted' => SubscriptionPlanWasDeleted::class,
     ];
 
     /** {@inheritdoc} */
@@ -67,7 +73,7 @@ class SubscriptionPlan extends BaseEntity
 
     public function getAmount()
     {
-        return money_format('%.2n', $this->amount) . '€';
+        return money_format('%.2n', $this->amount).'€';
     }
 
     /**

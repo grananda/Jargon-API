@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Events;
+
+use App\Models\Subscriptions\SubscriptionPlan;
+
+class SubscriptionPlanWasDeleted
+{
+    /**
+     * @var \App\Models\Subscriptions\SubscriptionPlan
+     */
+    public $subscriptionPlan;
+
+    /**
+     * Create a new event instance.
+     *
+     * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
+     */
+    public function __construct(SubscriptionPlan $subscriptionPlan)
+    {
+        $this->subscriptionPlan = $subscriptionPlan;
+    }
+}

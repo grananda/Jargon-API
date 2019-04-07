@@ -7,6 +7,7 @@ use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Events\Option\OptionWasCreated;
 use App\Events\Option\OptionWasDeleted;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
+use App\Events\SubscriptionPlanWasDeleted;
 use App\Events\User\UserActivationTokenGenerated;
 use App\Events\User\UserWasActivated;
 use App\Events\User\UserWasDeactivated;
@@ -36,37 +37,40 @@ class EventServiceProvider extends ServiceProvider
         UserActivationTokenGenerated::class => [
             SendUserActivationNotification::class,
         ],
-        UserWasActivated::class             => [
+        UserWasActivated::class => [
             InitializeActiveSubscription::class,
             InitializeUserOptions::class,
         ],
-        UserWasDeactivated::class           => [
+        UserWasDeactivated::class => [
             DeactivateActiveSubscription::class,
             SendUserDeactivationNotification::class,
         ],
-        UserWasDeleted::class               => [
+        UserWasDeleted::class => [
             SendUserDeletionNotification::class,
         ],
 
         // Collaborator events
-        CollaboratorAddedToTeam::class      => [
+        CollaboratorAddedToTeam::class => [
             SendTeamCollaboratorNotification::class,
         ],
-        CollaboratorAddedToProject::class   => [
+        CollaboratorAddedToProject::class => [
             SendProjectCollaboratorNotification::class,
         ],
 
         // Option events
-        OptionWasCreated::class             => [
+        OptionWasCreated::class => [
             AddOptionUser::class,
         ],
-        OptionWasDeleted::class             => [
+        OptionWasDeleted::class => [
             DeleteOptionUser::class,
         ],
 
         // SubscriptionPlan events
-        SubscriptionPlanWasCreated::class   => [
+        SubscriptionPlanWasCreated::class => [
             CreateStripeSubscriptionPlan::class,
+        ],
+        SubscriptionPlanWasDeleted::class => [
+            DeleteStripeSubscriptionPlan::class,
         ],
     ];
 }

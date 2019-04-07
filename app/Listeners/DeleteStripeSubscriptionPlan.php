@@ -7,7 +7,7 @@ use App\Repositories\Stripe\StripePlanRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class CreateStripeSubscriptionPlan implements ShouldQueue
+class DeleteStripeSubscriptionPlan implements ShouldQueue
 {
     use InteractsWithQueue;
 
@@ -37,6 +37,6 @@ class CreateStripeSubscriptionPlan implements ShouldQueue
      */
     public function handle(SubscriptionPlanWasCreated $event)
     {
-        $this->stripePlanRepository->create($event->subscriptionPlan);
+        $this->stripePlanRepository->delete($event->subscriptionPlan);
     }
 }
