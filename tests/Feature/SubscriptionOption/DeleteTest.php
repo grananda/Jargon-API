@@ -34,7 +34,7 @@ class DeleteTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Subscriptions\SubscriptionOption $option */
         $option = factory(SubscriptionOption::class)->create();

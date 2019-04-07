@@ -16,6 +16,7 @@ class SubscriptionPlansSeeder extends AbstractSeeder
                 'title'       => $plan['title'],
                 'description' => $plan['description'],
                 'alias'       => $plan['alias'],
+                'level'       => $plan['level'],
                 'amount'      => $plan['amount'],
                 'trial'       => false,
             ]);

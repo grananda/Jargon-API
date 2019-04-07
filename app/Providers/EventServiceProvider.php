@@ -6,12 +6,20 @@ use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Events\Option\OptionWasCreated;
 use App\Events\Option\OptionWasDeleted;
+use App\Events\User\UserActivationTokenGenerated;
+use App\Events\User\UserWasActivated;
+use App\Events\User\UserWasDeactivated;
+use App\Events\User\UserWasDeleted;
 use App\Listeners\AddOptionUser;
+use App\Listeners\DeactivateActiveSubscription;
 use App\Listeners\DeleteOptionUser;
-use App\Listeners\SendProjectCollaboratorInvitationEmail;
-use App\Listeners\SendTeamCollaboratorInvitationEmail;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use App\Listeners\InitializeActiveSubscription;
+use App\Listeners\InitializeUserOptions;
+use App\Listeners\SendProjectCollaboratorNotification;
+use App\Listeners\SendTeamCollaboratorNotification;
+use App\Listeners\SendUserActivationNotification;
+use App\Listeners\SendUserDeactivationNotification;
+use App\Listeners\SendUserDeletionNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -22,16 +30,28 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
+        // User events
+        UserActivationTokenGenerated::class => [
+            SendUserActivationNotification::class,
+        ],
+        UserWasActivated::class => [
+            InitializeActiveSubscription::class,
+            InitializeUserOptions::class,
+        ],
+        UserWasDeactivated::class => [
+            DeactivateActiveSubscription::class,
+            SendUserDeactivationNotification::class,
+        ],
+        UserWasDeleted::class => [
+            SendUserDeletionNotification::class,
         ],
 
         // Collaborator events
         CollaboratorAddedToTeam::class => [
-            SendTeamCollaboratorInvitationEmail::class,
+            SendTeamCollaboratorNotification::class,
         ],
         CollaboratorAddedToProject::class => [
-            SendProjectCollaboratorInvitationEmail::class,
+            SendProjectCollaboratorNotification::class,
         ],
 
         // Option events
@@ -42,16 +62,4 @@ class EventServiceProvider extends ServiceProvider
             DeleteOptionUser::class,
         ],
     ];
-
-    /**
-     * Register any events for your application.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        parent::boot();
-
-        //
-    }
 }

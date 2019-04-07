@@ -50,10 +50,12 @@ class SendTeamCollaboratorEmail extends Mailable
      */
     public function build()
     {
+        $subject = trans(':team wants you to collaborate with them', ['team' => $this->team->name]);
+
         return $this->view('emails.team.collaboratorInvitation')
             ->subject($this->subject)
             ->with([
-                'subject'         => trans($this->team->name.' wants you to collaborate with them'),
+                'subject'         => $subject,
                 'team'            => $this->team,
                 'user'            => $this->user,
                 'invitationToken' => $this->invitationToken,

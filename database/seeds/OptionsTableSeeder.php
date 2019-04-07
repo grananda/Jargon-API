@@ -2,7 +2,6 @@
 
 use App\Events\Option\OptionWasCreated;
 use App\Events\Option\OptionWasDeleted;
-use App\Events\Option\OptionWasUpdated;
 use App\Models\Options\Option;
 use App\Models\Options\OptionCategory;
 use Illuminate\Support\Facades\Event;
@@ -15,7 +14,6 @@ class OptionsTableSeeder extends AbstractSeeder
 
         Event::fake([
             OptionWasCreated::class,
-            OptionWasUpdated::class,
             OptionWasDeleted::class,
         ]);
 

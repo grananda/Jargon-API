@@ -22,6 +22,10 @@ class ActiveSubscription extends BaseEntity
         'ends_at',
     ];
 
+    protected $casts = [
+        'subscription_active' => 'boolean',
+    ];
+
     /**
      * @return BelongsTo
      */
@@ -76,5 +80,33 @@ class ActiveSubscription extends BaseEntity
     public function onGracePeriod()
     {
         return $this->ends_at ? Carbon::parse($this->ends_at)->greaterThanOrEqualTo(Carbon::now()) : false;
+    }
+
+    /**
+     * Activates an subscription.
+     *
+     * @return \App\Models\Subscriptions\ActiveSubscription|null
+     */
+    public function activate()
+    {
+        $this->subscription_active = true;
+
+        $this->save();
+
+        return $this->fresh();
+    }
+
+    /**
+     * Deactivates an subscription.
+     *
+     * @return \App\Models\Subscriptions\ActiveSubscription|null
+     */
+    public function deactivate()
+    {
+        $this->subscription_active = false;
+
+        $this->save();
+
+        return $this->fresh();
     }
 }

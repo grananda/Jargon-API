@@ -2,27 +2,65 @@
 
 namespace App\Models;
 
+use App\Events\User\UserActivationTokenGenerated;
+use App\Events\User\UserWasActivated;
+use App\Events\User\UserWasDeactivated;
+use App\Events\User\UserWasDeleted;
 use App\Models\Options\OptionUser;
 use App\Models\Subscriptions\ActiveSubscription;
+use App\Models\Traits\HasRegistration;
 use App\Models\Traits\HasUuid;
 use App\Models\Translations\Project;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens,
         Notifiable,
+        HasRegistration,
         HasUuid;
 
+    const ACTIVATION_EXPIRES_AT      = 48;
+    const ACTIVATION_TOKEN_LENGTH    = 32;
     const   SUPER_ADMIN_STAFF_MEMBER = 'super-admin';
     const   SENIOR_STAFF_MEMBER      = 'senior-staff';
     const   JUNIOR_STAFF_MEMBER      = 'junior-staff';
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $dispatchesEvents = [
+        'deleted'                    => UserWasDeleted::class,
+        'activated'                  => UserWasActivated::class,
+        'deactivated'                => UserWasDeactivated::class,
+        'activation-token-generated' => UserActivationTokenGenerated::class,
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function (self $model) {
+            $model->activation_token = Str::random(self::ACTIVATION_TOKEN_LENGTH);
+
+            $model->fireModelEvent('activation-token-generated');
+        });
+        static::deleting(function (self $model) {
+            $model->activeSubscription()->delete();
+            $model->options()->delete();
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -251,14 +289,6 @@ class User extends Authenticatable
         return $this->apiTokens()->first()->getApiToken();
     }
 
-    /**
-     * @return string
-     */
-    public function getItemToken()
-    {
-        return $this->item_token;
-    }
-
     public function createUserLoggedInEvent()
     {
         event(new UserLoggedIn($this));
@@ -272,15 +302,5 @@ class User extends Authenticatable
     public function setRole(Role $role)
     {
         $this->roles()->attach($role);
-    }
-
-    /**
-     * Determines if the User is activated.
-     *
-     * @return bool
-     */
-    public function isActivated()
-    {
-        return (bool) $this->activated_at;
     }
 }

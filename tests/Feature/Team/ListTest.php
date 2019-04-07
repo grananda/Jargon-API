@@ -31,7 +31,7 @@ class ListTest extends TestCase
         $owner = factory(User::class)->create();
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
@@ -53,7 +53,7 @@ class ListTest extends TestCase
         $owner = factory(User::class)->create();
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
@@ -77,7 +77,7 @@ class ListTest extends TestCase
         $owner = factory(User::class)->create();
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
@@ -109,7 +109,7 @@ class ListTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\User $user2 */
         $user2 = factory(User::class)->create();

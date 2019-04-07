@@ -24,7 +24,7 @@ class OptionUserRepositoryTest extends TestCase
         $optionsRepository = resolve(OptionRepository::class);
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \Illuminate\Database\Eloquent\Collection $options */
         $options = $optionsRepository->findAllBy([
@@ -54,7 +54,7 @@ class OptionUserRepositoryTest extends TestCase
         $optionsRepository = resolve(OptionRepository::class);
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \Illuminate\Database\Eloquent\Collection $options */
         $options = $optionsRepository->findAllBy([
@@ -86,7 +86,7 @@ class OptionUserRepositoryTest extends TestCase
         $optionsRepository = resolve(OptionRepository::class);
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \Illuminate\Database\Eloquent\Collection $options */
         $options = $optionsRepository->findAllBy([
@@ -124,7 +124,7 @@ class OptionUserRepositoryTest extends TestCase
         $optionsRepository = resolve(OptionRepository::class);
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \Illuminate\Database\Eloquent\Collection $options */
         $options = $optionsRepository->findAllBy([

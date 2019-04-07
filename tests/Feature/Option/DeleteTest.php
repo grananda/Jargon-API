@@ -30,7 +30,7 @@ class DeleteTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         // When
         $response = $this->signIn($user)->delete(route('options.destroy', [123]));

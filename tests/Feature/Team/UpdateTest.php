@@ -34,7 +34,7 @@ class UpdateTest extends TestCase
         Event::fake(CollaboratorAddedToTeam::class);
 
         /** @var \App\Models\User $user */
-        $user = factory(User::class)->create();
+        $user = $this->user();
 
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();

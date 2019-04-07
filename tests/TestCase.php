@@ -40,8 +40,6 @@ abstract class TestCase extends BaseTestCase
         }
         DB::beginTransaction();
         Artisan::call('db:seed');
-
-        Mail::fake();
     }
 
     public function tearDown(): void

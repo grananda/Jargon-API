@@ -30,7 +30,7 @@ class OptionUserRepository extends CoreRepository
     }
 
     /**
-     * Rebuild all OptionUser for a gvn user.
+     * Rebuild all OptionUser for a given user.
      *
      * @param \App\Models\User $user
      *
