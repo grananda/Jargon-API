@@ -6,11 +6,13 @@ use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Events\Option\OptionWasCreated;
 use App\Events\Option\OptionWasDeleted;
+use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\User\UserActivationTokenGenerated;
 use App\Events\User\UserWasActivated;
 use App\Events\User\UserWasDeactivated;
 use App\Events\User\UserWasDeleted;
 use App\Listeners\AddOptionUser;
+use App\Listeners\CreateStripeSubscriptionPlan;
 use App\Listeners\DeactivateActiveSubscription;
 use App\Listeners\DeleteOptionUser;
 use App\Listeners\InitializeActiveSubscription;
@@ -34,32 +36,37 @@ class EventServiceProvider extends ServiceProvider
         UserActivationTokenGenerated::class => [
             SendUserActivationNotification::class,
         ],
-        UserWasActivated::class => [
+        UserWasActivated::class             => [
             InitializeActiveSubscription::class,
             InitializeUserOptions::class,
         ],
-        UserWasDeactivated::class => [
+        UserWasDeactivated::class           => [
             DeactivateActiveSubscription::class,
             SendUserDeactivationNotification::class,
         ],
-        UserWasDeleted::class => [
+        UserWasDeleted::class               => [
             SendUserDeletionNotification::class,
         ],
 
         // Collaborator events
-        CollaboratorAddedToTeam::class => [
+        CollaboratorAddedToTeam::class      => [
             SendTeamCollaboratorNotification::class,
         ],
-        CollaboratorAddedToProject::class => [
+        CollaboratorAddedToProject::class   => [
             SendProjectCollaboratorNotification::class,
         ],
 
         // Option events
-        OptionWasCreated::class => [
+        OptionWasCreated::class             => [
             AddOptionUser::class,
         ],
-        OptionWasDeleted::class => [
+        OptionWasDeleted::class             => [
             DeleteOptionUser::class,
+        ],
+
+        // SubscriptionPlan events
+        SubscriptionPlanWasCreated::class   => [
+            CreateStripeSubscriptionPlan::class,
         ],
     ];
 }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factory;
 /* @var Factory $factory */
 $factory->define(SubscriptionPlan::class, function (Faker $faker) {
     return [
-        'title'       => $faker->title,
+        'title'       => $faker->word,
         'description' => $faker->text,
         'alias'       => $faker->word,
         'amount'      => $faker->numberBetween(0, 50),

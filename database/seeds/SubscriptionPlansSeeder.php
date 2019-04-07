@@ -1,13 +1,17 @@
 <?php
 
+use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\Subscriptions\SubscriptionPlanOptionValue;
+use Illuminate\Support\Facades\Event;
 
 class SubscriptionPlansSeeder extends AbstractSeeder
 {
     public function run()
     {
         $this->truncateTables(['subscription_plans', 'subscription_plan_option_values']);
+
+        Event::fake(SubscriptionPlanWasCreated::class);
 
         $plans = $this->getSeedFileContents('subscriptionPlans');
 

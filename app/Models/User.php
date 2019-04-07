@@ -19,6 +19,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Laravel\Cashier\Billable;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -26,13 +27,14 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens,
         Notifiable,
         HasRegistration,
-        HasUuid;
+        HasUuid,
+        Billable;
 
-    const ACTIVATION_EXPIRES_AT      = 48;
-    const ACTIVATION_TOKEN_LENGTH    = 32;
+    const ACTIVATION_EXPIRES_AT = 48;
+    const ACTIVATION_TOKEN_LENGTH = 32;
     const   SUPER_ADMIN_STAFF_MEMBER = 'super-admin';
-    const   SENIOR_STAFF_MEMBER      = 'senior-staff';
-    const   JUNIOR_STAFF_MEMBER      = 'junior-staff';
+    const   SENIOR_STAFF_MEMBER = 'senior-staff';
+    const   JUNIOR_STAFF_MEMBER = 'junior-staff';
 
     /**
      * {@inheritdoc}
@@ -124,8 +126,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 'role_id',
                 'validation_token',
             ])
-            ->withTimestamps()
-        ;
+            ->withTimestamps();
     }
 
     /**
@@ -140,8 +141,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 'role_id',
                 'validation_token',
             ])
-            ->withTimestamps()
-        ;
+            ->withTimestamps();
     }
 
     /**
@@ -150,8 +150,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function roles()
     {
         return $this->belongsToMany(Role::class)
-            ->withTimestamps()
-        ;
+            ->withTimestamps();
     }
 
     /**

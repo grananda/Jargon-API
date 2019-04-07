@@ -3,12 +3,14 @@
 namespace Tests\Feature\SubscriptionPlan;
 
 
+use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\Subscriptions\SubscriptionPlanOptionValue;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class StoreTest extends TestCase
@@ -60,6 +62,8 @@ class StoreTest extends TestCase
     public function a_200_will_be_returned_if_the_user_is_a_staff_member()
     {
         // Given
+        Event::fake(SubscriptionPlanWasCreated::class);
+
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
 
@@ -98,5 +102,7 @@ class StoreTest extends TestCase
             'option_key'           => $option->option_key,
             'option_value'         => $optionValue,
         ]);
+
+        Event::assertDispatched(SubscriptionPlanWasCreated::class);
     }
 }
