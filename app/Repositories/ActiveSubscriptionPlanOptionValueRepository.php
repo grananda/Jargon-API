@@ -53,7 +53,7 @@ class ActiveSubscriptionPlanOptionValueRepository extends CoreRepository
             /** @var \App\Models\Subscriptions\ActiveSubscriptionOptionValue $entity */
             $entity = $activeSubscription->options()->where('option_key', $attributes['option_key'])->first();
 
-            /** @var \App\Models\Subscriptions\ActiveSubscriptionOptionValue $entity */
+            /* @var \App\Models\Subscriptions\ActiveSubscriptionOptionValue $entity */
             return $this->update($entity, $attributes);
         });
     }

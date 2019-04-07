@@ -25,6 +25,7 @@ class SubscriptionPlan extends BaseEntity
         'title',
         'description',
         'alias',
+        'level',
         'quantity',
         'rank',
         'status',

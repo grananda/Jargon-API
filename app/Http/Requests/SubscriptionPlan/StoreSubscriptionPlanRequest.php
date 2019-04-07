@@ -28,6 +28,7 @@ class StoreSubscriptionPlanRequest extends Request
             'title'       => ['required', 'string'],
             'description' => ['required', 'string', 'max:255'],
             'alias'       => ['required', 'string'],
+            'level'       => ['required', 'numeric'],
             'amount'      => ['required', 'numeric'],
             'status'      => ['sometimes', 'boolean'],
             'options'     => ['required', 'array'],
