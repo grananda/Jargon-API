@@ -1,9 +1,9 @@
 {
-  "id": "gold-special",
+  "id": "plan_EqGLTlzeP9tQ3H",
   "object": "plan",
   "active": true,
   "aggregate_usage": null,
-  "amount": 5000,
+  "amount": 800,
   "billing_scheme": "per_unit",
   "created": 1554638982,
   "currency": "eur",

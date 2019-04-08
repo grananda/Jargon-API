@@ -6,7 +6,6 @@ namespace Tests\Feature\SubscriptionPlan;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\Subscriptions\SubscriptionPlan;
-use App\Models\Subscriptions\SubscriptionPlanOptionValue;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;

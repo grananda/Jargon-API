@@ -3,7 +3,8 @@
 namespace Tests\Feature\SubscriptionPlan;
 
 
-use App\Events\SubscriptionPlanWasDeleted;
+use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
+use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\Subscriptions\SubscriptionPlanOptionValue;

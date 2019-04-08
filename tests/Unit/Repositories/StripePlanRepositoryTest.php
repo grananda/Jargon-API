@@ -5,8 +5,10 @@ namespace Tests\Unit\Services;
 
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
+use App\Events\SubscriptionPlan\SubscriptionPlanWasUpdated;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Repositories\Stripe\StripePlanRepository;
+use App\Repositories\SubscriptionPlanRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -27,17 +29,56 @@ class StripePlanRepositoryTest extends TestCase
         /** @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
         $subscriptionPlan = factory(SubscriptionPlan::class)->create();
 
-        /** @var StripePlanRepository $stripeApiGateway */
-        $stripeApiGateway = new StripePlanRepository();
+        /** @var StripePlanRepository $stripePlanRepository */
+        $stripePlanRepository = new StripePlanRepository();
 
         // When
         /** @var array $response */
-        $response = $stripeApiGateway->create($subscriptionPlan);
+        $responseCreate = $stripePlanRepository->create($subscriptionPlan);
 
-        $responseDelete = $stripeApiGateway->delete($subscriptionPlan);
+        /** @var array $responseDelete */
+        $responseDelete = $stripePlanRepository->delete($subscriptionPlan);
 
         // Then
-        $this->assertEquals($response['id'], $subscriptionPlan->alias);
+        $this->assertEquals($responseCreate['id'], $subscriptionPlan->alias);
+        $this->assertTrue($responseDelete);
+    }
+
+    /** @test */
+    public function a_stripe_plan_is_updated_and_removed()
+    {
+        // Given
+        Event::fake(SubscriptionPlanWasCreated::class);
+        Event::fake(SubscriptionPlanWasUpdated::class);
+
+        /** @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
+        $subscriptionPlan = factory(SubscriptionPlan::class)->create();
+
+        /** @var StripePlanRepository $stripePlanRepository */
+        $stripePlanRepository = new StripePlanRepository();
+
+        /** @var SubscriptionPlanRepository $subscriptionPlanRepository */
+        $subscriptionPlanRepository = resolve(SubscriptionPlanRepository::class);
+
+        /** @var array $response */
+        $responseCreate = $stripePlanRepository->create($subscriptionPlan);
+
+        $title = $this->faker->word;
+
+        /** @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
+        $subscriptionPlan = $subscriptionPlanRepository->updateSubscriptionPlan($subscriptionPlan, [
+            'title' => $title,
+        ]);
+
+        // When
+        /** @var array $response */
+        $responseUpdate = $stripePlanRepository->update($subscriptionPlan);
+
+        /** @var array $responseDelete */
+        $responseDelete = $stripePlanRepository->delete($subscriptionPlan);
+
+        // Then
+        $this->assertEquals(0, strpos($responseUpdate['nickname'], $title));
         $this->assertTrue($responseDelete);
     }
 }

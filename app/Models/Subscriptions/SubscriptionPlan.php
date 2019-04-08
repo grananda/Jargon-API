@@ -3,7 +3,8 @@
 namespace App\Models\Subscriptions;
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
-use App\Events\SubscriptionPlanWasDeleted;
+use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
+use App\Events\SubscriptionPlan\SubscriptionPlanWasUpdated;
 use App\Models\BaseEntity;
 use App\Models\Traits\HasAlias;
 use App\Models\Traits\HasUuid;
@@ -37,11 +38,16 @@ class SubscriptionPlan extends BaseEntity
         'status',
     ];
 
+    protected $casts = [
+        'status' => 'boolean',
+    ];
+
     /**
      * {@inheritdoc}
      */
     protected $dispatchesEvents = [
         'created' => SubscriptionPlanWasCreated::class,
+        'updated' => SubscriptionPlanWasUpdated::class,
         'deleted' => SubscriptionPlanWasDeleted::class,
     ];
 

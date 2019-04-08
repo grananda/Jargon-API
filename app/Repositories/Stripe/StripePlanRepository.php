@@ -36,6 +36,7 @@ class StripePlanRepository
             return Plan::create([
                 'id'       => $subscriptionPlan->alias,
                 'nickname' => $subscriptionPlan->title.' Monthly Subscription',
+                'active'   => $subscriptionPlan->status,
                 'product'  => [
                     'name' => $subscriptionPlan->title,
                     'type' => SubscriptionPlan::STANDARD_STRIPE_TYPE_LABEL,
@@ -44,6 +45,27 @@ class StripePlanRepository
                 'currency'   => Cashier::usesCurrency(),
                 'interval'   => SubscriptionPlan::STANDARD_STRIPE_BILLING_PERIOD,
                 'usage_type' => SubscriptionPlan::STANDARD_STRIPE_BILLING_USAGE_TYPE,
+            ])->jsonSerialize();
+        } catch (Exception $exception) {
+            throw new StripeApiCallException($exception);
+        }
+    }
+
+    /**
+     * Updates an existing product and plan.
+     *
+     * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
+     *
+     * @throws \App\Exceptions\StripeApiCallException
+     *
+     * @return array|mixed
+     */
+    public function update(SubscriptionPlan $subscriptionPlan)
+    {
+        try {
+            return Plan::update($subscriptionPlan->alias, [
+                'nickname' => $subscriptionPlan->title.' Monthly Subscription',
+                'active'   => $subscriptionPlan->status,
             ])->jsonSerialize();
         } catch (Exception $exception) {
             throw new StripeApiCallException($exception);

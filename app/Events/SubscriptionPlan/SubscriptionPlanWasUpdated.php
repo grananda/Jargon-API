@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\SubscriptionPlan;
 
 use App\Models\Subscriptions\SubscriptionPlan;
 
-class SubscriptionPlanWasDeleted
+class SubscriptionPlanWasUpdated
 {
     /**
      * @var \App\Models\Subscriptions\SubscriptionPlan

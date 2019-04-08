@@ -7,7 +7,8 @@ use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Events\Option\OptionWasCreated;
 use App\Events\Option\OptionWasDeleted;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
-use App\Events\SubscriptionPlanWasDeleted;
+use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
+use App\Events\SubscriptionPlan\SubscriptionPlanWasUpdated;
 use App\Events\User\UserActivationTokenGenerated;
 use App\Events\User\UserWasActivated;
 use App\Events\User\UserWasDeactivated;
@@ -16,6 +17,7 @@ use App\Listeners\AddOptionUser;
 use App\Listeners\CreateStripeSubscriptionPlan;
 use App\Listeners\DeactivateActiveSubscription;
 use App\Listeners\DeleteOptionUser;
+use App\Listeners\DeleteStripeSubscriptionPlan;
 use App\Listeners\InitializeActiveSubscription;
 use App\Listeners\InitializeUserOptions;
 use App\Listeners\SendProjectCollaboratorNotification;
@@ -23,6 +25,7 @@ use App\Listeners\SendTeamCollaboratorNotification;
 use App\Listeners\SendUserActivationNotification;
 use App\Listeners\SendUserDeactivationNotification;
 use App\Listeners\SendUserDeletionNotification;
+use App\Listeners\UpdateStripeSubscriptionPlan;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -71,6 +74,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         SubscriptionPlanWasDeleted::class => [
             DeleteStripeSubscriptionPlan::class,
+        ],
+        SubscriptionPlanWasUpdated::class => [
+            UpdateStripeSubscriptionPlan::class,
         ],
     ];
 }

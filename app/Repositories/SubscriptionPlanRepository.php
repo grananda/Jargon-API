@@ -114,7 +114,7 @@ class SubscriptionPlanRepository extends CoreRepository
         }
 
         return $this->dbConnection->transaction(function () use ($subscriptionPlan) {
-            /** @var SubscriptionPlan $entity */
+            /* @var SubscriptionPlan $entity */
             return $this->delete($subscriptionPlan);
         });
     }
