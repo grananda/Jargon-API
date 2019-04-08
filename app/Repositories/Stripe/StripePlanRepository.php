@@ -38,8 +38,10 @@ class StripePlanRepository
                 'nickname' => $subscriptionPlan->title.' Monthly Subscription',
                 'active'   => $subscriptionPlan->status,
                 'product'  => [
-                    'name' => $subscriptionPlan->title,
-                    'type' => SubscriptionPlan::STANDARD_STRIPE_TYPE_LABEL,
+                    'id'     => $subscriptionPlan->alias,
+                    'name'   => $subscriptionPlan->title,
+                    'active' => $subscriptionPlan->status,
+                    'type'   => SubscriptionPlan::STANDARD_STRIPE_TYPE_LABEL,
                 ],
                 'amount'     => $subscriptionPlan->amount,
                 'currency'   => Cashier::usesCurrency(),
@@ -63,6 +65,11 @@ class StripePlanRepository
     public function update(SubscriptionPlan $subscriptionPlan)
     {
         try {
+            Product::update($subscriptionPlan->alias, [
+                'name'   => $subscriptionPlan->title,
+                'active' => $subscriptionPlan->status,
+            ]);
+
             return Plan::update($subscriptionPlan->alias, [
                 'nickname' => $subscriptionPlan->title.' Monthly Subscription',
                 'active'   => $subscriptionPlan->status,
