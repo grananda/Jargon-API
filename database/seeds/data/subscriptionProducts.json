@@ -3,9 +3,16 @@
     "title": "Freemium",
     "description": "FREE and Ideal for developers with a  small project",
     "alias": "freemium",
-    "level": 10,
-    "trial": true,
-    "amount": 0,
+    "rank": 10,
+    "plans": [
+      {
+        "alias": "freemium-month-euro",
+        "amount": 0,
+        "sort_order": 10,
+        "interval": "month",
+        "currency": "euro"
+      }
+    ],
     "options": [
       {
         "option_key": "project_count",
@@ -41,8 +48,23 @@
     "title": "Premium",
     "description": "Ideal for small start-ups and freelancers",
     "alias": "premium",
-    "level": 20,
-    "amount": 8.00,
+    "rank": 20,
+    "plans": [
+      {
+        "alias": "premium-month-euro",
+        "amount": 8,
+        "sort_order": 10,
+        "interval": "month",
+        "currency": "euro"
+      },
+      {
+        "alias": "premium-year-euro",
+        "amount": 86,
+        "sort_order": 20,
+        "interval": "year",
+        "currency": "euro"
+      }
+    ],
     "options": [
       {
         "option_key": "project_count",
@@ -78,8 +100,23 @@
     "title": "Professional",
     "description": "Perfect for medium size businesses or professional freelancers",
     "alias": "professional",
-    "amount": 25.00,
-    "level": 30,
+    "rank": 30,
+    "plans": [
+      {
+        "alias": "professional-month-euro",
+        "amount": 25,
+        "sort_order": 10,
+        "interval": "month",
+        "currency": "euro"
+      },
+      {
+        "alias": "professional-year-euro",
+        "amount": 270,
+        "sort_order": 20,
+        "interval": "year",
+        "currency": "euro"
+      }
+    ],
     "options": [
       {
         "option_key": "project_count",
@@ -115,8 +152,23 @@
     "title": "Enterprise",
     "description": "Full package for big sized business",
     "alias": "enterprise",
-    "amount": 45.00,
-    "level": 40,
+    "rank": 40,
+    "plans": [
+      {
+        "alias": "enterprise-month-euro",
+        "amount": 45,
+        "sort_order": 10,
+        "interval": "month",
+        "currency": "euro"
+      },
+      {
+        "alias": "enterprise-year-euro",
+        "amount": 486,
+        "sort_order": 20,
+        "interval": "year",
+        "currency": "euro"
+      }
+    ],
     "options": [
       {
         "option_key": "project_count",

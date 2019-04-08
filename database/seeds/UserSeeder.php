@@ -24,6 +24,7 @@ class UserSeeder extends AbstractSeeder
     {
         $this->truncateTables([
             'users',
+            'role_user',
             'collaborators',
             'user_profiles',
             'option_users',

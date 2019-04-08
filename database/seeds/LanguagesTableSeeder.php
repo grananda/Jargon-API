@@ -12,7 +12,7 @@ class LanguagesTableSeeder extends AbstractSeeder
      */
     public function run()
     {
-        $this->truncateTables(['languages']);
+        $this->truncateTables(['languages', 'dialects']);
 
         $locales           = $this->getSeedFileContents('languages');
         $langKeys          = [];

@@ -6,6 +6,7 @@ use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasUpdated;
 use App\Models\BaseEntity;
+use App\Models\Currency;
 use App\Models\Traits\HasAlias;
 use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,13 +16,10 @@ class SubscriptionPlan extends BaseEntity
     use HasUuid,
         HasAlias;
 
-    const ITEM_TOKEN_LENGTH         = 50;
-    const DEFAULT_SUBSCRIPTION_NAME = 'JARGON';
-    const DEFAULT_SUBSCRIPTION_PLAN = 'freemium';
-
-    const STANDARD_STRIPE_TYPE_LABEL         = 'service';
-    const STANDARD_STRIPE_BILLING_PERIOD     = 'month';
-    const STANDARD_STRIPE_BILLING_USAGE_TYPE = 'licensed';
+    const DEFAULT_SUBSCRIPTION_PLAN  = 'freemium-month-euro';
+    const STANDARD_STRIPE_TYPE_LABEL = 'service';
+    const STANDARD_STRIPE_INTERVAL   = 'month';
+    const STANDARD_STRIPE_USAGE_TYPE = 'licensed';
 
     protected $dates = [
         'created_at',
@@ -29,17 +27,14 @@ class SubscriptionPlan extends BaseEntity
     ];
 
     protected $fillable = [
-        'title',
-        'description',
         'alias',
-        'level',
-        'quantity',
-        'rank',
-        'status',
+        'sort_order',
+        'amount',
+        'interval',
     ];
 
     protected $casts = [
-        'status' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     /**
@@ -62,11 +57,27 @@ class SubscriptionPlan extends BaseEntity
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product()
+    {
+        return $this->belongsTo(SubscriptionProduct::class);
+    }
+
+    /**
      * @return HasMany
      */
     public function activeSubscriptions()
     {
         return $this->hasMany(ActiveSubscription::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function currency()
+    {
+        return $this->hasOne(Currency::class);
     }
 
     /**

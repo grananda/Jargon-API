@@ -14,6 +14,6 @@ trait HasAlias
      */
     public static function findByAliasOrFail(string $alias, array $columns = ['*'])
     {
-        return static::where('alias', '=', $alias)->firstOrFail($columns);
+        return static::where('alias', $alias)->firstOrFail($columns);
     }
 }

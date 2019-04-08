@@ -24,8 +24,9 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesTableSeeder::class);
         $this->call(OptionsTableSeeder::class);
         $this->call(LanguagesTableSeeder::class);
+        $this->call(CurrenciesSeeder::class);
         $this->call(SubscriptionOptionsSeeder::class);
-        $this->call(SubscriptionPlansSeeder::class);
+        $this->call(SubscriptionProductsSeeder::class);
 
         if (app()->environment('local') || app()->environment('staging')) {
             $this->call(UserSeeder::class);

@@ -37,6 +37,8 @@ class InitializeActiveSubscription
      *
      * @param \App\Events\User\UserWasActivated $event
      *
+     * @throws \Throwable
+     *
      * @return void
      */
     public function handle(UserWasActivated $event)

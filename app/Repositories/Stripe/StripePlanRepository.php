@@ -45,8 +45,8 @@ class StripePlanRepository
                 ],
                 'amount'     => $subscriptionPlan->amount,
                 'currency'   => Cashier::usesCurrency(),
-                'interval'   => SubscriptionPlan::STANDARD_STRIPE_BILLING_PERIOD,
-                'usage_type' => SubscriptionPlan::STANDARD_STRIPE_BILLING_USAGE_TYPE,
+                'interval'   => SubscriptionPlan::STANDARD_STRIPE_INTERVAL,
+                'usage_type' => SubscriptionPlan::STANDARD_STRIPE_USAGE_TYPE,
             ])->jsonSerialize();
         } catch (Exception $exception) {
             throw new StripeApiCallException($exception);

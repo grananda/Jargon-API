@@ -11,14 +11,17 @@ class CreateSubscriptionPlansTable extends Migration
         Schema::create('subscription_plans', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('uuid')->unique();
-            $table->string('title');
-            $table->string('description');
+            $table->unsignedInteger('product_id')->nullable();
             $table->string('alias')->unique();
-            $table->integer('level')->nullable(false);
             $table->double('amount')->default(0);
-            $table->boolean('trial')->default(false);
-            $table->boolean('status')->default(true);
+            $table->integer('sort_order')->default(0);
+            $table->enum('interval', ['month', 'year'])->default('month');
+            $table->unsignedBigInteger('currency_id')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
+
+            $table->foreign('product_id')->references('id')->on('subscription_products')->onDelete('cascade');
+            $table->foreign('currency_id')->references('id')->on('currencies')->onDelete('cascade');
         });
     }
 
