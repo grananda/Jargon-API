@@ -5,9 +5,9 @@ namespace Tests\Unit\Listeners\SubscriptionPlans;
 
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
-use App\Listeners\DeleteStripeSubscriptionPlan;
+use App\Listeners\SubscriptionPlans\DeleteStripeSubscriptionPlan;
 use App\Models\Subscriptions\SubscriptionPlan;
-use App\Repositories\Stripe\StripePlanRepository;
+use App\Repositories\Stripe\StripeSubscriptionPlanRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -28,11 +28,11 @@ class DeleteStripeSubscriptionPlanTest extends TestCase
         /** @var \App\Events\SubscriptionPlan\SubscriptionPlanWasCreated $event */
         $event = new SubscriptionPlanWasCreated($subscriptionPlan);
 
-        $stripePlanRepository = $this->createMock(StripePlanRepository::class);
+        $stripePlanRepository = $this->createMock(StripeSubscriptionPlanRepository::class);
         $stripePlanRepository->method('delete')
             ->willReturn($this->loadFixture('stripe/plan.create.success'));
 
-        /** @var \App\Listeners\CreateStripeSubscriptionPlan $listener */
+        /** @var \App\Listeners\SubscriptionPlans\CreateStripeSubscriptionPlan $listener */
         $listener = new DeleteStripeSubscriptionPlan($stripePlanRepository);
 
         // When

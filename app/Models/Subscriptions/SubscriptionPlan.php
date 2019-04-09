@@ -17,8 +17,6 @@ class SubscriptionPlan extends BaseEntity
         HasAlias;
 
     const DEFAULT_SUBSCRIPTION_PLAN  = 'freemium-month-eur';
-    const STANDARD_STRIPE_TYPE_LABEL = 'service';
-    const STANDARD_STRIPE_INTERVAL   = 'month';
     const STANDARD_STRIPE_USAGE_TYPE = 'licensed';
 
     protected $dates = [

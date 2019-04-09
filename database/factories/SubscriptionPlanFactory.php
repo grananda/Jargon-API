@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 /* @var Factory $factory */
 $factory->define(SubscriptionPlan::class, function (Faker $faker) {
     return [
-        'product_id' => function () {
+        'subscription_product_id' => function () {
             return factory(SubscriptionProduct::class)->create()->id;
         },
         'currency_id' => Currency::where('code', 'EUR')->first()->id,

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\SubscriptionPlans;
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
-use App\Repositories\Stripe\StripePlanRepository;
+use App\Repositories\Stripe\StripeSubscriptionPlanRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -12,18 +12,18 @@ class CreateStripeSubscriptionPlan implements ShouldQueue
     use InteractsWithQueue;
 
     /**
-     * @var \App\Repositories\Stripe\StripePlanRepository
+     * @var \App\Repositories\Stripe\StripeSubscriptionPlanRepository
      */
-    private $stripePlanRepository;
+    private $stripeSubscriptionPlanRepository;
 
     /**
      * CreateStripeSubscriptionPlan constructor.
      *
-     * @param \App\Repositories\Stripe\StripePlanRepository $stripeApiGateway
+     * @param \App\Repositories\Stripe\StripeSubscriptionPlanRepository $stripeSubscriptionPlanRepository
      */
-    public function __construct(StripePlanRepository $stripeApiGateway)
+    public function __construct(StripeSubscriptionPlanRepository $stripeSubscriptionPlanRepository)
     {
-        $this->stripePlanRepository = $stripeApiGateway;
+        $this->stripeSubscriptionPlanRepository = $stripeSubscriptionPlanRepository;
     }
 
     /**
@@ -37,6 +37,6 @@ class CreateStripeSubscriptionPlan implements ShouldQueue
      */
     public function handle(SubscriptionPlanWasCreated $event)
     {
-        $this->stripePlanRepository->create($event->subscriptionPlan);
+        $this->stripeSubscriptionPlanRepository->create($event->subscriptionPlan);
     }
 }

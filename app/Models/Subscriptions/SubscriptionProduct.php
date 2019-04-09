@@ -11,6 +11,8 @@ class SubscriptionProduct extends BaseEntity
 {
     use HasUuid;
 
+    const STANDARD_STRIPE_TYPE_LABEL = 'service';
+
     protected $dates = [
         'created_at',
         'updated_at',

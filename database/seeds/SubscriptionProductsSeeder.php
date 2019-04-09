@@ -28,12 +28,12 @@ class SubscriptionProductsSeeder extends AbstractSeeder
             ]);
             foreach ($product['plans'] as $plan) {
                 $subscriptionPlan = factory(SubscriptionPlan::class)->create([
-                    'alias'       => $plan['alias'],
-                    'amount'      => $plan['amount'],
-                    'sort_order'  => $plan['sort_order'],
-                    'interval'    => $plan['interval'],
-                    'currency_id' => Currency::where('code', $plan['currency'])->first(),
-                    'product_id'  => $subscriptionProduct->id,
+                    'alias'                   => $plan['alias'],
+                    'amount'                  => $plan['amount'],
+                    'sort_order'              => $plan['sort_order'],
+                    'interval'                => $plan['interval'],
+                    'currency_id'             => Currency::where('code', $plan['currency'])->first(),
+                    'subscription_product_id' => $subscriptionProduct->id,
                 ]);
 
                 foreach ($product['options'] as $option) {
