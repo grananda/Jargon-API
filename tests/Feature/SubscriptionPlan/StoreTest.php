@@ -6,6 +6,7 @@ namespace Tests\Feature\SubscriptionPlan;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\Subscriptions\SubscriptionPlan;
+use App\Models\Subscriptions\SubscriptionProduct;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
@@ -47,8 +48,14 @@ class StoreTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->staff(User::JUNIOR_STAFF_MEMBER);
 
+        /** @var \App\Models\Subscriptions\SubscriptionProduct $product */
+        $product = factory(SubscriptionProduct::class)->create();
+
         /** @var array $data */
-        $data = factory(SubscriptionPlan::class)->make()->toArray();
+        $data = factory(SubscriptionPlan::class)->make([
+            'product'  => $product->uuid,
+            'currency' => 'EUR',
+        ])->toArray();
 
         // When
         $response = $this->signIn($user)->post(route('subscriptions.plans.store'), $data);
@@ -69,8 +76,14 @@ class StoreTest extends TestCase
         /** @var \App\Models\Subscriptions\SubscriptionOption $option */
         $option = factory(SubscriptionOption::class)->create();
 
+        /** @var \App\Models\Subscriptions\SubscriptionProduct $product */
+        $product = factory(SubscriptionProduct::class)->create();
+
         /** @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
-        $subscriptionPlan = factory(SubscriptionPlan::class)->make();
+        $subscriptionPlan = factory(SubscriptionPlan::class)->make([
+            'currency' => 'EUR',
+            'product'  => $product->uuid,
+        ]);
 
         $optionValue = $this->faker->numberBetween(5, 10);
 

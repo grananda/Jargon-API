@@ -40,7 +40,7 @@ class UpdateTest extends TestCase
         $owner = factory(User::class)->create();
         $this->signIn($owner);
 
-        $this->createActiveSubscription($owner, 'professional');
+        $this->createActiveSubscription($owner, 'professional-month-eur');
 
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
@@ -83,7 +83,7 @@ class UpdateTest extends TestCase
 
         $this->createActiveSubscription(
             $owner,
-            'professional',
+            'professional-month-eur',
             ['collaborator_count' => 1]);
 
         $data = [
@@ -123,7 +123,7 @@ class UpdateTest extends TestCase
         $team->setOwner($owner);
         $team->setMember($collaborator1, Team::TEAM_TRANSLATOR_ROLE_ALIAS);
 
-        $this->createActiveSubscription($owner, 'professional');
+        $this->createActiveSubscription($owner, 'professional-month-eur');
         $data = [
             'name'          => $this->faker->sentence,
             'collaborators' => [

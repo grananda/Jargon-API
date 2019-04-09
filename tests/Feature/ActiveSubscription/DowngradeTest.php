@@ -22,7 +22,7 @@ class DowngradeTest extends TestCase
         $user = $this->user();
 
         /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
-        $activeSubscription = $this->createActiveSubscription($user, 'professional');
+        $activeSubscription = $this->createActiveSubscription($user, 'professional-month-eur');
 
         /** @var \App\Models\Subscriptions\SubscriptionPlan $subscription */
         $subscription = SubscriptionPlan::where('alias', SubscriptionPlan::DEFAULT_SUBSCRIPTION_PLAN)->first();

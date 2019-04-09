@@ -92,7 +92,7 @@ class UpdateTest extends TestCase
         $subscriptionPlan->addOption($subscriptionPlanOptionValue);
 
         $data = [
-            'status'  => false,
+            'is_active'  => false,
             'options' => [
                 [
                     'option_key'   => $option->option_key,
@@ -111,7 +111,7 @@ class UpdateTest extends TestCase
         // Assert
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment(['alias' => $subscriptionPlan->alias]);
-        $response->assertJsonFragment(['status' => $data['status']]);
+        $response->assertJsonFragment(['is_active' => $data['is_active']]);
         $this->assertDatabaseHas('subscription_plan_option_values', [
             'subscription_plan_id' => $subscriptionPlan->id,
             'option_key'           => $option->option_key,

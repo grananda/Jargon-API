@@ -25,7 +25,7 @@ class UpgradeTest extends TestCase
         $activeSubscription = $this->createActiveSubscription($user, SubscriptionPlan::DEFAULT_SUBSCRIPTION_PLAN);
 
         /** @var \App\Models\Subscriptions\SubscriptionPlan $subscription */
-        $subscription = SubscriptionPlan::where('alias', 'professional')->first();
+        $subscription = SubscriptionPlan::where('alias', 'professional-month-eur')->first();
 
         // When
         $response = $this->signIn($user)->put(route('activeSubscriptions.upgrade.update'), [

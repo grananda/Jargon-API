@@ -16,7 +16,7 @@ class SubscriptionPlan extends BaseEntity
     use HasUuid,
         HasAlias;
 
-    const DEFAULT_SUBSCRIPTION_PLAN  = 'freemium-month-euro';
+    const DEFAULT_SUBSCRIPTION_PLAN  = 'freemium-month-eur';
     const STANDARD_STRIPE_TYPE_LABEL = 'service';
     const STANDARD_STRIPE_INTERVAL   = 'month';
     const STANDARD_STRIPE_USAGE_TYPE = 'licensed';
@@ -31,6 +31,7 @@ class SubscriptionPlan extends BaseEntity
         'sort_order',
         'amount',
         'interval',
+        'is_active',
     ];
 
     protected $casts = [
@@ -73,11 +74,11 @@ class SubscriptionPlan extends BaseEntity
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function currency()
     {
-        return $this->hasOne(Currency::class);
+        return $this->belongsTo(Currency::class);
     }
 
     /**

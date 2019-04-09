@@ -64,7 +64,7 @@ class ProjectModelTest extends TestCase
     {
         // Given
         /** @var SubscriptionPlan | null $subscriptionPlan */
-        $subscriptionPlan = SubscriptionPlan::findByAliasOrFail('professional');
+        $subscriptionPlan = SubscriptionPlan::findByAliasOrFail('professional-month-eur');
 
         /** @var \App\Models\User $user */
         $user = $this->user('registered-user');

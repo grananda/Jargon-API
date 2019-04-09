@@ -14,7 +14,7 @@ $factory->define(SubscriptionPlan::class, function (Faker $faker) {
         'product_id' => function () {
             return factory(SubscriptionProduct::class)->create()->id;
         },
-        'currency_id' => Currency::where('name', 'euro')->first(),
+        'currency_id' => Currency::where('code', 'EUR')->first()->id,
         'alias'       => Str::slug($faker->sentence(3)),
         'amount'      => $faker->numberBetween(0, 50),
         'sort_order'  => $faker->numberBetween(0, 10),

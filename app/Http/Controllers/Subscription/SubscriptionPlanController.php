@@ -43,9 +43,9 @@ class SubscriptionPlanController extends ApiController
     public function index(IndexSubscriptionPlanRequest $request)
     {
         try {
-            $organizations = $this->subscriptionPlanRepository->findAllBy(['status' => true]);
+            $plans = $this->subscriptionPlanRepository->findAllBy(['is_active' => true]);
 
-            return $this->responseOk(new SubscriptionPlanCollection($organizations));
+            return $this->responseOk(new SubscriptionPlanCollection($plans));
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
         }
@@ -63,7 +63,7 @@ class SubscriptionPlanController extends ApiController
     public function store(StoreSubscriptionPlanRequest $request)
     {
         try {
-            $subscriptionPlan = $this->subscriptionPlanRepository->createSubscriptionPlan($request->validated());
+            $subscriptionPlan = $this->subscriptionPlanRepository->createSubscriptionPlan($request->product, $request->currency, $request->validated());
 
             return $this->responseCreated(new SubscriptionPlanResource($subscriptionPlan));
         } catch (Exception $e) {

@@ -32,7 +32,7 @@ class SubscriptionProductsSeeder extends AbstractSeeder
                     'amount'      => $plan['amount'],
                     'sort_order'  => $plan['sort_order'],
                     'interval'    => $plan['interval'],
-                    'currency_id' => Currency::where('name', $plan['currency'])->first(),
+                    'currency_id' => Currency::where('code', $plan['currency'])->first(),
                     'product_id'  => $subscriptionProduct->id,
                 ]);
 

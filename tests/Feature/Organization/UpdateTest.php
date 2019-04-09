@@ -36,7 +36,7 @@ class UpdateTest extends TestCase
         $owner = factory(User::class)->create();
         $this->signIn($owner);
 
-        $this->createActiveSubscription($owner, 'professional');
+        $this->createActiveSubscription($owner, 'professional-month-eur');
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
@@ -68,7 +68,7 @@ class UpdateTest extends TestCase
 
         $this->createActiveSubscription(
             $owner,
-            'professional'
+            'professional-month-eur'
         );
 
         $data = [

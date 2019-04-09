@@ -43,7 +43,7 @@ class StoreTest extends TestCase
 
         $this->createActiveSubscription(
             $user,
-            'professional',
+            'professional-month-eur',
             ['project_count' => 0]);
 
         $data = [
@@ -77,7 +77,7 @@ class StoreTest extends TestCase
 
         $this->createActiveSubscription(
             $user,
-            'professional',
+            'professional-month-eur',
             ['collaborator_count' => 0]);
 
         $data = [
@@ -111,7 +111,7 @@ class StoreTest extends TestCase
         $owner = factory(User::class)->create();
         $this->signIn($owner);
 
-        $this->createActiveSubscription($owner, 'professional');
+        $this->createActiveSubscription($owner, 'professional-month-eur');
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();

@@ -17,13 +17,15 @@ class SubscriptionPlan extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'          => $this->uuid,
-            'title'       => $this->title,
-            'description' => $this->description,
-            'alias'       => $this->alias,
-            'amount'      => $this->amount,
-            'status'      => (bool) $this->status,
-            'options'     => new SubscriptionPlanOptionValueCollection($this->options),
+            'id'         => $this->uuid,
+            'product'    => $this->product->alias,
+            'currency'   => $this->currency->code,
+            'alias'      => $this->alias,
+            'amount'     => $this->amount,
+            'sort_order' => $this->sort_order,
+            'interval'   => $this->interval,
+            'is_active'  => (bool) $this->is_active,
+            'options'    => new SubscriptionPlanOptionValueCollection($this->options),
         ];
     }
 }

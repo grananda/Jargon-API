@@ -42,7 +42,7 @@ class UpdateTest extends TestCase
         $owner = factory(User::class)->create();
         $this->signIn($owner);
 
-        $this->createActiveSubscription($owner, 'professional');
+        $this->createActiveSubscription($owner, 'professional-month-eur');
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();
@@ -78,7 +78,7 @@ class UpdateTest extends TestCase
         $owner = factory(User::class)->create();
         $this->signIn($owner);
 
-        $this->createActiveSubscription($owner, 'professional', ['collaborator_count' => 1]);
+        $this->createActiveSubscription($owner, 'professional-month-eur', ['collaborator_count' => 1]);
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();
@@ -118,7 +118,7 @@ class UpdateTest extends TestCase
         $owner = factory(User::class)->create();
         $this->signIn($owner);
 
-        $this->createActiveSubscription($owner, 'professional');
+        $this->createActiveSubscription($owner, 'professional-month-eur');
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();

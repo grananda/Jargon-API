@@ -6,11 +6,11 @@
     "rank": 10,
     "plans": [
       {
-        "alias": "freemium-month-euro",
+        "alias": "freemium-month-eur",
         "amount": 0,
         "sort_order": 10,
         "interval": "month",
-        "currency": "euro"
+        "currency": "EUR"
       }
     ],
     "options": [
@@ -51,18 +51,18 @@
     "rank": 20,
     "plans": [
       {
-        "alias": "premium-month-euro",
+        "alias": "premium-month-eur",
         "amount": 8,
         "sort_order": 10,
         "interval": "month",
-        "currency": "euro"
+        "currency": "EUR"
       },
       {
-        "alias": "premium-year-euro",
+        "alias": "premium-year-eur",
         "amount": 86,
         "sort_order": 20,
         "interval": "year",
-        "currency": "euro"
+        "currency": "EUR"
       }
     ],
     "options": [
@@ -103,18 +103,18 @@
     "rank": 30,
     "plans": [
       {
-        "alias": "professional-month-euro",
+        "alias": "professional-month-eur",
         "amount": 25,
         "sort_order": 10,
         "interval": "month",
-        "currency": "euro"
+        "currency": "EUR"
       },
       {
-        "alias": "professional-year-euro",
+        "alias": "professional-year-eur",
         "amount": 270,
         "sort_order": 20,
         "interval": "year",
-        "currency": "euro"
+        "currency": "EUR"
       }
     ],
     "options": [
@@ -155,18 +155,18 @@
     "rank": 40,
     "plans": [
       {
-        "alias": "enterprise-month-euro",
+        "alias": "enterprise-month-eur",
         "amount": 45,
         "sort_order": 10,
         "interval": "month",
-        "currency": "euro"
+        "currency": "EUR"
       },
       {
-        "alias": "enterprise-year-euro",
+        "alias": "enterprise-year-eur",
         "amount": 486,
         "sort_order": 20,
         "interval": "year",
-        "currency": "euro"
+        "currency": "EUR"
       }
     ],
     "options": [
