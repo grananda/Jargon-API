@@ -27,8 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens,
         Notifiable,
         HasRegistration,
-        HasUuid,
-        Billable;
+        HasUuid;
 
     const ACTIVATION_EXPIRES_AT      = 48;
     const ACTIVATION_TOKEN_LENGTH    = 32;
