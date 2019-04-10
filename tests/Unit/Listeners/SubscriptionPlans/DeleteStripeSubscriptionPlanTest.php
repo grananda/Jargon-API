@@ -5,6 +5,7 @@ namespace Tests\Unit\Listeners\SubscriptionPlans;
 
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
+use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
 use App\Listeners\SubscriptionPlans\DeleteStripeSubscriptionPlan;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Repositories\Stripe\StripeSubscriptionPlanRepository;
@@ -25,8 +26,8 @@ class DeleteStripeSubscriptionPlanTest extends TestCase
         /** @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
         $subscriptionPlan = factory(SubscriptionPlan::class)->create();
 
-        /** @var \App\Events\SubscriptionPlan\SubscriptionPlanWasCreated $event */
-        $event = new SubscriptionPlanWasCreated($subscriptionPlan);
+        /** @var \App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted $event */
+        $event = new SubscriptionPlanWasDeleted($subscriptionPlan);
 
         $stripePlanRepository = $this->createMock(StripeSubscriptionPlanRepository::class);
         $stripePlanRepository->method('delete')
