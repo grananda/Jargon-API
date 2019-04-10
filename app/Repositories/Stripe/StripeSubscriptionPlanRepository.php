@@ -46,7 +46,7 @@ class StripeSubscriptionPlanRepository
                 'interval'   => $subscriptionPlan->interval,
                 'active'     => $subscriptionPlan->is_active,
                 'usage_type' => SubscriptionPlan::STANDARD_STRIPE_USAGE_TYPE,
-            ])->jsonSerialize();
+            ]);
         } catch (Exception $exception) {
             throw new StripeApiCallException($exception);
         }
@@ -66,9 +66,8 @@ class StripeSubscriptionPlanRepository
         try {
             return $this->stripe->plans()->update($subscriptionPlan->alias, [
                 'nickname' => $subscriptionPlan->title,
-                'product'  => $subscriptionPlan->product->alias,
                 'active'   => $subscriptionPlan->is_active,
-            ])->jsonSerialize();
+            ]);
         } catch (Exception $exception) {
             throw new StripeApiCallException($exception);
         }
@@ -92,7 +91,7 @@ class StripeSubscriptionPlanRepository
 
             $response = $this->stripe->plans()->delete($subscriptionPlan->alias);
 
-            if (! $response->isDeleted()) {
+            if (! $response['deleted']) {
                 throw new StripeApiCallException(trans('Could not delete subscription plan.'));
             }
 
