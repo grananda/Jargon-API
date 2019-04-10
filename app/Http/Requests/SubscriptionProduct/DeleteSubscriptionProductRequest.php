@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\SubscriptionProduct;
 
+use App\Http\Requests\Request;
 use App\Models\Subscriptions\SubscriptionProduct;
-use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteSubscriptionProductRequest extends FormRequest
+class DeleteSubscriptionProductRequest extends Request
 {
     /**
      * @var \App\Models\Subscriptions\SubscriptionProduct

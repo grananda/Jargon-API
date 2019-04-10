@@ -6,6 +6,7 @@ use App\Models\Options\Option;
 use App\Models\Organization;
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\Subscriptions\SubscriptionPlan;
+use App\Models\Subscriptions\SubscriptionProduct;
 use App\Models\Team;
 use App\Models\Translations\Project;
 use App\Models\User;
@@ -14,6 +15,7 @@ use App\Policies\OrganizationPolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\SubscriptionOptionPolicy;
 use App\Policies\SubscriptionPlanPolicy;
+use App\Policies\SubscriptionProductPolicy;
 use App\Policies\TeamPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -27,13 +29,14 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Organization::class       => OrganizationPolicy::class,
-        Team::class               => TeamPolicy::class,
-        User::class               => UserPolicy::class,
-        Project::class            => ProjectPolicy::class,
-        SubscriptionPlan::class   => SubscriptionPlanPolicy::class,
-        SubscriptionOption::class => SubscriptionOptionPolicy::class,
-        Option::class             => OptionPolicy::class,
+        Organization::class        => OrganizationPolicy::class,
+        Team::class                => TeamPolicy::class,
+        User::class                => UserPolicy::class,
+        Project::class             => ProjectPolicy::class,
+        SubscriptionPlan::class    => SubscriptionPlanPolicy::class,
+        SubscriptionProduct::class => SubscriptionProductPolicy::class,
+        SubscriptionOption::class  => SubscriptionOptionPolicy::class,
+        Option::class              => OptionPolicy::class,
     ];
 
     /**
