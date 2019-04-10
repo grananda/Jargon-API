@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Subscriptions;
+namespace App\Http\Resources\SubscriptionPlan;
 
 use App\Http\Resources\SubscriptionPlanOptionValue\SubscriptionPlanOptionValueCollection;
 use Illuminate\Http\Resources\Json\JsonResource;

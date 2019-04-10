@@ -9,15 +9,16 @@ use App\Events\Option\OptionWasDeleted;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasUpdated;
+use App\Events\SubscriptionProduct\SubscriptionProductWasCreated;
+use App\Events\SubscriptionProduct\SubscriptionProductWasDeleted;
+use App\Events\SubscriptionProduct\SubscriptionProductWasUpdated;
 use App\Events\User\UserActivationTokenGenerated;
 use App\Events\User\UserWasActivated;
 use App\Events\User\UserWasDeactivated;
 use App\Events\User\UserWasDeleted;
 use App\Listeners\AddOptionUser;
-use App\Listeners\CreateStripeSubscriptionPlan;
 use App\Listeners\DeactivateActiveSubscription;
 use App\Listeners\DeleteOptionUser;
-use App\Listeners\DeleteStripeSubscriptionPlan;
 use App\Listeners\InitializeActiveSubscription;
 use App\Listeners\InitializeUserOptions;
 use App\Listeners\SendProjectCollaboratorNotification;
@@ -25,7 +26,11 @@ use App\Listeners\SendTeamCollaboratorNotification;
 use App\Listeners\SendUserActivationNotification;
 use App\Listeners\SendUserDeactivationNotification;
 use App\Listeners\SendUserDeletionNotification;
-use App\Listeners\UpdateStripeSubscriptionPlan;
+use App\Listeners\SubscriptionPlans\DeleteStripeSubscriptionPlan;
+use App\Listeners\SubscriptionPlans\UpdateStripeSubscriptionPlan;
+use App\Listeners\SubscriptionProducts\CreateStripeSubscriptionProduct;
+use App\Listeners\SubscriptionProducts\DeleteStripeSubscriptionProduct;
+use App\Listeners\SubscriptionProducts\UpdateStripeSubscriptionProduct;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -68,9 +73,20 @@ class EventServiceProvider extends ServiceProvider
             DeleteOptionUser::class,
         ],
 
+        // SubscriptionProduct events
+        SubscriptionProductWasCreated::class => [
+            CreateStripeSubscriptionProduct::class,
+        ],
+        SubscriptionProductWasDeleted::class => [
+            DeleteStripeSubscriptionProduct::class,
+        ],
+        SubscriptionProductWasUpdated::class => [
+            UpdateStripeSubscriptionProduct::class,
+        ],
+
         // SubscriptionPlan events
         SubscriptionPlanWasCreated::class => [
-            CreateStripeSubscriptionPlan::class,
+            CreateStripeSubscriptionProduct::class,
         ],
         SubscriptionPlanWasDeleted::class => [
             DeleteStripeSubscriptionPlan::class,

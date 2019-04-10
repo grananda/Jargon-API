@@ -6,11 +6,14 @@ namespace Tests\Unit\Repositories;
 
 use App\Models\Subscriptions\SubscriptionProduct;
 use App\Repositories\Stripe\StripeSubscriptionProductRepository;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /** @group using-external-service */
 class StripeSubscriptionProductRepositoryTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function creates_updates_and_deletes_a_stripe_product()
     {

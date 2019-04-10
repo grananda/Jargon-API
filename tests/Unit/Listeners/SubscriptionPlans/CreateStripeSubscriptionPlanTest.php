@@ -32,7 +32,7 @@ class CreateStripeSubscriptionPlanTest extends TestCase
         $stripePlanRepository->method('create')
             ->willReturn($this->loadFixture('stripe/plan.create.success'));
 
-        /** @var \App\Listeners\SubscriptionPlans\CreateStripeSubscriptionPlan $listener */
+        /** @var \App\Listeners\SubscriptionPlans\CreateStripeSubscriptionProduct $listener */
         $listener = new CreateStripeSubscriptionPlan($stripePlanRepository);
 
         // When

@@ -4,7 +4,6 @@ namespace App\Models\Subscriptions;
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
-use App\Events\SubscriptionPlan\SubscriptionPlanWasUpdated;
 use App\Models\BaseEntity;
 use App\Models\Currency;
 use App\Models\Traits\HasAlias;
@@ -41,7 +40,6 @@ class SubscriptionPlan extends BaseEntity
      */
     protected $dispatchesEvents = [
         'created' => SubscriptionPlanWasCreated::class,
-        'updated' => SubscriptionPlanWasUpdated::class,
         'deleted' => SubscriptionPlanWasDeleted::class,
     ];
 
@@ -60,7 +58,7 @@ class SubscriptionPlan extends BaseEntity
      */
     public function product()
     {
-        return $this->belongsTo(SubscriptionProduct::class);
+        return $this->belongsTo(SubscriptionProduct::class, 'subscription_product_id');
     }
 
     /**

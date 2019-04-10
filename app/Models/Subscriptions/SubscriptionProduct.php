@@ -4,6 +4,7 @@ namespace App\Models\Subscriptions;
 
 use App\Events\SubscriptionProduct\SubscriptionProductWasCreated;
 use App\Events\SubscriptionProduct\SubscriptionProductWasDeleted;
+use App\Events\SubscriptionProduct\SubscriptionProductWasUpdated;
 use App\Models\BaseEntity;
 use App\Models\Traits\HasUuid;
 
@@ -32,18 +33,9 @@ class SubscriptionProduct extends BaseEntity
 
     protected $dispatchesEvents = [
         'created' => SubscriptionProductWasCreated::class,
+        'updated' => SubscriptionProductWasUpdated::class,
         'deleted' => SubscriptionProductWasDeleted::class,
     ];
-
-    /** {@inheritdoc} */
-    public static function boot()
-    {
-        parent::boot();
-
-        static::deleted(function (self $model) {
-            $model->plans()->delete();
-        });
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

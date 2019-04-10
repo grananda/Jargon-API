@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Subscriptions;
+namespace App\Http\Resources\SubscriptionProduct;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class SubscriptionPlanCollection extends ResourceCollection
+class SubscriptionProductCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.

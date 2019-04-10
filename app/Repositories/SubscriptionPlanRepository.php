@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Events\SubscriptionPlan\SubscriptionPlanWasUpdated;
 use App\Exceptions\SubscriptionPlanDeleteException;
 use App\Models\Currency;
 use App\Models\Subscriptions\SubscriptionPlan;
@@ -105,7 +106,9 @@ class SubscriptionPlanRepository extends CoreRepository
                 }
             }
 
-            return $entity->fresh();
+            event(new SubscriptionPlanWasUpdated($entity->fresh()));
+
+            return $entity;
         });
     }
 

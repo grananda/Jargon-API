@@ -32,7 +32,7 @@ class DeleteStripeSubscriptionPlanTest extends TestCase
         $stripePlanRepository->method('delete')
             ->willReturn($this->loadFixture('stripe/plan.create.success'));
 
-        /** @var \App\Listeners\SubscriptionPlans\CreateStripeSubscriptionPlan $listener */
+        /** @var \App\Listeners\SubscriptionPlans\CreateStripeSubscriptionProduct $listener */
         $listener = new DeleteStripeSubscriptionPlan($stripePlanRepository);
 
         // When

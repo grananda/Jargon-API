@@ -9,8 +9,8 @@ use App\Http\Requests\SubscriptionPlan\IndexSubscriptionPlanRequest;
 use App\Http\Requests\SubscriptionPlan\ShowSubscriptionPlanRequest;
 use App\Http\Requests\SubscriptionPlan\StoreSubscriptionPlanRequest;
 use App\Http\Requests\SubscriptionPlan\UpdateSubscriptionPlanRequest;
-use App\Http\Resources\Subscriptions\SubscriptionPlan as SubscriptionPlanResource;
-use App\Http\Resources\Subscriptions\SubscriptionPlanCollection;
+use App\Http\Resources\SubscriptionPlan\SubscriptionPlan as SubscriptionPlanResource;
+use App\Http\Resources\SubscriptionPlan\SubscriptionPlanCollection;
 use App\Repositories\SubscriptionPlanRepository;
 use Exception;
 
