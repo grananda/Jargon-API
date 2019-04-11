@@ -1,0 +1,36 @@
+{
+  "id": "cus_ErnYW2Pdf9f2up",
+  "object": "customer",
+  "account_balance": 0,
+  "created": 1554993160,
+  "currency": "eur",
+  "default_source": null,
+  "delinquent": false,
+  "description": null,
+  "discount": null,
+  "email": null,
+  "invoice_prefix": "C6AB21B",
+  "invoice_settings": {
+    "custom_fields": null,
+    "footer": null
+  },
+  "livemode": false,
+  "metadata": {},
+  "shipping": null,
+  "sources": {
+    "object": "list",
+    "data": [],
+    "has_more": false,
+    "total_count": 0,
+    "url": "/v1/customers/cus_ErnYW2Pdf9f2up/sources"
+  },
+  "subscriptions": {
+    "object": "list",
+    "data": [],
+    "has_more": false,
+    "total_count": 0,
+    "url": "/v1/customers/cus_ErnYW2Pdf9f2up/subscriptions"
+  },
+  "tax_info": null,
+  "tax_info_verification": null
+}

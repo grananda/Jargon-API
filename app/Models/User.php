@@ -68,7 +68,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'stripe_id',
     ];
 
     /**
@@ -302,5 +302,17 @@ class User extends Authenticatable implements MustVerifyEmail
     public function setRole(Role $role)
     {
         $this->roles()->attach($role);
+    }
+
+    /**
+     * Sets user Stripe Id.
+     *
+     * @param string $stripeId
+     *
+     * @return bool
+     */
+    public function setStripeId(string $stripeId)
+    {
+        return $this->update(['stripe_id' => $stripeId]);
     }
 }

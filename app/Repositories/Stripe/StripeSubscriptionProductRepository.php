@@ -5,26 +5,10 @@ namespace App\Repositories\Stripe;
 use App\Exceptions\StripeApiCallException;
 use App\Exceptions\SubscriptionPlanDeleteException;
 use App\Models\Subscriptions\SubscriptionProduct;
-use Cartalyst\Stripe\Stripe;
 use Exception;
 
-class StripeSubscriptionProductRepository
+class StripeSubscriptionProductRepository extends AbstractStripeRepository
 {
-    /**
-     * @var \Cartalyst\Stripe\Stripe
-     */
-    private $stripe;
-
-    /**
-     * StripePlanRepository constructor.
-     *
-     * @param \Cartalyst\Stripe\Stripe $stripe
-     */
-    public function __construct(Stripe $stripe)
-    {
-        $this->stripe = $stripe;
-    }
-
     /**
      * Creates a Stripe product.
      *
@@ -85,6 +69,7 @@ class StripeSubscriptionProductRepository
                 throw new SubscriptionPlanDeleteException(trans('Cannot delete active subscription product.'));
             }
 
+            /** @var array $response */
             $response = $this->stripe->products()->delete($subscriptionProduct->alias);
 
             if (! $response['deleted']) {
