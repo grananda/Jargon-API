@@ -34,7 +34,7 @@ class UpdateSubscriptionProductRequest extends Request
         return [
             'title'       => ['sometimes', 'string'],
             'description' => ['sometimes', 'string'],
-            'rank'        => ['required', 'numeric'],
+            'rank'        => ['sometimes', 'numeric'],
             'is_active'   => ['sometimes', 'boolean'],
         ];
     }
