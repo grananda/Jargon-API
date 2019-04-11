@@ -3,10 +3,7 @@
 namespace Tests\Feature\SubscriptionProduct;
 
 
-use App\Events\SubscriptionPlan\SubscriptionPlanWasUpdated;
-use App\Models\Subscriptions\SubscriptionOption;
-use App\Models\Subscriptions\SubscriptionPlan;
-use App\Models\Subscriptions\SubscriptionPlanOptionValue;
+use App\Events\SubscriptionProduct\SubscriptionProductWasUpdated;
 use App\Models\Subscriptions\SubscriptionProduct;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -67,7 +64,7 @@ class UpdateTest extends TestCase
     public function a_200_will_be_returned_if_the_user_is_a_staff_member()
     {
         // Given
-        Event::fake(SubscriptionPlanWasUpdated::class);
+        Event::fake(SubscriptionProductWasUpdated::class);
 
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
@@ -92,6 +89,6 @@ class UpdateTest extends TestCase
             'is_active' => $data['is_active'],
         ]);
 
-        Event::assertDispatched(SubscriptionPlanWasUpdated::class);
+        Event::assertDispatched(SubscriptionProductWasUpdated::class);
     }
 }
