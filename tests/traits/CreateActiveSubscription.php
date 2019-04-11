@@ -18,9 +18,11 @@ trait CreateActiveSubscription
      *
      * @param array            $options
      *
+     * @param array            $arguments
+     *
      * @return \App\Models\Subscriptions\ActiveSubscription
      */
-    public function createActiveSubscription(User $user, string $subscriptionType, array $options = [])
+    public function createActiveSubscription(User $user, string $subscriptionType, array $options = [], array $arguments = [])
     {
         $this->signIn($user);
 
@@ -28,11 +30,14 @@ trait CreateActiveSubscription
         $subscriptionPlan = SubscriptionPlan::findByAliasOrFail($subscriptionType);
 
         /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
-        $activeSubscription = factory(ActiveSubscription::class)->create([
-            'user_id'              => $user->id,
-            'subscription_plan_id' => $subscriptionPlan->id,
-            'subscription_active'  => true,
-        ]);
+        $activeSubscription = factory(ActiveSubscription::class)->create(array_merge(
+            [
+                'user_id'              => $user->id,
+                'subscription_plan_id' => $subscriptionPlan->id,
+                'subscription_active'  => true,
+            ],
+            $arguments
+        ));
 
         foreach ($subscriptionPlan->options as $option) {
             factory(ActiveSubscriptionOptionValue::class)->create([

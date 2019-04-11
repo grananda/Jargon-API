@@ -20,6 +20,7 @@ class ActiveSubscription extends BaseEntity
         'subscription_plan_id',
         'subscription_active',
         'ends_at',
+        'stripe_id',
     ];
 
     protected $casts = [
