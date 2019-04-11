@@ -15,6 +15,13 @@ class SubscriptionProduct extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id'          => $this->uuid,
+            'title'       => $this->title,
+            'description' => $this->description,
+            'alias'       => $this->alias,
+            'rank'        => $this->rank,
+            'is_active'   => (bool) $this->is_active,
+        ];
     }
 }

@@ -21,7 +21,7 @@ class UpdateSubscriptionProductRequest extends Request
     {
         $this->subscriptionProduct = SubscriptionProduct::findByUuidOrFail($this->route('id'));
 
-        return $this->user()->can('update', SubscriptionProduct::class);
+        return $this->user()->can('update', $this->subscriptionProduct);
     }
 
     /**
