@@ -110,7 +110,7 @@ class StripeSubscriptionRepositoryTest extends TestCase
         /** @var array $responseCanceled */
         $responseCancel = $stripeSubscriptionRepository->cancel($user, $activeSubscription);
         $activeSubscription->update([
-            'ends_at'   => $responseCancel['cancel_at'],
+            'ends_at' => $responseCancel['cancel_at'],
         ]);
         $activeSubscription->refresh();
 
