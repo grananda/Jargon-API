@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Translations\Project;
 use App\Models\Translations\Translation;
 use Illuminate\Database\Eloquent\Collection;
 
