@@ -34,6 +34,8 @@ class StripeSubscriptionRepositoryTest extends TestCase
             SubscriptionProductWasDeleted::class,
         ]);
 
+        // *** Resolve repositories ***
+
         /** @var \App\Repositories\Stripe\StripeSubscriptionProductRepository $stripeSubscriptionProductRepository */
         $stripeSubscriptionProductRepository = resolve(StripeSubscriptionProductRepository::class);
 
@@ -46,6 +48,9 @@ class StripeSubscriptionRepositoryTest extends TestCase
         /** @var \App\Repositories\Stripe\StripeSubscriptionRepository $stripeSubscriptionRepository */
         $stripeSubscriptionRepository = resolve(StripeSubscriptionRepository::class);
 
+
+        // *** Create objects ***
+
         /** @var \App\Models\User $user */
         $user = $this->user();
 
@@ -54,8 +59,17 @@ class StripeSubscriptionRepositoryTest extends TestCase
             'amount' => 0,
         ]);
 
+        /** @var SubscriptionPlan $subscriptionPlan */
+        $subscriptionPlan2 = factory(SubscriptionPlan::class)->create([
+            'amount' => 0,
+        ]);
+
         /** @var \App\Models\Subscriptions\SubscriptionProduct $subscriptionProduct */
         $subscriptionProduct = $subscriptionPlan->product;
+
+        $subscriptionPlan2->product()->associate($subscriptionProduct);
+
+        // *** Create Stripe elements ***
 
         /** @var array $customer */
         $customer = $stripeCustomerRepository->create($user);
@@ -68,63 +82,48 @@ class StripeSubscriptionRepositoryTest extends TestCase
         /** @var array $plan */
         $plan = $stripeSubscriptionPlanRepository->create($subscriptionPlan);
 
+        /** @var array $plan2 */
+        $plan2 = $stripeSubscriptionPlanRepository->create($subscriptionPlan2);
+
         // When
-        /** @var array $responseCreated */
-        $responseCreated = $stripeSubscriptionRepository->create($user, $subscriptionPlan);
-        $this->createActiveSubscription($user, $subscriptionPlan->alias, [], ['stripe_id' => $responseCreated['id']]);
+        /** @var array $responseCreate */
+        $responseCreate = $stripeSubscriptionRepository->create($user, $subscriptionPlan);
+        $this->createActiveSubscription($user, $subscriptionPlan->alias, [], ['stripe_id' => $responseCreate['id']]);
 
         /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         $activeSubscription = $user->fresh()->activeSubscription;
 
+        /** @var array $responseUpdate */
+        $responseUpdate = $stripeSubscriptionRepository->swap($user, $subscriptionPlan2);
+
         /** @var array $responseCanceled */
-        $responseCancelled = $stripeSubscriptionRepository->cancel($user, $activeSubscription);
-        $activeSubscription->update(['ends_at' => $responseCancelled['cancel_at']]);
+        $responseCancel = $stripeSubscriptionRepository->cancel($user, $activeSubscription);
+        $activeSubscription->update(['ends_at' => $responseCancel['cancel_at']]);
         $activeSubscription->refresh();
 
         /** @var array $responseReactivate */
-        $responseReactivated = $stripeSubscriptionRepository->reactivate($user, $activeSubscription);
-        $activeSubscription->update(['ends_at' => $responseCancelled['cancel_at']]);
+        $responseReactivate = $stripeSubscriptionRepository->reactivate($user, $activeSubscription);
+        $activeSubscription->update(['ends_at' => $responseCancel['cancel_at']]);
         $activeSubscription->refresh();
+
+        // *** Cleanup ***
 
         $activeSubscription->delete();
         $stripeCustomerRepository->delete($user);
+
         $stripeSubscriptionPlanRepository->delete($subscriptionPlan);
         $subscriptionPlan->delete();
+
+        $stripeSubscriptionPlanRepository->delete($subscriptionPlan2);
+        $subscriptionPlan2->delete();
+
         $stripeSubscriptionProductRepository->delete($subscriptionProduct);
 
         // Then
-        $this->assertEquals($responseCreated['customer'], $user->stripe_id);
-        $this->assertNotNull($responseCancelled['cancel_at']);
-        $this->assertNull($responseReactivated['cancel_at']);
-    }
-
-    /** @test */
-    public function creates_a_paid_stripe_subscription()
-    {
-
-    }
-
-    /** @test */
-    public function fails_to_create_a_paid_stripe_subscription()
-    {
-
-    }
-
-    /** @test */
-    public function swaps_to_a_paid_stripe_subscription()
-    {
-
-    }
-
-    /** @test */
-    public function fails_to_swap_to_a_paid_stripe_subscription()
-    {
-
-    }
-
-    /** @test */
-    public function swaps_to_a_free_stripe_subscription()
-    {
-
+        $this->assertEquals($responseCreate['customer'], $user->stripe_id);
+        $this->assertEquals($responseUpdate['items']['id'], $subscriptionPlan->alias);
+        $this->assertEquals($responseUpdate['items']['id'], $subscriptionPlan2->alias);
+        $this->assertNotNull($responseCancel['cancel_at']);
+        $this->assertNull($responseReactivate['cancel_at']);
     }
 }

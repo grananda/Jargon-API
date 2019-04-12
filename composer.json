@@ -13,7 +13,6 @@
         "bugsnag/bugsnag-laravel": "^2.0",
         "cartalyst/stripe-laravel": "^10.0",
         "fideloper/proxy": "^4.0",
-        "guzzlehttp/guzzle": "^6.3",
         "kalnoy/nestedset": "^4.3",
         "laravel/framework": "5.8.*",
         "laravel/passport": "^7.2",

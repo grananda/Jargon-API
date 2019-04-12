@@ -16,9 +16,9 @@ class StripeSubscriptionRepository extends AbstractStripeRepository
      * @param \App\Models\User                           $user
      * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
      *
+     * @return array
      * @throws \App\Exceptions\StripeApiCallException
      *
-     * @return array
      */
     public function create(User $user, SubscriptionPlan $subscriptionPlan)
     {
@@ -37,27 +37,24 @@ class StripeSubscriptionRepository extends AbstractStripeRepository
     }
 
     /**
-     * Updates a Stripe subscription.
+     * Swaps a Stripe subscription.
      *
      * @param \App\Models\User                           $user
      * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
      *
+     * @return array
      * @throws \App\Exceptions\StripeApiCallException
      *
-     * @return array
      */
-    public function update(User $user, SubscriptionPlan $subscriptionPlan)
+    public function swap(User $user, SubscriptionPlan $subscriptionPlan)
     {
         try {
             /** @var \App\Models\Subscriptions\SubscriptionPlan $currentSubscriptionPlan */
             $currentSubscriptionPlan = $user->activeSubscription->subscriptionPlan;
 
             return $this->stripe->subscriptions()->update($user->stripe_id, $currentSubscriptionPlan->alias, [
-                'customer' => $user->stripe_id,
-                'prorate'  => true,
-                'items'    => [
-                    'plan' => $subscriptionPlan->alias,
-                ],
+                'prorate' => true,
+                'plan'    => $subscriptionPlan->alias,
             ]);
         } catch (Exception $exception) {
             throw new StripeApiCallException($exception);
@@ -70,9 +67,9 @@ class StripeSubscriptionRepository extends AbstractStripeRepository
      * @param \App\Models\User                             $user
      * @param \App\Models\Subscriptions\ActiveSubscription $activeSubscriptionPlan
      *
+     * @return array
      * @throws \App\Exceptions\StripeApiCallException
      *
-     * @return array
      */
     public function cancel(User $user, ActiveSubscription $activeSubscriptionPlan)
     {
@@ -89,9 +86,9 @@ class StripeSubscriptionRepository extends AbstractStripeRepository
      * @param \App\Models\User                             $user
      * @param \App\Models\Subscriptions\ActiveSubscription $activeSubscriptionPlan
      *
+     * @return array
      * @throws \App\Exceptions\StripeApiCallException
      *
-     * @return array
      */
     public function reactivate(User $user, ActiveSubscription $activeSubscriptionPlan)
     {
