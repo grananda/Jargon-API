@@ -57,11 +57,13 @@ class StripeSubscriptionRepositoryTest extends TestCase
         /** @var SubscriptionPlan $subscriptionPlan */
         $subscriptionPlan = factory(SubscriptionPlan::class)->create([
             'amount' => 0,
+            'alias'  => 'Plan-1',
         ]);
 
         /** @var SubscriptionPlan $subscriptionPlan */
         $subscriptionPlan2 = factory(SubscriptionPlan::class)->create([
             'amount' => 0,
+            'alias'  => 'Plan-2',
         ]);
 
         /** @var \App\Models\Subscriptions\SubscriptionProduct $subscriptionProduct */
@@ -87,23 +89,37 @@ class StripeSubscriptionRepositoryTest extends TestCase
 
         // When
         /** @var array $responseCreate */
+
+        // *** Create subscription ***
+
         $responseCreate = $stripeSubscriptionRepository->create($user, $subscriptionPlan);
         $this->createActiveSubscription($user, $subscriptionPlan->alias, [], ['stripe_id' => $responseCreate['id']]);
 
         /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         $activeSubscription = $user->fresh()->activeSubscription;
 
+        // *** Swap subscription ***
+
         /** @var array $responseUpdate */
         $responseUpdate = $stripeSubscriptionRepository->swap($user, $subscriptionPlan2);
+        $activeSubscription->update(['stripe_id' => $responseUpdate['id']]);
+        $activeSubscription->refresh();
+
+        // *** Cancel subscription ***
 
         /** @var array $responseCanceled */
         $responseCancel = $stripeSubscriptionRepository->cancel($user, $activeSubscription);
-        $activeSubscription->update(['ends_at' => $responseCancel['cancel_at']]);
+        $activeSubscription->update([
+            'ends_at'   => $responseCancel['cancel_at'],
+        ]);
         $activeSubscription->refresh();
 
         /** @var array $responseReactivate */
         $responseReactivate = $stripeSubscriptionRepository->reactivate($user, $activeSubscription);
-        $activeSubscription->update(['ends_at' => $responseCancel['cancel_at']]);
+        $activeSubscription->update([
+            'stripe_id' => $responseReactivate['id'],
+            'ends_at'   => $responseReactivate['cancel_at'],
+        ]);
         $activeSubscription->refresh();
 
         // *** Cleanup ***
@@ -118,11 +134,12 @@ class StripeSubscriptionRepositoryTest extends TestCase
         $subscriptionPlan2->delete();
 
         $stripeSubscriptionProductRepository->delete($subscriptionProduct);
+        $subscriptionProduct->delete();
 
         // Then
         $this->assertEquals($responseCreate['customer'], $user->stripe_id);
-        $this->assertEquals($responseUpdate['items']['id'], $subscriptionPlan->alias);
-        $this->assertEquals($responseUpdate['items']['id'], $subscriptionPlan2->alias);
+        $this->assertEquals($responseCreate['plan']['id'], $subscriptionPlan->alias);
+        $this->assertEquals($responseUpdate['plan']['id'], $subscriptionPlan2->alias);
         $this->assertNotNull($responseCancel['cancel_at']);
         $this->assertNull($responseReactivate['cancel_at']);
     }
