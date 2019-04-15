@@ -6,6 +6,7 @@ use App\Events\User\UserActivationTokenGenerated;
 use App\Events\User\UserWasActivated;
 use App\Events\User\UserWasDeactivated;
 use App\Events\User\UserWasDeleted;
+use App\Jobs\UpdateStripeCustomer;
 use App\Models\Options\OptionUser;
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Traits\HasRegistration;
@@ -26,13 +27,14 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens,
         Notifiable,
         HasRegistration,
-        HasUuid;
+        HasUuid,
+        HasStripeId;
 
-    const ACTIVATION_EXPIRES_AT      = 48;
-    const ACTIVATION_TOKEN_LENGTH    = 32;
+    const ACTIVATION_EXPIRES_AT = 48;
+    const ACTIVATION_TOKEN_LENGTH = 32;
     const   SUPER_ADMIN_STAFF_MEMBER = 'super-admin';
-    const   SENIOR_STAFF_MEMBER      = 'senior-staff';
-    const   JUNIOR_STAFF_MEMBER      = 'junior-staff';
+    const   SENIOR_STAFF_MEMBER = 'senior-staff';
+    const   JUNIOR_STAFF_MEMBER = 'junior-staff';
 
     /**
      * {@inheritdoc}
@@ -53,8 +55,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
         static::creating(function (self $model) {
             $model->activation_token = Str::random(self::ACTIVATION_TOKEN_LENGTH);
-
             $model->fireModelEvent('activation-token-generated');
+        });
+        static::updating(function (self $model) {
+           if($model->isDirty(['email', 'name'])){
+               UpdateStripeCustomer::dispatch($model);
+           }
         });
         static::deleting(function (self $model) {
             $model->activeSubscription()->delete();
@@ -124,8 +130,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 'role_id',
                 'validation_token',
             ])
-            ->withTimestamps()
-        ;
+            ->withTimestamps();
     }
 
     /**
@@ -140,8 +145,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 'role_id',
                 'validation_token',
             ])
-            ->withTimestamps()
-        ;
+            ->withTimestamps();
     }
 
     /**
@@ -150,8 +154,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function roles()
     {
         return $this->belongsToMany(Role::class)
-            ->withTimestamps()
-        ;
+            ->withTimestamps();
     }
 
     /**
@@ -310,17 +313,5 @@ class User extends Authenticatable implements MustVerifyEmail
     public function setRole(Role $role)
     {
         $this->roles()->attach($role);
-    }
-
-    /**
-     * Sets user Stripe Id.
-     *
-     * @param string $stripeId
-     *
-     * @return bool
-     */
-    public function setStripeId(string $stripeId)
-    {
-        return $this->update(['stripe_id' => $stripeId]);
     }
 }

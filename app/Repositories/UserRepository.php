@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Connection;
+use Illuminate\Database\Eloquent\Model;
 
 class UserRepository extends CoreRepository
 {
@@ -15,7 +16,8 @@ class UserRepository extends CoreRepository
         parent::__construct($dbConnection, $model);
     }
 
-    public function create(array $attributes)
+    /** @inheritDoc */
+    public function createUser(array $attributes)
     {
         return $this->dbConnection->transaction(function () use ($attributes) {
             $attributes['password'] = bcrypt($attributes['password']);
@@ -23,6 +25,28 @@ class UserRepository extends CoreRepository
             $entity->save();
 
             return $entity;
+        });
+    }
+
+    /**
+     * @param \App\Models\User $entity
+     * @param array            $attributes
+     *
+     * @return mixed
+     * @throws \Throwable
+     */
+    public function updateUser(User $entity, array $attributes)
+    {
+        return $this->dbConnection->transaction(function () use ($entity, $attributes) {
+            if (isset($attributes['password'])) {
+                $attributes['password'] = bcrypt($attributes['password']);
+            }
+
+            $entity->fill($attributes);
+
+            $entity->save();
+
+            return $entity->fresh();
         });
     }
 

@@ -32,6 +32,17 @@ class UserPolicy extends AbstractPolicy
      *
      * @return bool
      */
+    public function update(User $authUser, User $user)
+    {
+        return $user->hasRole(User::SENIOR_STAFF_MEMBER) || $authUser->uuid === $user->uuid;
+    }
+
+    /**
+     * @param \App\Models\User $authUser
+     * @param User             $user
+     *
+     * @return bool
+     */
     public function cancel(User $authUser, User $user)
     {
         return $authUser->uuid === $user->uuid;
