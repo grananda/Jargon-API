@@ -7,10 +7,13 @@ namespace Tests\Unit\Repositories;
 use App\Models\Card;
 use App\Repositories\Stripe\StripeCardRepository;
 use App\Repositories\Stripe\StripeCustomerRepository;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StripeCardRepositoryTest extends TestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function adds_a_stripe_card()
     {
