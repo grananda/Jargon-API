@@ -30,11 +30,11 @@ class User extends Authenticatable implements MustVerifyEmail
         HasUuid,
         HasStripeId;
 
-    const ACTIVATION_EXPIRES_AT = 48;
-    const ACTIVATION_TOKEN_LENGTH = 32;
+    const ACTIVATION_EXPIRES_AT      = 48;
+    const ACTIVATION_TOKEN_LENGTH    = 32;
     const   SUPER_ADMIN_STAFF_MEMBER = 'super-admin';
-    const   SENIOR_STAFF_MEMBER = 'senior-staff';
-    const   JUNIOR_STAFF_MEMBER = 'junior-staff';
+    const   SENIOR_STAFF_MEMBER      = 'senior-staff';
+    const   JUNIOR_STAFF_MEMBER      = 'junior-staff';
 
     /**
      * {@inheritdoc}
@@ -58,9 +58,9 @@ class User extends Authenticatable implements MustVerifyEmail
             $model->fireModelEvent('activation-token-generated');
         });
         static::updating(function (self $model) {
-           if($model->isDirty(['email', 'name'])){
-               UpdateStripeCustomer::dispatch($model);
-           }
+            if ($model->isDirty(['email', 'name'])) {
+                UpdateStripeCustomer::dispatch($model);
+            }
         });
         static::deleting(function (self $model) {
             $model->activeSubscription()->delete();
@@ -130,7 +130,8 @@ class User extends Authenticatable implements MustVerifyEmail
                 'role_id',
                 'validation_token',
             ])
-            ->withTimestamps();
+            ->withTimestamps()
+        ;
     }
 
     /**
@@ -145,7 +146,8 @@ class User extends Authenticatable implements MustVerifyEmail
                 'role_id',
                 'validation_token',
             ])
-            ->withTimestamps();
+            ->withTimestamps()
+        ;
     }
 
     /**
@@ -154,7 +156,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function roles()
     {
         return $this->belongsToMany(Role::class)
-            ->withTimestamps();
+            ->withTimestamps()
+        ;
     }
 
     /**

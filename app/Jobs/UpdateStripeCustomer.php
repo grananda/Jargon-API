@@ -27,8 +27,9 @@ class UpdateStripeCustomer extends AbstractJob
      *
      * @param \App\Repositories\Stripe\StripeCustomerRepository $stripeCustomerRepository
      *
-     * @return void
      * @throws \App\Exceptions\StripeApiCallException
+     *
+     * @return void
      */
     public function handle(StripeCustomerRepository $stripeCustomerRepository)
     {

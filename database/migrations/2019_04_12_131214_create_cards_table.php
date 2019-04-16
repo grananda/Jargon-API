@@ -18,7 +18,7 @@ class CreateCardsTable extends Migration
             $table->string('stripe_id');
             $table->string('brand');
             $table->string('country');
-            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('last4');
             $table->integer('exp_month');
             $table->integer('exp_year');

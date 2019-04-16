@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Connection;
-use Illuminate\Database\Eloquent\Model;
 
 class UserRepository extends CoreRepository
 {
@@ -16,7 +15,7 @@ class UserRepository extends CoreRepository
         parent::__construct($dbConnection, $model);
     }
 
-    /** @inheritDoc */
+    /** {@inheritdoc} */
     public function createUser(array $attributes)
     {
         return $this->dbConnection->transaction(function () use ($attributes) {
@@ -32,8 +31,9 @@ class UserRepository extends CoreRepository
      * @param \App\Models\User $entity
      * @param array            $attributes
      *
-     * @return mixed
      * @throws \Throwable
+     *
+     * @return mixed
      */
     public function updateUser(User $entity, array $attributes)
     {

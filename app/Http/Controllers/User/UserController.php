@@ -55,8 +55,9 @@ class UserController extends ApiController
      *
      * @param \App\Http\Requests\User\UserUpdateRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UserUpdateRequest $request)
     {

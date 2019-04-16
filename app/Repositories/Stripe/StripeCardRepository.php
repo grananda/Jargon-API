@@ -31,17 +31,16 @@ class StripeCardRepository extends AbstractStripeRepository
     /**
      * Updates a Stripe card.
      *
-     * @param \App\Models\User $user
      * @param \App\Models\Card $card
      *
      * @throws \App\Exceptions\StripeApiCallException
      *
      * @return mixed
      */
-    public function update(User $user, Card $card)
+    public function update(Card $card)
     {
         try {
-            return $this->stripe->cards()->update($user->stripe_id, $card->stripe_id, [
+            return $this->stripe->cards()->update($card->user->stripe_id, $card->stripe_id, [
                 'name'            => $card->name,
                 'address_city'    => $card->address_city,
                 'address_country' => $card->address_country,
@@ -58,18 +57,17 @@ class StripeCardRepository extends AbstractStripeRepository
     /**
      * Deletes a Stripe card.
      *
-     * @param \App\Models\User $user
      * @param \App\Models\Card $card
      *
      * @throws \App\Exceptions\StripeApiCallException
      *
      * @return mixed
      */
-    public function delete(User $user, Card $card)
+    public function delete(Card $card)
     {
         try {
             /** @var array $response */
-            $response = $this->stripe->cards()->delete($user->stripe_id, $card->stripe_id);
+            $response = $this->stripe->cards()->delete($card->user->stripe_id, $card->stripe_id);
 
             if (! $response['deleted']) {
                 throw new StripeApiCallException(trans('Could not delete card.'));

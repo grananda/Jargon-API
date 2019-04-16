@@ -67,13 +67,14 @@ class StripeCardRepositoryTest extends TestCase
 
         /** @var \App\Models\Card $card */
         $card = factory(Card::class)->make([
+            'user_id'         => $user->id,
             'stripe_id'       => $responseCreate['id'],
             'address_country' => 'Spain',
         ]);
 
-        $responseUpdate = $stripeCardRepository->update($user, $card);
+        $responseUpdate = $stripeCardRepository->update($card);
 
-        $responseDelete = $stripeCardRepository->delete($user, $card);
+        $responseDelete = $stripeCardRepository->delete($card);
 
         $stripeCustomerRepository->delete($user);
 

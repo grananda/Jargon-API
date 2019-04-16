@@ -1,15 +1,12 @@
 <?php
 
-
 namespace App\Services;
-
 
 use App\Models\User;
 use App\Repositories\Stripe\StripeCustomerRepository;
 
 class CustomerService
 {
-
     /**
      * The StripeCustomerRepositoryInstance.
      *
@@ -32,8 +29,9 @@ class CustomerService
      *
      * @param \App\Models\User $user
      *
-     * @return bool
      * @throws \App\Exceptions\StripeApiCallException
+     *
+     * @return bool
      */
     public function registerCustomer(User $user)
     {

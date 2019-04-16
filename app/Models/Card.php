@@ -16,6 +16,12 @@ class Card extends BaseEntity
         'last4',
         'exp_month',
         'exp_year',
+        'address_city',
+        'address_country',
+        'address_line1',
+        'address_line2',
+        'address_state',
+        'address_zip',
     ];
 
     /**
