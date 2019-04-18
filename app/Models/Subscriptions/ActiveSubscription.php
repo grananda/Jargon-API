@@ -92,6 +92,8 @@ class ActiveSubscription extends BaseEntity
     {
         $this->subscription_active = true;
 
+        $this->ends_at = null;
+
         $this->save();
 
         return $this->fresh();
@@ -100,11 +102,17 @@ class ActiveSubscription extends BaseEntity
     /**
      * Deactivates an subscription.
      *
-     * @return \App\Models\Subscriptions\ActiveSubscription|null
+     * @param string|null $cancelAt
+     *
+     * @return \App\Models\Subscriptions\ActiveSubscription
      */
-    public function deactivate()
+    public function deactivate(string $cancelAt = null)
     {
+        $cancelAt = $cancelAt ? Carbon::createFromTimestamp($cancelAt) : now();
+
         $this->subscription_active = false;
+
+        $this->ends_at = $cancelAt;
 
         $this->save();
 

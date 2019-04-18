@@ -57,7 +57,7 @@ class User extends Authenticatable implements MustVerifyEmail
             $model->activation_token = Str::random(self::ACTIVATION_TOKEN_LENGTH);
             $model->fireModelEvent('activation-token-generated');
         });
-        static::updating(function (self $model) {
+        static::updated(function (self $model) {
             if ($model->isDirty(['email', 'name'])) {
                 UpdateStripeCustomer::dispatch($model);
             }

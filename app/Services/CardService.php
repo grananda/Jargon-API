@@ -78,7 +78,7 @@ class CardService
         $card = $this->cardRepository->update($card, $attributes);
 
         /* @var array $cc */
-        $this->stripeCardRepository->update($card->user, $card);
+        $this->stripeCardRepository->update($card);
 
         return $card;
     }

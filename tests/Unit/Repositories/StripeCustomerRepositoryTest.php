@@ -4,8 +4,10 @@
 namespace Tests\Unit\Repositories;
 
 
+use App\Jobs\UpdateStripeCustomer;
 use App\Repositories\Stripe\StripeCustomerRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class StripeCustomerRepositoryTest extends TestCase
@@ -16,6 +18,8 @@ class StripeCustomerRepositoryTest extends TestCase
     public function creates_updates_and_deletes_a_stripe_customer()
     {
         // Given
+        Bus::fake(UpdateStripeCustomer::class);
+
         $email1 = $this->faker->email;
 
         /** @var \App\Models\User $user */
@@ -45,5 +49,7 @@ class StripeCustomerRepositoryTest extends TestCase
         $this->assertEquals($responseCustomerCreated['email'], $email1);
         $this->assertEquals($responseCustomerUpdated['email'], $email2);
         $this->assertTrue($responseCustomerDeleted);
+
+        Bus::assertDispatched(UpdateStripeCustomer::class);
     }
 }

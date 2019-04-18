@@ -41,18 +41,19 @@ class ActiveSubscriptionRepository extends CoreRepository
     /**
      * @param \App\Models\Subscriptions\SubscriptionPlan $subscription
      * @param \App\Models\User                           $user
+     * @param array                                      $attributes
      *
      * @throws \Throwable
      *
      * @return mixed
      */
-    public function createActiveSubscription(SubscriptionPlan $subscription, User $user)
+    public function createActiveSubscription(SubscriptionPlan $subscription, User $user, array $attributes = [])
     {
-        return $this->dbConnection->transaction(function () use ($subscription, $user) {
+        return $this->dbConnection->transaction(function () use ($subscription, $user, $attributes) {
             /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
-            $activeSubscription = $this->create([
+            $activeSubscription = $this->create(array_merge([
                 'subscription_active' => true,
-            ]);
+            ], $attributes));
 
             $subscription->activeSubscriptions()->save($activeSubscription);
 
@@ -74,16 +75,19 @@ class ActiveSubscriptionRepository extends CoreRepository
     /**
      * @param \App\Models\Subscriptions\SubscriptionPlan $subscription
      * @param \App\Models\User                           $user
+     * @param array                                      $attributes
      *
      * @throws \Throwable
      *
      * @return mixed
      */
-    public function updateActiveSubscription(SubscriptionPlan $subscription, User $user)
+    public function updateActiveSubscription(SubscriptionPlan $subscription, User $user, array $attributes = [])
     {
-        return $this->dbConnection->transaction(function () use ($subscription, $user) {
+        return $this->dbConnection->transaction(function () use ($subscription, $user, $attributes) {
             /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
             $activeSubscription = $user->activeSubscription;
+
+            $activeSubscription->fill($attributes);
 
             $subscription->activeSubscriptions()->save($activeSubscription);
 
