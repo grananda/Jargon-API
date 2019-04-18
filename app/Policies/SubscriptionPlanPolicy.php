@@ -57,7 +57,7 @@ class SubscriptionPlanPolicy extends AbstractPolicy
      */
     public function upgrade(User $user, SubscriptionPlan $subscriptionPlan)
     {
-        return true;
+        return $user->activeSubscription->subscriptionPlan->product->rank < $subscriptionPlan->product->rank;
     }
 
     /**
@@ -68,6 +68,7 @@ class SubscriptionPlanPolicy extends AbstractPolicy
      */
     public function downgrade(User $user, SubscriptionPlan $subscriptionPlan)
     {
-        return true;
+        return $user->activeSubscription->subscriptionPlan->product->rank > $subscriptionPlan->product->rank;
+        ;
     }
 }

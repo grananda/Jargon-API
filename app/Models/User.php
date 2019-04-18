@@ -317,4 +317,20 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->roles()->attach($role);
     }
+
+    /**
+     * @return bool
+     */
+    public function isStripeCustomer()
+    {
+        return (bool) $this->stripe_id;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCard()
+    {
+        return (bool) $this->cards->count();
+    }
 }
