@@ -13,15 +13,16 @@ interface SubscriptionServiceInterface
      *
      * @param \App\Models\User                           $user
      * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
-     * @param string                                     $stripeToken
      *
      * @throws \App\Exceptions\StripeApiCallException
      * @throws \App\Exceptions\ActiveSubscriptionStatusException
+     * @throws \App\Exceptions\StripeMissingCardException
+     * @throws \App\Exceptions\StripeMissingCustomerException
      * @throws \Throwable
      *
      * @return \App\Models\Subscriptions\ActiveSubscription
      */
-    public function subscribe(User $user, SubscriptionPlan $subscriptionPlan, string $stripeToken = null): ActiveSubscription;
+    public function subscribe(User $user, SubscriptionPlan $subscriptionPlan): ActiveSubscription;
 
     /**
      * Cancels an active subscription.

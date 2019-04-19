@@ -3,7 +3,8 @@
 namespace App\Services;
 
 use App\Exceptions\ActiveSubscriptionStatusException;
-use App\Exceptions\StripeCardTokenMissingException;
+use App\Exceptions\StripeMissingCardException;
+use App\Exceptions\StripeMissingCustomerException;
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\User;
@@ -13,18 +14,6 @@ use App\Services\Contract\SubscriptionServiceInterface;
 
 class SubscriptionService implements SubscriptionServiceInterface
 {
-    /**
-     * The CustomerService instance.
-     *
-     * @var \App\Services\CustomerService
-     */
-    private $customerService;
-
-    /**
-     * @var \App\Services\CardService
-     */
-    private $cardService;
-
     /**
      * The ActiveSubscriptionRepository instance.
      *
@@ -44,30 +33,19 @@ class SubscriptionService implements SubscriptionServiceInterface
      *
      * @param \App\Repositories\ActiveSubscriptionRepository        $activeSubscriptionRepository
      * @param \App\Repositories\Stripe\StripeSubscriptionRepository $stripeSubscriptionRepository
-     * @param \App\Services\CustomerService                         $customerService
-     * @param \App\Services\CardService                             $cardService
      */
-    public function __construct(ActiveSubscriptionRepository $activeSubscriptionRepository, StripeSubscriptionRepository $stripeSubscriptionRepository, CustomerService $customerService, CardService $cardService)
+    public function __construct(ActiveSubscriptionRepository $activeSubscriptionRepository, StripeSubscriptionRepository $stripeSubscriptionRepository)
     {
         $this->activeSubscriptionRepository = $activeSubscriptionRepository;
         $this->stripeSubscriptionRepository = $stripeSubscriptionRepository;
-        $this->customerService              = $customerService;
-        $this->cardService                  = $cardService;
     }
 
     /** {@inheritdoc} */
-    public function subscribe(User $user, SubscriptionPlan $subscriptionPlan, string $stripeToken = null): ActiveSubscription
+    public function subscribe(User $user, SubscriptionPlan $subscriptionPlan): ActiveSubscription
     {
-        if (! $user->isStripeCustomer()) {
-            /** @var User $user */
-            $user = $this->customerService->registerCustomer($user);
-        }
+        throw_if(! $user->isStripeCustomer(), new StripeMissingCustomerException(trans('Subscription operation requires of Stripe customer')));
 
-        if (! $user->hasCard()) {
-            throw_if(is_null($stripeToken), new StripeCardTokenMissingException(trans('Subscription upgrade requires of Stripe card token')));
-
-            $this->cardService->registerCard($user, $stripeToken);
-        }
+        throw_if(! $user->hasCard(), new StripeMissingCardException(trans('Subscription operation requires of Stripe card')));
 
         if (! (bool) $user->activeSubscription || ! (bool) $user->activeSubscription->stripe_id) {
             return $this->createSubscription($user, $subscriptionPlan);
@@ -103,8 +81,8 @@ class SubscriptionService implements SubscriptionServiceInterface
      * @param \App\Models\User                           $user
      * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
      *
-     * @throws \Throwable
      * @throws \App\Exceptions\StripeApiCallException
+     * @throws \Throwable
      *
      * @return \App\Models\Subscriptions\ActiveSubscription|void
      */
@@ -130,8 +108,8 @@ class SubscriptionService implements SubscriptionServiceInterface
      * @param \App\Models\User                           $user
      * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
      *
-     * @throws \App\Exceptions\StripeApiCallException
      * @throws \Throwable
+     * @throws \App\Exceptions\StripeApiCallException
      *
      * @return \App\Models\Subscriptions\ActiveSubscription|void
      */

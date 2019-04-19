@@ -3,6 +3,7 @@
 
 namespace Tests\Feature\ActiveSubscription;
 
+use App\Models\Card;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\User;
 use App\Repositories\Stripe\StripeCustomerRepository;
@@ -44,7 +45,11 @@ class UpgradeTest extends TestCase
     {
         // Given
         /** @var \App\Models\User $user */
-        $user = $this->user('registered-user', ['stripe_id' => null]);
+        $user = $this->user();
+
+        factory(Card::class)->create([
+            'user_id' => $user->id,
+        ]);
 
         /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         $activeSubscription = $this->createActiveSubscription($user, SubscriptionPlan::DEFAULT_SUBSCRIPTION_PLAN, [], [
@@ -57,17 +62,6 @@ class UpgradeTest extends TestCase
 
         /** @var array $stripeSubscriptionResponse */
         $stripeSubscriptionResponse = $this->loadFixture('stripe/subscription.create.success');
-
-        /** @var array $stripeCustomerResponse */
-        $stripeCustomerResponse = $this->loadFixture('stripe/customer.create.success');
-
-        $this->mock(StripeCustomerRepository::class, function ($mock) use ($user, $stripeCustomerResponse) {
-            /** @var \Mockery\Mock $mock */
-            $mock->shouldReceive('create')
-                ->withArgs([$user])
-                ->once()
-                ->andReturn($stripeCustomerResponse);
-        });
 
         $this->mock(StripeSubscriptionRepository::class, function ($mock) use ($user, $stripeSubscriptionResponse) {
             /** @var \Mockery\Mock $mock */
@@ -89,11 +83,6 @@ class UpgradeTest extends TestCase
             'subscription_plan_id' => $subscription->id,
             'user_id'              => $user->id,
             'stripe_id'            => $stripeSubscriptionResponse['id'],
-        ]);
-
-        $this->assertDatabaseHas('users', [
-            'id'        => $user->id,
-            'stripe_id' => $stripeCustomerResponse['id'],
         ]);
 
         /** @var \App\Models\Subscriptions\SubscriptionPlanOptionValue $option */
