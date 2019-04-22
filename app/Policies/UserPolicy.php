@@ -32,8 +32,39 @@ class UserPolicy extends AbstractPolicy
      *
      * @return bool
      */
+    public function update(User $authUser, User $user)
+    {
+        return $user->hasRole(User::SENIOR_STAFF_MEMBER) || $authUser->uuid === $user->uuid;
+    }
+
+    /**
+     * @param \App\Models\User $authUser
+     * @param User             $user
+     *
+     * @return bool
+     */
     public function cancel(User $authUser, User $user)
     {
         return $authUser->uuid === $user->uuid;
+    }
+
+    /**
+     * @param \App\Models\User $user
+     *
+     * @return bool
+     */
+    public function registerCustomer(User $user)
+    {
+        return ! $user->isStaffMember() && ! $user->isStripeCustomer();
+    }
+
+    /**
+     * @param \App\Models\User $user
+     *
+     * @return bool
+     */
+    public function deleteCustomer(User $user)
+    {
+        return ! $user->isStaffMember() && $user->isStripeCustomer();
     }
 }

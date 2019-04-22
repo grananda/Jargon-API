@@ -4,24 +4,25 @@ namespace App\Http\Controllers\Subscription;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\ActiveSubscription\UpgradeActiveSubscriptionRequest;
-use App\Repositories\ActiveSubscriptionRepository;
+use App\Http\Resources\ActiveSubscription\ActiveSubscription as ActiveSubscriptionResource;
+use App\Services\SubscriptionService;
 use Exception;
 
 class ActiveSubscriptionUpgradeController extends ApiController
 {
     /**
-     * @var \App\Repositories\ActiveSubscriptionRepository
+     * @var \App\Services\SubscriptionService
      */
-    private $activeSubscriptionRepository;
+    private $subscriptionService;
 
     /**
      * ActiveSubscriptionUpgradeController constructor.
      *
-     * @param \App\Repositories\ActiveSubscriptionRepository $activeSubscriptionRepository
+     * @param \App\Services\SubscriptionService $subscriptionService
      */
-    public function __construct(ActiveSubscriptionRepository $activeSubscriptionRepository)
+    public function __construct(SubscriptionService $subscriptionService)
     {
-        $this->activeSubscriptionRepository = $activeSubscriptionRepository;
+        $this->subscriptionService = $subscriptionService;
     }
 
     /**
@@ -36,9 +37,10 @@ class ActiveSubscriptionUpgradeController extends ApiController
     public function update(UpgradeActiveSubscriptionRequest $request)
     {
         try {
-            $this->activeSubscriptionRepository->updateActiveSubscription($request->subscriptionPlan, $request->user());
+            /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
+            $activeSubscription = $this->subscriptionService->subscribe($request->user(), $request->subscriptionPlan);
 
-            return $this->responseNoContent();
+            return $this->responseOk(new ActiveSubscriptionResource($activeSubscription));
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
         }

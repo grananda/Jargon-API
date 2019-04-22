@@ -43,14 +43,18 @@ class StoreTest extends TestCase
 
         $this->createActiveSubscription(
             $user,
-            'professional',
+            'professional-month-eur',
             ['project_count' => 0]);
 
         $data = [
-            'title'          => $this->faker->sentence,
+            'title'         => $this->faker->sentence,
             'description'   => $this->faker->text,
             'collaborators' => [
-                [$collaborator->uuid, Project::PROJECT_DEFAULT_ROLE_ALIAS],
+                [
+                    'id'    => $collaborator->uuid,
+                    'role'  => Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
             ],
         ];
 
@@ -77,7 +81,7 @@ class StoreTest extends TestCase
 
         $this->createActiveSubscription(
             $user,
-            'professional',
+            'professional-month-eur',
             ['collaborator_count' => 0]);
 
         $data = [
@@ -85,7 +89,11 @@ class StoreTest extends TestCase
             'description'   => $this->faker->text,
             'teams'         => [],
             'collaborators' => [
-                [$collaborator->uuid, Project::PROJECT_DEFAULT_ROLE_ALIAS],
+                [
+                    'id'    => $collaborator->uuid,
+                    'role'  => Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
             ],
         ];
 
@@ -107,11 +115,17 @@ class StoreTest extends TestCase
         /** @var \App\Models\User $collaborator1 */
         $collaborator1 = factory(User::class)->create();
 
+        /** @var \App\Models\User $collaborator2 */
+        $collaborator2 = factory(User::class)->create();
+
+        /** @var \App\Models\User $collaborator3 */
+        $collaborator3 = factory(User::class)->create();
+
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
         $this->signIn($owner);
 
-        $this->createActiveSubscription($owner, 'professional');
+        $this->createActiveSubscription($owner, 'professional-month-eur');
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
@@ -124,7 +138,21 @@ class StoreTest extends TestCase
         $data = [
             'title'         => $this->faker->sentence,
             'collaborators' => [
-                [$collaborator1->uuid, Project::PROJECT_DEFAULT_ROLE_ALIAS,],
+                [
+                    'id'    => $collaborator1->uuid,
+                    'role'  => Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
+                [
+                    'id'    => $collaborator2->uuid,
+                    'role'  => Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
+                [
+                    'id'    => $collaborator3->uuid,
+                    'role'  => Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
             ],
             'teams'         => [
                 [$team->uuid,],
@@ -147,7 +175,20 @@ class StoreTest extends TestCase
         $this->assertDatabaseHas('collaborators', [
             'entity_type' => 'project',
             'is_owner'    => 0,
+            'is_valid'    => 0,
             'user_id'     => $collaborator1->id,
+        ]);
+        $this->assertDatabaseHas('collaborators', [
+            'entity_type' => 'project',
+            'is_owner'    => 0,
+            'is_valid'    => 0,
+            'user_id'     => $collaborator2->id,
+        ]);
+        $this->assertDatabaseHas('collaborators', [
+            'entity_type' => 'project',
+            'is_owner'    => 0,
+            'is_valid'    => 0,
+            'user_id'     => $collaborator3->id,
         ]);
 
         Event::assertDispatched(CollaboratorAddedToProject::class);

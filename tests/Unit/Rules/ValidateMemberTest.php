@@ -19,8 +19,23 @@ class ValidateMemberTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->user();
 
-        $this->assertTrue($this->validator(['collaborators' => [$user->uuid, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS]])->passes());
-        $this->assertFalse($this->validator(['collaborators' => [$user->id, Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS]])->passes());
+        $this->assertTrue($this->validator([
+            'collaborators' =>
+                [
+                    'id'    => $user->uuid,
+                    'role'  => Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
+        ])->passes());
+
+        $this->assertFalse($this->validator([
+            'collaborators' =>
+                [
+                    'id'    => $user->id,
+                    'role'  => Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
+        ])->passes());
     }
 
     /**

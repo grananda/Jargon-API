@@ -4,24 +4,33 @@ namespace App\Http\Controllers\Subscription;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\ActiveSubscription\DowngradeActiveSubscriptionRequest;
-use App\Repositories\ActiveSubscriptionRepository;
+use App\Http\Resources\ActiveSubscription\ActiveSubscription as ActiveSubscriptionResource;
+use App\Services\SubscriptionDowngradeService;
+use App\Services\SubscriptionService;
 use Exception;
 
 class ActiveSubscriptionDowngradeController extends ApiController
 {
     /**
-     * @var \App\Repositories\ActiveSubscriptionRepository
+     * @var \App\Services\SubscriptionService
      */
-    private $activeSubscriptionRepository;
+    private $subscriptionService;
+
+    /**
+     * @var \App\Services\SubscriptionDowngradeService
+     */
+    private $subscriptionDowngradeService;
 
     /**
      * ActiveSubscriptionUpgradeController constructor.
      *
-     * @param \App\Repositories\ActiveSubscriptionRepository $activeSubscriptionRepository
+     * @param \App\Services\SubscriptionService          $subscriptionService
+     * @param \App\Services\SubscriptionDowngradeService $subscriptionDowngradeService
      */
-    public function __construct(ActiveSubscriptionRepository $activeSubscriptionRepository)
+    public function __construct(SubscriptionService $subscriptionService, SubscriptionDowngradeService $subscriptionDowngradeService)
     {
-        $this->activeSubscriptionRepository = $activeSubscriptionRepository;
+        $this->subscriptionService          = $subscriptionService;
+        $this->subscriptionDowngradeService = $subscriptionDowngradeService;
     }
 
     /**
@@ -36,9 +45,12 @@ class ActiveSubscriptionDowngradeController extends ApiController
     public function update(DowngradeActiveSubscriptionRequest $request)
     {
         try {
-            $this->activeSubscriptionRepository->updateActiveSubscription($request->subscriptionPlan, $request->user());
+            $this->subscriptionDowngradeService->checkSubscriptionPlanDowngradeRules($request->user(), $request->subscriptionPlan);
 
-            return $this->responseNoContent();
+            /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
+            $activeSubscription = $this->subscriptionService->subscribe($request->user(), $request->subscriptionPlan);
+
+            return $this->responseOk(new ActiveSubscriptionResource($activeSubscription));
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
         }

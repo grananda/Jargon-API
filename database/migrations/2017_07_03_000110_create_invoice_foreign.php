@@ -9,7 +9,7 @@ class CreateInvoiceForeign extends Migration
     public function up()
     {
         Schema::table('invoices', function (Blueprint $table) {
-            $table->foreign('subscription_id')->references('id')->on('subscriptions')->onDelete('cascade');
+            $table->foreign('subscription_id')->references('id')->on('active_subscriptions')->onDelete('cascade');
         });
     }
 

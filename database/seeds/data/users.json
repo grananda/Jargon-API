@@ -19,7 +19,7 @@
         "username": "jFreemium",
         "password": "123456",
         "role": "registered-user",
-        "subscription": "freemium"
+        "subscription": "freemium-month-eur"
     },
     {
         "name": "John Premium",
@@ -27,7 +27,7 @@
         "username": "jPremium",
         "password": "123456",
         "role": "registered-user",
-        "subscription": "premium"
+        "subscription": "premium-month-eur"
     },
     {
         "name": "John Professional",
@@ -35,7 +35,7 @@
         "username": "jProfessional",
         "password": "123456",
         "role": "registered-user",
-        "subscription": "professional"
+        "subscription": "professional-month-eur"
     },
     {
         "name": "John Enterprise",
@@ -43,6 +43,6 @@
         "username": "jEnterprise",
         "password": "123456",
         "role": "registered-user",
-        "subscription": "enterprise"
+        "subscription": "enterprise-month-eur"
     }
 ]

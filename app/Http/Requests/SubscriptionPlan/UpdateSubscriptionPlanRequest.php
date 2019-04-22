@@ -32,14 +32,10 @@ class UpdateSubscriptionPlanRequest extends Request
     public function rules()
     {
         return [
-            'title'       => ['sometimes', 'string'],
-            'description' => ['sometimes', 'string', 'max:255'],
-            'alias'       => ['sometimes', 'string'],
-            'level'       => ['sometimes', 'numeric'],
-            'amount'      => ['sometimes', 'numeric'],
-            'status'      => ['sometimes', 'boolean'],
-            'options'     => ['sometimes', 'array'],
-            'options.*'   => ['required'],
+            'sort_order' => ['sometimes', 'numeric'],
+            'is_active'  => ['sometimes', 'boolean'],
+            'options'    => ['required', 'array'],
+            'options.*'  => ['required'],
         ];
     }
 }

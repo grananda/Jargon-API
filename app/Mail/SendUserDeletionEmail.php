@@ -34,6 +34,8 @@ class SendUserDeletionEmail extends Mailable
         $app     = env('APP_NAME');
         $subject = trans(':app Account Deleted', ['app' => $app]);
 
+        // TODO: Complete email view
+
         return $this->view('emails.auth.accountDeleted')
             ->subject($subject)
             ->with([

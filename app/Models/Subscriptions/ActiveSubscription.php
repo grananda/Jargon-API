@@ -2,7 +2,10 @@
 
 namespace App\Models\Subscriptions;
 
+use App\Events\ActiveSubscription\ActiveSubscriptionWasActivated;
+use App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated;
 use App\Models\BaseEntity;
+use App\Models\Traits\OptionQuota;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ActiveSubscription extends BaseEntity
 {
+    use OptionQuota;
+
     protected $dates = [
         'created_at',
         'updated_at',
@@ -20,10 +25,19 @@ class ActiveSubscription extends BaseEntity
         'subscription_plan_id',
         'subscription_active',
         'ends_at',
+        'stripe_id',
     ];
 
     protected $casts = [
         'subscription_active' => 'boolean',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $dispatchesEvents = [
+        'activated'   => ActiveSubscriptionWasActivated::class,
+        'deactivated' => ActiveSubscriptionWasDeactivated::class,
     ];
 
     /**
@@ -91,7 +105,11 @@ class ActiveSubscription extends BaseEntity
     {
         $this->subscription_active = true;
 
+        $this->ends_at = null;
+
         $this->save();
+
+        $this->fireModelEvent('activated');
 
         return $this->fresh();
     }
@@ -99,13 +117,21 @@ class ActiveSubscription extends BaseEntity
     /**
      * Deactivates an subscription.
      *
-     * @return \App\Models\Subscriptions\ActiveSubscription|null
+     * @param string|null $cancelAt
+     *
+     * @return \App\Models\Subscriptions\ActiveSubscription
      */
-    public function deactivate()
+    public function deactivate(string $cancelAt = null)
     {
+        $cancelAt = $cancelAt ? Carbon::createFromTimestamp($cancelAt) : now();
+
         $this->subscription_active = false;
 
+        $this->ends_at = $cancelAt;
+
         $this->save();
+
+        $this->fireModelEvent('deactivated');
 
         return $this->fresh();
     }

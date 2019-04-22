@@ -92,6 +92,8 @@ class ProjectController extends ApiController
      * @param \App\Http\Requests\Project\UpdateProjectRequest $request
      * @param int                                             $id
      *
+     * @throws \Throwable
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateProjectRequest $request, $id)

@@ -38,6 +38,8 @@ class SendUserActivationEmail extends Mailable
             'token' => $this->user->activation_token,
         ]);
 
+        // TODO: Complete email view
+
         return $this->view('emails.auth.userActivation')
             ->subject($subject)
             ->with([

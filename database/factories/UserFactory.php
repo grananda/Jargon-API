@@ -14,6 +14,7 @@ $factory->define(User::class, function (Faker $faker) {
         'password'         => bcrypt($faker->password),
         'activation_token' => Str::random(32),
         'remember_token'   => Str::random(10),
+        'stripe_id'        => 'cus_'.Str::random(24),
         'created_at'       => Carbon::now(),
         'updated_at'       => Carbon::now(),
         'activated_at'     => Carbon::now(),

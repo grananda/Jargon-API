@@ -6,6 +6,7 @@ use App\Events\User\UserActivationTokenGenerated;
 use App\Events\User\UserWasActivated;
 use App\Events\User\UserWasDeactivated;
 use App\Events\User\UserWasDeleted;
+use App\Jobs\UpdateStripeCustomer;
 use App\Models\Options\OptionUser;
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Traits\HasRegistration;
@@ -26,7 +27,8 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens,
         Notifiable,
         HasRegistration,
-        HasUuid;
+        HasUuid,
+        HasStripeId;
 
     const ACTIVATION_EXPIRES_AT      = 48;
     const ACTIVATION_TOKEN_LENGTH    = 32;
@@ -53,8 +55,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
         static::creating(function (self $model) {
             $model->activation_token = Str::random(self::ACTIVATION_TOKEN_LENGTH);
-
             $model->fireModelEvent('activation-token-generated');
+        });
+        static::updated(function (self $model) {
+            if ($model->isDirty(['email', 'name'])) {
+                UpdateStripeCustomer::dispatch($model);
+            }
         });
         static::deleting(function (self $model) {
             $model->activeSubscription()->delete();
@@ -68,7 +74,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'stripe_id',
     ];
 
     /**
@@ -187,6 +193,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function cards()
+    {
+        return $this->hasMany(Card::class);
+    }
+
+    /**
      * @param $id
      *
      * @return bool
@@ -302,5 +316,124 @@ class User extends Authenticatable implements MustVerifyEmail
     public function setRole(Role $role)
     {
         $this->roles()->attach($role);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isStripeCustomer()
+    {
+        return (bool) $this->stripe_id;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasCard()
+    {
+        return (bool) $this->cards->count();
+    }
+
+    /**
+     * Returns total user active projects.
+     *
+     * @return int
+     */
+    public function getActiveProjects()
+    {
+        return $this->projects()->count();
+    }
+
+    /**
+     * Returns total user active teams as owner.
+     *
+     * @return mixed
+     */
+    public function getActiveTeams()
+    {
+        return $this->teams->filter(function ($team) {
+            /* @var $team \App\Models\Team */
+            return $team->isOwner($this) == true;
+        })->count();
+    }
+
+    /**
+     * Returns total user active organizations as owner.
+     *
+     * @return mixed
+     */
+    public function getActiveOrganizations()
+    {
+        return $this->organizations->filter(function ($org) {
+            /* @var $org \App\Models\Organization */
+            return $org->isOwner($this) == true;
+        })->count();
+    }
+
+    /**
+     * Returns total collaborators for user organizations.
+     *
+     * @return int
+     */
+    public function getOrganizationCollaboratorCount()
+    {
+        // TODO: Apply functional programming
+
+        $counter = 0;
+
+        /** @var \App\Models\Organization $organization */
+        foreach ($this->organizations as $organization) {
+            $counter += $organization->members()->count();
+        }
+
+        return $counter;
+    }
+
+    /**
+     * Returns total collaborators for user teams.
+     *
+     * @return int
+     */
+    public function getTeamCollaboratorCount()
+    {
+        // TODO: Apply functional programming
+
+        $counter = 0;
+
+        /** @var \App\Models\Team $team */
+        foreach ($this->teams as $team) {
+            $counter += $team->members()->count();
+        }
+
+        return $counter;
+    }
+
+    /**
+     * Returns total collaborators for user teams.
+     *
+     * @return int
+     */
+    public function getProjectCollaboratorCount()
+    {
+        // TODO: Apply functional programming
+
+        $counter = 0;
+
+        /** @var \App\Models\Translations\Project $project */
+        foreach ($this->projects as $project) {
+            $counter += $project->members()->count();
+        }
+
+        return $counter;
+    }
+
+    /**
+     * Get total collaborators related to user entitites.
+     *
+     * @return int
+     */
+    public function getActiveCollaborators()
+    {
+        return $this->getOrganizationCollaboratorCount() + $this->getTeamCollaboratorCount() + $this->getProjectCollaboratorCount();
     }
 }

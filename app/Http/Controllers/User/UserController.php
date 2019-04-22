@@ -4,7 +4,9 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\User\DeleteUserRequest;
+use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Requests\UserRegistrationRequest;
+use App\Models\User;
 use App\Repositories\UserRepository;
 use Exception;
 use Illuminate\Http\Request;
@@ -40,9 +42,30 @@ class UserController extends ApiController
     public function store(UserRegistrationRequest $request)
     {
         try {
-            $this->userRepository->create($request->validated());
+            $this->userRepository->createUser($request->validated());
 
             return $this->responseCreated(trans('Successfully created user'));
+        } catch (Exception $exception) {
+            return $this->responseInternalError($exception->getMessage());
+        }
+    }
+
+    /**
+     * Updates user.
+     *
+     * @param \App\Http\Requests\User\UserUpdateRequest $request
+     *
+     * @throws \Throwable
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(UserUpdateRequest $request)
+    {
+        try {
+            /** @var User $user */
+            $user = $this->userRepository->updateUser($request->user, $request->validated());
+
+            return $this->responseOk($user);
         } catch (Exception $exception) {
             return $this->responseInternalError($exception->getMessage());
         }

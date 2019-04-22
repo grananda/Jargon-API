@@ -43,6 +43,8 @@ class SendPasswordRecoveryEmail extends Mailable
             'token' => $this->token,
         ]);
 
+        // TODO: Complete email view
+
         return $this->view('emails.auth.passwordRecovery')
             ->subject($subject)
             ->with([

@@ -42,7 +42,7 @@ class UpdateTest extends TestCase
         $owner = factory(User::class)->create();
         $this->signIn($owner);
 
-        $this->createActiveSubscription($owner, 'professional');
+        $this->createActiveSubscription($owner, 'professional-month-eur');
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();
@@ -78,7 +78,7 @@ class UpdateTest extends TestCase
         $owner = factory(User::class)->create();
         $this->signIn($owner);
 
-        $this->createActiveSubscription($owner, 'professional', ['collaborator_count' => 1]);
+        $this->createActiveSubscription($owner, 'professional-month-eur', ['collaborator_count' => 1]);
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();
@@ -88,8 +88,16 @@ class UpdateTest extends TestCase
         $data = [
             'title'         => $this->faker->sentence,
             'collaborators' => [
-                [$collaborator1->uuid, Project::PROJECT_DEFAULT_ROLE_ALIAS],
-                [$collaborator2->uuid, Project::PROJECT_DEFAULT_ROLE_ALIAS],
+                [
+                    'id'    => $collaborator1->uuid,
+                    'role' => Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
+                [
+                    'id'    => $collaborator2->uuid,
+                    'role' => Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
             ],
         ];
 
@@ -108,17 +116,17 @@ class UpdateTest extends TestCase
         // Given
         Event::fake(CollaboratorAddedToProject::class);
 
+        /** @var \App\Models\User $owner */
+        $owner = factory(User::class)->create();
+
         /** @var \App\Models\User $collaborator1 */
         $collaborator1 = factory(User::class)->create();
 
         /** @var \App\Models\User $collaborator2 */
         $collaborator2 = factory(User::class)->create();
 
-        /** @var \App\Models\User $owner */
-        $owner = factory(User::class)->create();
-        $this->signIn($owner);
-
-        $this->createActiveSubscription($owner, 'professional');
+        /** @var  \Illuminate\Database\Eloquent\Collection $collaborator1 */
+        $collaborators = factory(User::class, 5)->create();
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
@@ -132,13 +140,27 @@ class UpdateTest extends TestCase
         $project = factory(Project::class)->create();
         $project->setOwner($owner);
         $project->setMember($collaborator1);
+        $project->setMember($collaborator2);
+        $project->validateMember($collaborator2);
+
+        $collaborators->each(function ($collaborator) use ($project) {
+            $project->setMember($collaborator);
+        });
+
+        $this->createActiveSubscription($owner, 'professional-month-eur');
 
         $data = [
             'title'         => $this->faker->sentence,
             'collaborators' => [
                 [
-                    $collaborator1->uuid, Project::PROJECT_DEFAULT_ROLE_ALIAS,
-                    $collaborator2->uuid, Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    'id'    => $collaborator1->uuid,
+                    'role'  => Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
+                [
+                    'id'    => $collaborator2->uuid,
+                    'role'  => Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
                 ],
             ],
             'teams'         => [
@@ -161,9 +183,25 @@ class UpdateTest extends TestCase
         $this->assertDatabaseHas('collaborators', [
             'entity_type' => 'project',
             'is_owner'    => 0,
+            'is_valid'    => false,
             'user_id'     => $collaborator1->id,
         ]);
+        $this->assertDatabaseHas('collaborators', [
+            'entity_type' => 'project',
+            'is_owner'    => 0,
+            'is_valid'    => true,
+            'user_id'     => $collaborator2->id,
+        ]);
 
-        Event::assertDispatched(CollaboratorAddedToProject::class, 2);
+        $collaborators->each(function ($item) {
+            $this->assertDatabaseMissing('collaborators', [
+                'entity_type' => 'project',
+                'is_owner'    => 0,
+                'is_valid'    => false,
+                'user_id'     => $item->id,
+            ]);
+        });
+
+        Event::assertDispatched(CollaboratorAddedToProject::class, 7);
     }
 }

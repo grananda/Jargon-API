@@ -33,7 +33,7 @@ class StoreTest extends TestCase
 
         $this->createActiveSubscription(
             $user,
-            'professional',
+            'professional-month-eur',
             ['organization_count' => 0]);
 
         $data = [
@@ -55,7 +55,7 @@ class StoreTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->user();
 
-        $this->createActiveSubscription($user, 'professional');
+        $this->createActiveSubscription($user, 'professional-month-eur');
 
         $data = [
             'name'        => $this->faker->word,

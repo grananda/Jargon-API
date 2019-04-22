@@ -36,7 +36,7 @@ class TeamInvitationController extends ApiController
             /** @var \App\Models\Team $team */
             $team = $this->teamRepository->findOneByinvitationToken($request->invitationToken);
 
-            $this->teamRepository->validateInvitation($team);
+            $this->teamRepository->validateInvitation($team, $request->invitationToken);
 
             return $this->responseOk(true);
         } catch (ModelNotFoundException $modelNotFoundException) {

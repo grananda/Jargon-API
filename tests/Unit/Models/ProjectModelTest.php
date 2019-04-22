@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Models;
 
+use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Models\Dialect;
 use App\Models\Organization;
 use App\Models\Role;
@@ -12,6 +13,7 @@ use App\Models\Team;
 use App\Models\Translations\Project;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 class ProjectModelTest extends TestCase
@@ -19,15 +21,17 @@ class ProjectModelTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_project_will_have_a_member_and_and_owner_collaborator()
+    public function a_project_will_have_members_and_and_owner_collaborator()
     {
         // Given
+        Bus::fake(CollaboratorAddedToProject::class);
+
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
         $this->signIn($owner);
 
-        /** @var \App\Models\User $member */
-        $member = factory(User::class)->create();
+        /** @var \Illuminate\Database\Eloquent\Collection $members */
+        $members = factory(User::class, 10)->create();
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();
@@ -40,7 +44,9 @@ class ProjectModelTest extends TestCase
 
         // When
         $project->setOwner($owner);
-        $project->setMember($member, Project::PROJECT_DEFAULT_ROLE_ALIAS);
+        $members->each(function ($member) use ($project) {
+            $project->setMember($member, Project::PROJECT_DEFAULT_ROLE_ALIAS);
+        });
 
         // Then
         $this->assertDatabaseHas('collaborators', [
@@ -48,15 +54,71 @@ class ProjectModelTest extends TestCase
             'entity_id'   => $project->id,
             'entity_type' => 'project',
             'is_owner'    => true,
+            'is_valid'    => true,
             'role_id'     => $roleOwner->id,
         ]);
+
+        $members->each(function($member) use ($project, $roleMember){
+            $this->assertDatabaseHas('collaborators', [
+                'user_id'     => $member->id,
+                'entity_id'   => $project->id,
+                'entity_type' => 'project',
+                'is_owner'    => false,
+                'is_valid'    => false,
+                'role_id'     => $roleMember->id,
+            ]);
+        });
+    }
+
+    /** @test */
+    public function a_project_will_have_valid_members_and_and_owner_collaborator()
+    {
+        // Given
+        Bus::fake(CollaboratorAddedToProject::class);
+
+        /** @var \App\Models\User $owner */
+        $owner = factory(User::class)->create();
+        $this->signIn($owner);
+
+        /** @var \Illuminate\Database\Eloquent\Collection $members */
+        $members = factory(User::class, 10)->create();
+
+        /** @var \App\Models\Translations\Project $project */
+        $project = factory(Project::class)->create();
+
+        /** @var \App\Models\Role $roleOwner */
+        $roleOwner = Role::where('alias', Project::PROJECT_OWNER_ROLE_ALIAS)->first();
+
+        /** @var \App\Models\Role $roleMember */
+        $roleMember = Role::where('alias', Project::PROJECT_DEFAULT_ROLE_ALIAS)->first();
+
+        // When
+        $project->setOwner($owner);
+        $members->each(function ($member) use ($project) {
+            $project->setMember($member, Project::PROJECT_DEFAULT_ROLE_ALIAS);
+            $project->validateMember($member);
+        });
+
+        // Then
         $this->assertDatabaseHas('collaborators', [
-            'user_id'     => $member->id,
+            'user_id'     => $owner->id,
             'entity_id'   => $project->id,
             'entity_type' => 'project',
-            'is_owner'    => false,
-            'role_id'     => $roleMember->id,
+            'is_owner'    => true,
+            'is_valid'    => true,
+            'role_id'     => $roleOwner->id,
         ]);
+
+        $members->each(function($member) use ($project, $roleMember){
+            $this->assertDatabaseHas('collaborators', [
+                'user_id'     => $member->id,
+                'entity_id'   => $project->id,
+                'entity_type' => 'project',
+                'is_owner'    => false,
+                'is_valid'    => true,
+                'role_id'     => $roleMember->id,
+            ]);
+        });
     }
 
     /** @test */
@@ -64,7 +126,7 @@ class ProjectModelTest extends TestCase
     {
         // Given
         /** @var SubscriptionPlan | null $subscriptionPlan */
-        $subscriptionPlan = SubscriptionPlan::findByAliasOrFail('professional');
+        $subscriptionPlan = SubscriptionPlan::findByAliasOrFail('professional-month-eur');
 
         /** @var \App\Models\User $user */
         $user = $this->user('registered-user');

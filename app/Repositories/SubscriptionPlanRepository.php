@@ -2,8 +2,12 @@
 
 namespace App\Repositories;
 
+use App\Events\SubscriptionPlan\SubscriptionPlanWasUpdated;
+use App\Exceptions\SubscriptionPlanDeleteException;
+use App\Models\Currency;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\Subscriptions\SubscriptionPlanOptionValue;
+use App\Models\Subscriptions\SubscriptionProduct;
 use Illuminate\Database\Connection;
 
 class SubscriptionPlanRepository extends CoreRepository
@@ -37,17 +41,25 @@ class SubscriptionPlanRepository extends CoreRepository
     /**
      * Creates new model.
      *
-     * @param array $attributes
+     * @param \App\Models\Subscriptions\SubscriptionProduct $product
+     * @param \App\Models\Currency                          $currency
+     * @param array                                         $attributes
      *
      * @throws \Throwable
      *
      * @return mixed
      */
-    public function createSubscriptionPlan(array $attributes)
+    public function createSubscriptionPlan(SubscriptionProduct $product, Currency $currency, array $attributes)
     {
-        return $this->dbConnection->transaction(function () use ($attributes) {
+        return $this->dbConnection->transaction(function () use ($product, $currency, $attributes) {
             /** @var \App\Models\Subscriptions\SubscriptionPlan $entity */
             $entity = $this->create($attributes);
+
+            $entity->currency()->associate($currency);
+
+            $entity->product()->associate($product);
+
+            $entity->save();
 
             if (isset($attributes['options'])) {
                 foreach ($attributes['options'] as $item) {
@@ -94,7 +106,29 @@ class SubscriptionPlanRepository extends CoreRepository
                 }
             }
 
-            return $entity->fresh();
+            event(new SubscriptionPlanWasUpdated($entity->fresh()));
+
+            return $entity;
+        });
+    }
+
+    /**
+     * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
+     *
+     * @throws \Throwable
+     * @throws \App\Exceptions\SubscriptionPlanDeleteException
+     *
+     * @return mixed
+     */
+    public function deleteSubscriptionPlan(SubscriptionPlan $subscriptionPlan)
+    {
+        if ((bool) $subscriptionPlan->activeSubscriptions()->count()) {
+            throw new SubscriptionPlanDeleteException(trans('Cannot delete active subscription.'));
+        }
+
+        return $this->dbConnection->transaction(function () use ($subscriptionPlan) {
+            /* @var SubscriptionPlan $entity */
+            return $this->delete($subscriptionPlan);
         });
     }
 }

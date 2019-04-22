@@ -2,19 +2,23 @@
 
 namespace App\Models\Subscriptions;
 
+use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
+use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
 use App\Models\BaseEntity;
+use App\Models\Currency;
 use App\Models\Traits\HasAlias;
 use App\Models\Traits\HasUuid;
+use App\Models\Traits\OptionQuota;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SubscriptionPlan extends BaseEntity
 {
     use HasUuid,
-        HasAlias;
+        HasAlias,
+        OptionQuota;
 
-    const ITEM_TOKEN_LENGTH         = 50;
-    const DEFAULT_SUBSCRIPTION_NAME = 'JARGON';
-    const DEFAULT_SUBSCRIPTION_PLAN = 'freemium';
+    const DEFAULT_SUBSCRIPTION_PLAN  = 'freemium-month-eur';
+    const STANDARD_STRIPE_USAGE_TYPE = 'licensed';
 
     protected $dates = [
         'created_at',
@@ -22,13 +26,23 @@ class SubscriptionPlan extends BaseEntity
     ];
 
     protected $fillable = [
-        'title',
-        'description',
         'alias',
-        'level',
-        'quantity',
-        'rank',
-        'status',
+        'sort_order',
+        'amount',
+        'interval',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $dispatchesEvents = [
+        'created' => SubscriptionPlanWasCreated::class,
+        'deleted' => SubscriptionPlanWasDeleted::class,
     ];
 
     /** {@inheritdoc} */
@@ -42,11 +56,27 @@ class SubscriptionPlan extends BaseEntity
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product()
+    {
+        return $this->belongsTo(SubscriptionProduct::class, 'subscription_product_id');
+    }
+
+    /**
      * @return HasMany
      */
     public function activeSubscriptions()
     {
         return $this->hasMany(ActiveSubscription::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
     }
 
     /**

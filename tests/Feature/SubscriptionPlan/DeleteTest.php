@@ -3,12 +3,14 @@
 namespace Tests\Feature\SubscriptionPlan;
 
 
+use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\Subscriptions\SubscriptionPlanOptionValue;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
@@ -84,6 +86,8 @@ class DeleteTest extends TestCase
     public function a_200_will_be_returned_if_the_user_is_a_staff_member()
     {
         // Given
+        Event::fake(SubscriptionPlanWasDeleted::class);
+
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
 
@@ -111,5 +115,7 @@ class DeleteTest extends TestCase
         $this->assertDatabaseMissing('subscription_plan_option_values', [
             'subscription_plan_id' => $subscriptionPlan->id,
         ]);
+
+        Event::assertDispatched(SubscriptionPlanWasDeleted::class);
     }
 }

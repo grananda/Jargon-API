@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Subscription;
 
+use App\Exceptions\SubscriptionPlanDeleteException;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\SubscriptionPlan\DeleteSubscriptionPlanRequest;
 use App\Http\Requests\SubscriptionPlan\IndexSubscriptionPlanRequest;
 use App\Http\Requests\SubscriptionPlan\ShowSubscriptionPlanRequest;
 use App\Http\Requests\SubscriptionPlan\StoreSubscriptionPlanRequest;
 use App\Http\Requests\SubscriptionPlan\UpdateSubscriptionPlanRequest;
-use App\Http\Resources\Subscriptions\SubscriptionPlan as SubscriptionPlanResource;
-use App\Http\Resources\Subscriptions\SubscriptionPlanCollection;
+use App\Http\Resources\SubscriptionPlan\SubscriptionPlan as SubscriptionPlanResource;
+use App\Http\Resources\SubscriptionPlan\SubscriptionPlanCollection;
 use App\Repositories\SubscriptionPlanRepository;
 use Exception;
 
@@ -42,9 +43,9 @@ class SubscriptionPlanController extends ApiController
     public function index(IndexSubscriptionPlanRequest $request)
     {
         try {
-            $organizations = $this->subscriptionPlanRepository->findAllBy(['status' => true]);
+            $plans = $this->subscriptionPlanRepository->findAllBy(['is_active' => true]);
 
-            return $this->responseOk(new SubscriptionPlanCollection($organizations));
+            return $this->responseOk(new SubscriptionPlanCollection($plans));
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
         }
@@ -62,7 +63,7 @@ class SubscriptionPlanController extends ApiController
     public function store(StoreSubscriptionPlanRequest $request)
     {
         try {
-            $subscriptionPlan = $this->subscriptionPlanRepository->createSubscriptionPlan($request->validated());
+            $subscriptionPlan = $this->subscriptionPlanRepository->createSubscriptionPlan($request->product, $request->currency, $request->validated());
 
             return $this->responseCreated(new SubscriptionPlanResource($subscriptionPlan));
         } catch (Exception $e) {
@@ -118,9 +119,11 @@ class SubscriptionPlanController extends ApiController
     public function destroy(DeleteSubscriptionPlanRequest $request)
     {
         try {
-            $this->subscriptionPlanRepository->delete($request->subscriptionPlan);
+            $this->subscriptionPlanRepository->deleteSubscriptionplan($request->subscriptionPlan);
 
             return $this->responseNoContent();
+        } catch (SubscriptionPlanDeleteException $subscriptionPlanDeleteException) {
+            return $this->responseInternalError($subscriptionPlanDeleteException->getMessage());
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
         }

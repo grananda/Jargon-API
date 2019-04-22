@@ -30,9 +30,13 @@ trait InvitationTrait
      * Validate user invitation.
      *
      * @param \Illuminate\Database\Eloquent\Model $entity
+     * @param string                              $token
      */
-    public function validateInvitation(Model $entity)
+    public function validateInvitation(Model $entity, string $token)
     {
-        $entity->validateMember($entity->collaborators()->first());
+        /** @var \App\Models\User $collaborator */
+        $collaborator = $entity->nonActiveMembers()->where('validation_token', $token)->first();
+
+        $entity->validateMember($collaborator);
     }
 }

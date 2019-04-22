@@ -2,8 +2,8 @@
 
 namespace App\Policies\Traits;
 
+use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 
 trait ActiveSubscriptionRestrictionsTrait
 {
@@ -16,15 +16,13 @@ trait ActiveSubscriptionRestrictionsTrait
      */
     public function getCurrentSubscriptionCollaborationQuota(User $user)
     {
+        /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         if ($activeSubscription = $user->activeSubscription) {
-            $subscriptionCollaboratorQuota = $activeSubscription->options()
-                ->where('option_key', 'collaborator_count')
-                ->first()
-                ->option_value;
+            $subscriptionCollaboratorQuota = $activeSubscription->getAllowedCollaborators();
 
-            $subscriptionCollaboratorQuota -= $this->calculateCurrentOrganizationQuota($user->organizations);
-            $subscriptionCollaboratorQuota -= $this->calculateCurrentTeamQuota($user->teams);
-            $subscriptionCollaboratorQuota -= $this->calculateCurrentProjectQuota($user->projects);
+            $subscriptionCollaboratorQuota -= $user->getOrganizationCollaboratorCount();
+            $subscriptionCollaboratorQuota -= $user->getTeamCollaboratorCount();
+            $subscriptionCollaboratorQuota -= $user->getProjectCollaboratorCount();
 
             return $subscriptionCollaboratorQuota;
         }
@@ -41,23 +39,17 @@ trait ActiveSubscriptionRestrictionsTrait
      */
     public function getCurrentSubscriptionOrganizationQuota(User $user)
     {
+        /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         if ($activeSubscription = $user->activeSubscription) {
-            $subscriptionProjectQuota = $activeSubscription->options()
-                ->where('option_key', 'organization_count')
-                ->first()
-                ->option_value;
-
-            $currentOrganizationCount = $user->organizations->filter(function ($org) use ($user) {
-                /* @var $org \App\Models\Organization */
-                return $org->isOwner($user) == true;
-            })->count();
+            $subscriptionProjectQuota = $activeSubscription->getAllowedOrganizations();
+            $currentOrganizationCount = $user->getActiveOrganizations();
 
             $subscriptionProjectQuota -= $currentOrganizationCount;
 
             return $subscriptionProjectQuota;
         }
 
-        return 0;
+        return false;
     }
 
     /**
@@ -69,16 +61,10 @@ trait ActiveSubscriptionRestrictionsTrait
      */
     public function getCurrentSubscriptionTeamQuota(User $user)
     {
+        /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         if ($activeSubscription = $user->activeSubscription) {
-            $subscriptionTeamQuota = $activeSubscription->options()
-                ->where('option_key', 'team_count')
-                ->first()
-                ->option_value;
-
-            $currentTeamCount = $user->teams->filter(function ($team) use ($user) {
-                /* @var $team \App\Models\Team */
-                return $team->isOwner($user) == true;
-            })->count();
+            $subscriptionTeamQuota = $activeSubscription->getAllowedTeams();
+            $currentTeamCount      = $user->getActiveTeams();
 
             $subscriptionTeamQuota -= $currentTeamCount;
 
@@ -97,13 +83,12 @@ trait ActiveSubscriptionRestrictionsTrait
      */
     public function getCurrentSubscriptionProjectQuota(User $user)
     {
+        /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         if ($activeSubscription = $user->activeSubscription) {
-            $subscriptionProjectQuota = $activeSubscription->options()
-                ->where('option_key', 'project_count')
-                ->first()
-                ->option_value;
+            $subscriptionProjectQuota = $activeSubscription->getAllowedProjects();
+            $currentProjectQuota      = $user->getActiveProjects();
 
-            $subscriptionProjectQuota -= $user->projects()->count();
+            $subscriptionProjectQuota -= $currentProjectQuota;
 
             return $subscriptionProjectQuota;
         }
@@ -120,63 +105,32 @@ trait ActiveSubscriptionRestrictionsTrait
      */
     public function hasActiveSubscription(User $user)
     {
-        return (bool) $user->activeSubscription;
+        return (bool) $user->activeSubscription && $user->activeSubscription->isSubscriptionActive();
     }
 
     /**
-     * Calculates current user organization collaborators.
+     * Determines if a subscription can be upgraded.
      *
-     * @param \Illuminate\Database\Eloquent\Collection $organizations
+     * @param \App\Models\User                           $user
+     * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
      *
-     * @return int
+     * @return bool
      */
-    private function calculateCurrentOrganizationQuota(Collection $organizations)
+    public function canUpgrade(User $user, SubscriptionPlan $subscriptionPlan)
     {
-        $counter = 0;
-
-        /** @var \App\Models\Organization $organization */
-        foreach ($organizations as $organization) {
-            $counter += $organization->members()->count();
-        }
-
-        return $counter;
+        return $user->activeSubscription->subscriptionPlan->product->rank < $subscriptionPlan->product->rank;
     }
 
     /**
-     * Calculates current user team collaborators.
+     * Determines if a subscription can be donwgraded.
      *
-     * @param \Illuminate\Database\Eloquent\Collection $teams
+     * @param \App\Models\User                           $user
+     * @param \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan
      *
-     * @return int
+     * @return bool
      */
-    private function calculateCurrentTeamQuota(Collection $teams)
+    public function canDowngrade(User $user, SubscriptionPlan $subscriptionPlan)
     {
-        $counter = 0;
-
-        /** @var \App\Models\Team $team */
-        foreach ($teams as $team) {
-            $counter -= $team->members()->count();
-        }
-
-        return $counter;
-    }
-
-    /**
-     * Calculates current user project collaborators.
-     *
-     * @param \Illuminate\Database\Eloquent\Collection $projects
-     *
-     * @return int
-     */
-    private function calculateCurrentProjectQuota(Collection $projects)
-    {
-        $counter = 0;
-
-        /** @var \App\Models\Translations\Project $project */
-        foreach ($projects as $project) {
-            $counter += $project->members()->count();
-        }
-
-        return $counter;
+        return $user->activeSubscription->subscriptionPlan->product->rank > $subscriptionPlan->product->rank;
     }
 }

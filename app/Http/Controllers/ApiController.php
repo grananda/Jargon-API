@@ -87,6 +87,16 @@ abstract class ApiController extends BaseController
      *
      * @return JsonResponse
      */
+    public function responseBadRequest($message = null)
+    {
+        return response()->json(compact('message'), HttpResponse::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @param $message
+     *
+     * @return JsonResponse
+     */
     public function responseValidationError($message = null)
     {
         return response()->json(compact('message'), HttpResponse::HTTP_UNPROCESSABLE_ENTITY);
