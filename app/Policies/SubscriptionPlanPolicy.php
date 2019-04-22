@@ -4,9 +4,12 @@ namespace App\Policies;
 
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\User;
+use App\Policies\Traits\ActiveSubscriptionRestrictionsTrait;
 
 class SubscriptionPlanPolicy extends AbstractPolicy
 {
+    use ActiveSubscriptionRestrictionsTrait;
+
     /**
      * @param User $user
      *
@@ -57,7 +60,8 @@ class SubscriptionPlanPolicy extends AbstractPolicy
      */
     public function upgrade(User $user, SubscriptionPlan $subscriptionPlan)
     {
-        return $user->activeSubscription->subscriptionPlan->product->rank < $subscriptionPlan->product->rank;
+        return $this->hasActiveSubscription($user)
+            && $this->canUpgrade($user, $subscriptionPlan);
     }
 
     /**
@@ -68,7 +72,7 @@ class SubscriptionPlanPolicy extends AbstractPolicy
      */
     public function downgrade(User $user, SubscriptionPlan $subscriptionPlan)
     {
-        return $user->activeSubscription->subscriptionPlan->product->rank > $subscriptionPlan->product->rank;
-        ;
+        return $this->hasActiveSubscription($user)
+            && $this->canDowngrade($user, $subscriptionPlan);
     }
 }

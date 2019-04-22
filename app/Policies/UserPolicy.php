@@ -47,4 +47,24 @@ class UserPolicy extends AbstractPolicy
     {
         return $authUser->uuid === $user->uuid;
     }
+
+    /**
+     * @param \App\Models\User $user
+     *
+     * @return bool
+     */
+    public function registerCustomer(User $user)
+    {
+        return ! $user->isStaffMember() && ! $user->isStripeCustomer();
+    }
+
+    /**
+     * @param \App\Models\User $user
+     *
+     * @return bool
+     */
+    public function deleteCustomer(User $user)
+    {
+        return ! $user->isStaffMember() && $user->isStripeCustomer();
+    }
 }

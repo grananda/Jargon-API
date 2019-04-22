@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\ActiveSubscription\ActiveSubscriptionWasActivated;
+use App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated;
 use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Events\Option\OptionWasCreated;
@@ -17,10 +19,13 @@ use App\Events\User\UserWasActivated;
 use App\Events\User\UserWasDeactivated;
 use App\Events\User\UserWasDeleted;
 use App\Listeners\AddOptionUser;
+use App\Listeners\CancelStripeSubscription;
 use App\Listeners\DeactivateActiveSubscription;
 use App\Listeners\DeleteOptionUser;
+use App\Listeners\DeleteStripeCustomer;
 use App\Listeners\InitializeActiveSubscription;
 use App\Listeners\InitializeUserOptions;
+use App\Listeners\ReactivateStripeSubscription;
 use App\Listeners\SendProjectCollaboratorNotification;
 use App\Listeners\SendTeamCollaboratorNotification;
 use App\Listeners\SendUserActivationNotification;
@@ -55,6 +60,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserWasDeleted::class => [
             SendUserDeletionNotification::class,
+            DeleteStripeCustomer::class,
         ],
 
         // Collaborator events
@@ -93,6 +99,14 @@ class EventServiceProvider extends ServiceProvider
         ],
         SubscriptionPlanWasUpdated::class => [
             UpdateStripeSubscriptionPlan::class,
+        ],
+
+        // ActiveSubscription
+        ActiveSubscriptionWasActivated::class => [
+            ReactivateStripeSubscription::class,
+        ],
+        ActiveSubscriptionWasDeactivated::class => [
+            CancelStripeSubscription::class,
         ],
     ];
 }

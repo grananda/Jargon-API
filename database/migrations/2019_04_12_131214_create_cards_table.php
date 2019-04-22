@@ -16,6 +16,7 @@ class CreateCardsTable extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('stripe_id');
+            $table->uuid('uuid')->unique();
             $table->string('brand');
             $table->string('country');
             $table->unsignedBigInteger('user_id')->nullable();

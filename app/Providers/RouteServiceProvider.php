@@ -30,6 +30,8 @@ class RouteServiceProvider extends ServiceProvider
         'subscriptionOptions',
         'options',
         'activeSubscriptions',
+        'customers',
+        'cards',
     ];
 
     /**

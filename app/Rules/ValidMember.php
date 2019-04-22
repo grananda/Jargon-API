@@ -18,7 +18,7 @@ class ValidMember implements Rule
      */
     public function passes($attribute, $value)
     {
-        return (bool) User::findByUuid($value[0]);
+        return (bool) User::findByUuid($value['id']);
     }
 
     /**

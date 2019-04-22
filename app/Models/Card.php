@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasUuid;
+
 class Card extends BaseEntity
 {
+    use HasUuid;
+
     protected $dates = [
         'created_at',
         'updated_at',

@@ -4,10 +4,12 @@
 namespace Tests\Unit\Listeners\User;
 
 
+use App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated;
 use App\Events\User\UserWasDeactivated;
-use App\Listeners\DeactivateActiveSubscription as DeactivateActiveSubscriptionAlias;
+use App\Listeners\DeactivateActiveSubscription;
 use App\Models\Subscriptions\SubscriptionPlan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
@@ -20,6 +22,8 @@ class DeactivateActiveSubscriptionTest extends TestCase
     public function user_active_subscription_is_deactivated()
     {
         // Given
+        Event::fake(ActiveSubscriptionWasDeactivated::class);
+
         /** @var \App\Models\User $user */
         $user = $this->user();
 
@@ -31,7 +35,7 @@ class DeactivateActiveSubscriptionTest extends TestCase
 
 
         /** @var \App\Listeners\DeactivateActiveSubscription $listener */
-        $listener = new DeactivateActiveSubscriptionAlias();
+        $listener = new DeactivateActiveSubscription();
 
         // When
         $listener->handle($event);
@@ -39,6 +43,8 @@ class DeactivateActiveSubscriptionTest extends TestCase
         // Then
         $this->assertFalse($user->fresh()->activeSubscription->subscription_active);
         $this->assertFalse($subscription->fresh()->subscription_active);
+
+        Event::assertDispatched(ActiveSubscriptionWasDeactivated::class);
 
     }
 }

@@ -47,7 +47,11 @@ class StoreTest extends TestCase
             'name'          => $this->faker->word,
             'description'   => $this->faker->text,
             'collaborators' => [
-                [$collaborator->uuid, Team::TEAM_DEFAULT_ROLE_ALIAS],
+                [
+                    'id'    => $collaborator->uuid,
+                    'role'  => Team::TEAM_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
             ],
         ];
 
@@ -82,7 +86,11 @@ class StoreTest extends TestCase
             'description'   => $this->faker->text,
             'teams'         => [],
             'collaborators' => [
-                [$collaborator->uuid, Team::TEAM_DEFAULT_ROLE_ALIAS],
+                [
+                    'id'    => $collaborator->uuid,
+                    'role'  => Team::TEAM_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
             ],
         ];
 
@@ -104,8 +112,14 @@ class StoreTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->user();
 
-        /** @var \App\Models\User $collaborator */
-        $collaborator = factory(User::class)->create();
+        /** @var \App\Models\User $collaborator1 */
+        $collaborator1 = factory(User::class)->create();
+
+        /** @var \App\Models\User $collaborator2 */
+        $collaborator2 = factory(User::class)->create();
+
+        /** @var \App\Models\User $collaborator3 */
+        $collaborator3 = factory(User::class)->create();
 
         $this->createActiveSubscription($user, 'professional-month-eur');
 
@@ -114,7 +128,21 @@ class StoreTest extends TestCase
             'description'   => $this->faker->text,
             'teams'         => [],
             'collaborators' => [
-                [$collaborator->uuid, Team::TEAM_DEFAULT_ROLE_ALIAS],
+                [
+                    'id'    => $collaborator1->uuid,
+                    'role'  => Team::TEAM_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
+                [
+                    'id'    => $collaborator2->uuid,
+                    'role'  => Team::TEAM_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
+                [
+                    'id'    => $collaborator3->uuid,
+                    'role'  => Team::TEAM_DEFAULT_ROLE_ALIAS,
+                    'owner' => false,
+                ],
             ],
         ];
 
@@ -135,7 +163,20 @@ class StoreTest extends TestCase
         $this->assertDatabaseHas('collaborators', [
             'entity_type' => 'team',
             'is_owner'    => 0,
-            'user_id'     => $collaborator->id,
+            'is_valid'    => 0,
+            'user_id'     => $collaborator1->id,
+        ]);
+        $this->assertDatabaseHas('collaborators', [
+            'entity_type' => 'team',
+            'is_owner'    => 0,
+            'is_valid'    => 0,
+            'user_id'     => $collaborator2->id,
+        ]);
+        $this->assertDatabaseHas('collaborators', [
+            'entity_type' => 'team',
+            'is_owner'    => 0,
+            'is_valid'    => 0,
+            'user_id'     => $collaborator3->id,
         ]);
 
         Event::assertDispatched(CollaboratorAddedToTeam::class);

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Card;
 use App\Models\Options\Option;
 use App\Models\Organization;
 use App\Models\Subscriptions\SubscriptionOption;
@@ -10,6 +11,7 @@ use App\Models\Subscriptions\SubscriptionProduct;
 use App\Models\Team;
 use App\Models\Translations\Project;
 use App\Models\User;
+use App\Policies\CardPolicy;
 use App\Policies\OptionPolicy;
 use App\Policies\OrganizationPolicy;
 use App\Policies\ProjectPolicy;
@@ -37,6 +39,7 @@ class AuthServiceProvider extends ServiceProvider
         SubscriptionProduct::class => SubscriptionProductPolicy::class,
         SubscriptionOption::class  => SubscriptionOptionPolicy::class,
         Option::class              => OptionPolicy::class,
+        Card::class                => CardPolicy::class,
     ];
 
     /**

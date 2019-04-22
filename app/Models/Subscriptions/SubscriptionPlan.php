@@ -8,12 +8,14 @@ use App\Models\BaseEntity;
 use App\Models\Currency;
 use App\Models\Traits\HasAlias;
 use App\Models\Traits\HasUuid;
+use App\Models\Traits\OptionQuota;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SubscriptionPlan extends BaseEntity
 {
     use HasUuid,
-        HasAlias;
+        HasAlias,
+        OptionQuota;
 
     const DEFAULT_SUBSCRIPTION_PLAN  = 'freemium-month-eur';
     const STANDARD_STRIPE_USAGE_TYPE = 'licensed';

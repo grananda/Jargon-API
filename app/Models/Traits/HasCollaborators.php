@@ -4,7 +4,6 @@ namespace App\Models\Traits;
 
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 trait HasCollaborators
@@ -18,6 +17,24 @@ trait HasCollaborators
     {
         return $this->morphToMany(User::class, 'entity', 'collaborators')
             ->where('is_valid', true)
+            ->withPivot([
+                'is_owner',
+                'is_valid',
+                'role_id',
+                'validation_token',
+            ])
+            ->withTimestamps()
+        ;
+    }
+
+    /**
+     * Returns entity users.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function users()
+    {
+        return $this->morphToMany(User::class, 'entity', 'collaborators')
             ->withPivot([
                 'is_owner',
                 'is_valid',
@@ -62,7 +79,7 @@ trait HasCollaborators
                 'validation_token',
             ])
             ->withTimestamps()
-            ;
+        ;
     }
 
     /**
@@ -114,7 +131,7 @@ trait HasCollaborators
      */
     public function validateMember(User $user)
     {
-        $this->collaborators()->updateExistingPivot($user->id, ['is_valid' => true]);
+        $this->nonActiveMembers()->updateExistingPivot($user->id, ['is_valid' => true]);
     }
 
     /**
@@ -125,14 +142,21 @@ trait HasCollaborators
      */
     protected function addMember(User $user, string $role)
     {
-        $this->setCollaborators([
+        $invitationToken = Str::random(self::ITEM_TOKEN_LENGTH);
+
+        $this->users()->syncWithoutDetaching([
                 $user->id => [
-                    'is_valid' => false,
-                    'is_owner' => false,
-                    'role_id'  => Role::where('alias', $role)->first()->id,
+                    'is_valid'         => false,
+                    'validation_token' => $invitationToken,
+                    'is_owner'         => false,
+                    'role_id'          => Role::where('alias', $role)->first()->id,
                 ],
             ]
         );
+
+        $this->load('users');
+
+        $this->createAddCollaboratorEvent($this, $user->fresh(), $invitationToken);
     }
 
     /**
@@ -143,7 +167,7 @@ trait HasCollaborators
      */
     protected function addOwner(User $user, string $role)
     {
-        $this->setCollaborators([
+        $this->users()->syncWithoutDetaching([
                 $user->id => [
                     'is_valid' => true,
                     'is_owner' => true,
@@ -151,6 +175,8 @@ trait HasCollaborators
                 ],
             ]
         );
+
+        $this->load('users');
     }
 
     /**
@@ -158,31 +184,42 @@ trait HasCollaborators
      *
      * @param array $collaborators
      */
-    private function setCollaborators(array $collaborators)
+    public function setCollaborators(array $collaborators)
     {
-        /** @var array $currentCollaborators */
-        $currentCollaborators = array_column($this->collaborators()->get()->toArray(), 'id');
+        /** @var \Illuminate\Support\Collection $members */
+        $members = collect($collaborators)->mapWithKeys(function ($item) {
+            /** @var \App\Models\User $user */
+            $user = $this->users()->where('uuid', $item['id'])->first() ?? User::findByUuidOrFail($item['id']);
 
-        foreach ($collaborators as $userId => $options) {
-            if (array_search($userId, $currentCollaborators) === false) {
-                $invitationToken = Str::random(self::ITEM_TOKEN_LENGTH);
+            /** @var \App\Models\Role $role */
+            $role = Role::where('alias', $item['role'])->first()->id;
 
-                Arr::set($collaborators, $userId.'.validation_token', $invitationToken);
-                Arr::set($collaborators, $userId.'.is_valid', $options['is_owner']);
+            /** @var string $invitationToken */
+            $invitationToken = $user->pivot->validation_token ?? Str::random(self::ITEM_TOKEN_LENGTH);
 
-                /** @var \App\Models\User $user */
-                $user = User::find($userId);
+            /** @var bool $isValid */
+            $isValid = $user->pivot->is_valid ?? false;
 
-                if (! $options['is_owner']) {
-                    $this->createAddCollaboratorEvent($this, $user, $invitationToken);
-                }
+            $collaborator = [
+                $user->id => [
+                    'is_valid'         => $item['owner'] ? $item['owner'] : $isValid,
+                    'is_owner'         => $item['owner'],
+                    'role_id'          => $role,
+                    'validation_token' => $invitationToken,
+                ],
+            ];
+
+            if (! $item['owner'] && ! isset($user->pivot->validation_token)) {
+                $this->createAddCollaboratorEvent($this, $user, $invitationToken);
             }
-        }
+
+            return $collaborator;
+        });
 
         $this->detachCollaborators();
-        $this->collaborators()->syncWithoutDetaching($collaborators);
+        $this->users()->syncWithoutDetaching($members);
 
-        $this->load('collaborators');
+        $this->load('users');
     }
 
     /**
@@ -190,9 +227,9 @@ trait HasCollaborators
      */
     private function detachCollaborators()
     {
-        foreach ($this->collaborators as $collaborator) {
+        foreach ($this->users as $collaborator) {
             if (! $collaborator->pivot->is_owner) {
-                $this->collaborators()->detach($collaborator->pivot->user_id);
+                $this->users()->detach($collaborator->pivot->user_id);
             }
         }
     }

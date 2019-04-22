@@ -14,13 +14,6 @@ class UpdateProjectInvitationRequest extends Request
     public $invitationToken;
 
     /**
-     * The Team to be invited to.
-     *
-     * @var \App\Models\Team
-     */
-    public $team;
-
-    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool

@@ -68,10 +68,18 @@ class UpdateTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->user();
 
+        /** @var \App\Models\User $validMember */
+        $validMember = $this->user();
+
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();
         $project->setOwner($owner);
+
+        $project->setMember($validMember, Team::TEAM_DEFAULT_ROLE_ALIAS);
+        $project->validateMember($validMember);
+
         $project->setMember($user, Team::TEAM_DEFAULT_ROLE_ALIAS);
+
 
         $token = $project->nonActiveMembers()->where('user_id', $user->id)->first()->pivot->validation_token;
 
@@ -80,5 +88,6 @@ class UpdateTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
+        $this->assertEquals($project->fresh()->collaborators()->count(), 3);
     }
 }

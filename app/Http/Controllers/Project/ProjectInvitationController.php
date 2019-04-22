@@ -37,7 +37,7 @@ class ProjectInvitationController extends ApiController
             /** @var \App\Models\Translations\Project $project */
             $project = $this->projectRepository->findOneByinvitationToken($request->invitationToken);
 
-            $this->projectRepository->validateInvitation($project);
+            $this->projectRepository->validateInvitation($project, $request->invitationToken);
 
             return $this->responseOk(true);
         } catch (ModelNotFoundException $modelNotFoundException) {

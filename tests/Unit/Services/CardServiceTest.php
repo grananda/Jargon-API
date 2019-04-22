@@ -4,6 +4,7 @@
 namespace Tests\Unit\Services;
 
 
+use App\Exceptions\StripeApiCallException;
 use App\Models\Card;
 use App\Repositories\CardRepository;
 use App\Repositories\Stripe\StripeCardRepository;
@@ -42,6 +43,30 @@ class CardServiceTest extends TestCase
 
         // Then
         $this->assertEquals($card->stripe_id, $response['id']);
+    }
+
+    /** @test */
+    public function adds_an_invalid_card_for_customer()
+    {
+        // Given
+        $this->expectException(StripeApiCallException::class);
+        $cardToken = 'tok_invalid';
+
+        /** @var \App\Models\User $user */
+        $user = $this->user();
+
+        /** @var \App\Repositories\CardRepository $cardRepository */
+        $cardRepository = resolve(CardRepository::class);
+
+        $stripeCardRepository = $this->createMock(StripeCardRepository::class);
+        $stripeCardRepository->method('create')
+            ->willThrowException(new StripeApiCallException());
+
+        /** @var CardService $cardService */
+        $cardService = new CardService($stripeCardRepository, $cardRepository);
+
+        // When
+        $cardService->registerCard($user, $cardToken);
     }
 
     /** @test */

@@ -3,12 +3,14 @@
 
 namespace Tests\Unit\Listeners\User;
 
+use App\Events\ActiveSubscription\ActiveSubscriptionWasActivated;
 use App\Events\User\UserWasActivated;
 use App\Listeners\InitializeActiveSubscription;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Repositories\ActiveSubscriptionRepository;
 use App\Repositories\SubscriptionPlanRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
@@ -53,11 +55,16 @@ class InitializeActiveSubscriptionTest extends TestCase
     public function active_subscription_is_activated_when_activating_a_user()
     {
         // Given
+        Event::fake(ActiveSubscriptionWasActivated::class);
+
         /** @var \App\Models\User $user */
         $user = $this->user();
 
         /** @var \App\Models\Subscriptions\SubscriptionPlan $subscription */
-        $subscription = $this->createActiveSubscription($user, SubscriptionPlan::DEFAULT_SUBSCRIPTION_PLAN, ['subscription_active' => false]);
+        $subscription = $this->createActiveSubscription($user, SubscriptionPlan::DEFAULT_SUBSCRIPTION_PLAN, [
+            'subscription_active' => false,
+            'stripe_id'           => null,
+        ]);
 
         /** @var \App\Events\User\UserWasActivated $event */
         $event = new UserWasActivated($user);
@@ -80,5 +87,7 @@ class InitializeActiveSubscriptionTest extends TestCase
         $this->assertEquals($user->activeSubscription->subscriptionPlan->id, $subscription->id);
         $this->assertTrue($user->activeSubscription->subscription_active);
         $this->assertEquals($user->activeSubscription->options()->count(), $subscription->options()->count());
+
+        Event::assertDispatched(ActiveSubscriptionWasActivated::class);
     }
 }

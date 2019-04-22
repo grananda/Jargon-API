@@ -333,4 +333,107 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return (bool) $this->cards->count();
     }
+
+    /**
+     * Returns total user active projects.
+     *
+     * @return int
+     */
+    public function getActiveProjects()
+    {
+        return $this->projects()->count();
+    }
+
+    /**
+     * Returns total user active teams as owner.
+     *
+     * @return mixed
+     */
+    public function getActiveTeams()
+    {
+        return $this->teams->filter(function ($team) {
+            /* @var $team \App\Models\Team */
+            return $team->isOwner($this) == true;
+        })->count();
+    }
+
+    /**
+     * Returns total user active organizations as owner.
+     *
+     * @return mixed
+     */
+    public function getActiveOrganizations()
+    {
+        return $this->organizations->filter(function ($org) {
+            /* @var $org \App\Models\Organization */
+            return $org->isOwner($this) == true;
+        })->count();
+    }
+
+    /**
+     * Returns total collaborators for user organizations.
+     *
+     * @return int
+     */
+    public function getOrganizationCollaboratorCount()
+    {
+        // TODO: Apply functional programming
+
+        $counter = 0;
+
+        /** @var \App\Models\Organization $organization */
+        foreach ($this->organizations as $organization) {
+            $counter += $organization->members()->count();
+        }
+
+        return $counter;
+    }
+
+    /**
+     * Returns total collaborators for user teams.
+     *
+     * @return int
+     */
+    public function getTeamCollaboratorCount()
+    {
+        // TODO: Apply functional programming
+
+        $counter = 0;
+
+        /** @var \App\Models\Team $team */
+        foreach ($this->teams as $team) {
+            $counter += $team->members()->count();
+        }
+
+        return $counter;
+    }
+
+    /**
+     * Returns total collaborators for user teams.
+     *
+     * @return int
+     */
+    public function getProjectCollaboratorCount()
+    {
+        // TODO: Apply functional programming
+
+        $counter = 0;
+
+        /** @var \App\Models\Translations\Project $project */
+        foreach ($this->projects as $project) {
+            $counter += $project->members()->count();
+        }
+
+        return $counter;
+    }
+
+    /**
+     * Get total collaborators related to user entitites.
+     *
+     * @return int
+     */
+    public function getActiveCollaborators()
+    {
+        return $this->getOrganizationCollaboratorCount() + $this->getTeamCollaboratorCount() + $this->getProjectCollaboratorCount();
+    }
 }
