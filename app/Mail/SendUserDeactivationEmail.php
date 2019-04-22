@@ -34,6 +34,8 @@ class SendUserDeactivationEmail extends Mailable
         $app     = env('APP_NAME');
         $subject = trans(':app Account Deactivated', ['app' => $app]);
 
+        // TODO: Complete email view
+
         return $this->view('emails.auth.userDeactivation')
             ->subject($subject)
             ->with([

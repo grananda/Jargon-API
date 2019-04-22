@@ -4,6 +4,8 @@
 namespace Tests\Unit\Services;
 
 
+use App\Events\ActiveSubscription\ActiveSubscriptionWasActivated;
+use App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated;
 use App\Exceptions\ActiveSubscriptionStatusException;
 use App\Exceptions\StripeCardTokenMissingException;
 use App\Exceptions\StripeMissingCardException;
@@ -16,6 +18,7 @@ use App\Repositories\Stripe\StripeCustomerRepository;
 use App\Repositories\Stripe\StripeSubscriptionRepository;
 use App\Services\SubscriptionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
@@ -232,6 +235,8 @@ class SubscriptionServiceTest extends TestCase
     public function a_customer_cancels_a_subscription()
     {
         // Given
+        Event::fake(ActiveSubscriptionWasDeactivated::class);
+
         /** @var \App\Models\User $user */
         $user = $this->user();
 
@@ -251,6 +256,7 @@ class SubscriptionServiceTest extends TestCase
 
         // Then
         $this->assertFalse($activeSubscription->fresh()->isSubscriptionActive());
+        Event::assertDispatched(ActiveSubscriptionWasDeactivated::class);
     }
 
     /** @test */
@@ -281,6 +287,8 @@ class SubscriptionServiceTest extends TestCase
     public function a_customer_reactivates_a_subscription()
     {
         // Given
+        Event::fake(ActiveSubscriptionWasActivated::class);
+
         /** @var \App\Models\User $user */
         $user = $this->user();
 
@@ -301,5 +309,7 @@ class SubscriptionServiceTest extends TestCase
 
         // Then
         $this->assertTrue($activeSubscription->fresh()->isSubscriptionActive());
+        Event::assertDispatched(ActiveSubscriptionWasActivated::class);
+
     }
 }

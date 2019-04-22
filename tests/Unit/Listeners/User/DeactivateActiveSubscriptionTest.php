@@ -45,6 +45,5 @@ class DeactivateActiveSubscriptionTest extends TestCase
         $this->assertFalse($subscription->fresh()->subscription_active);
 
         Event::assertDispatched(ActiveSubscriptionWasDeactivated::class);
-
     }
 }

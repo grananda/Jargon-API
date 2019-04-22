@@ -6,10 +6,12 @@ namespace Tests\Unit\Listeners\ActiveSubscriptions;
 
 use App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated;
 use App\Listeners\CancelStripeSubscription;
+use App\Mail\SendSubscriptionDeactivationEmail;
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\User;
 use App\Repositories\Stripe\StripeSubscriptionRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
@@ -22,13 +24,15 @@ class CancelStripeSubscriptionTest extends TestCase
     public function a_stripe_subscription_is_canceled()
     {
         // Given
+        Mail::fake();
+
         /** @var \App\Models\User $user */
         $user = $this->user();
 
         /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         $activeSubscription = $this->createActiveSubscription($user, 'professional-month-eur');
 
-        $this->mock(StripeSubscriptionRepository::class, function ($mock){
+        $this->mock(StripeSubscriptionRepository::class, function ($mock) {
             /** @var \Mockery\Mock $mock */
             $mock->shouldReceive('cancel')
                 ->withArgs([User::class, ActiveSubscription::class])
@@ -44,6 +48,10 @@ class CancelStripeSubscriptionTest extends TestCase
 
         // When
         $listener->handle($event);
+
+        // Then
+        Mail::assertSent(SendSubscriptionDeactivationEmail::class);
+
     }
 
     /** @test */

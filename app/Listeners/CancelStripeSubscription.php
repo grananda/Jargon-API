@@ -3,9 +3,11 @@
 namespace App\Listeners;
 
 use App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated;
+use App\Mail\SendSubscriptionDeactivationEmail;
 use App\Repositories\Stripe\StripeSubscriptionRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Mail;
 
 class CancelStripeSubscription implements ShouldQueue
 {
@@ -39,6 +41,10 @@ class CancelStripeSubscription implements ShouldQueue
     {
         if (isset($event->activeSubscription->stripe_id)) {
             $this->stripeSubscriptionRepository->cancel($event->activeSubscription->user, $event->activeSubscription);
+
+            Mail::to($event->activeSubscription->user)
+                ->send(new SendSubscriptionDeactivationEmail($event->activeSubscription))
+            ;
         }
     }
 }

@@ -32,6 +32,7 @@ class RouteServiceProvider extends ServiceProvider
         'activeSubscriptions',
         'customers',
         'cards',
+        'webhooks',
     ];
 
     /**

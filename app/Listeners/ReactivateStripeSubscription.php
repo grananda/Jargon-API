@@ -3,9 +3,11 @@
 namespace App\Listeners;
 
 use App\Events\ActiveSubscription\ActiveSubscriptionWasActivated;
+use App\Mail\SendSubscriptionActivationEmail;
 use App\Repositories\Stripe\StripeSubscriptionRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Mail;
 
 class ReactivateStripeSubscription implements ShouldQueue
 {
@@ -39,6 +41,10 @@ class ReactivateStripeSubscription implements ShouldQueue
     {
         if (isset($event->activeSubscription->stripe_id)) {
             $this->stripeSubscriptionRepository->reactivate($event->activeSubscription->user, $event->activeSubscription);
+
+            Mail::to($event->activeSubscription->user)
+                ->send(new SendSubscriptionActivationEmail($event->activeSubscription))
+            ;
         }
     }
 }
