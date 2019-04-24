@@ -225,6 +225,18 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * @param array $roles
+     *
+     * @return bool
+     */
+    public function hasRoles(array $roles)
+    {
+        $roles = array_column($this->roles->toArray(), 'alias');
+
+        return (bool) array_intersect($roles, $roles);
+    }
+
+    /**
      * @param string $v
      */
     public function setPassword($v)

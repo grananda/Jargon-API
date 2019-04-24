@@ -125,6 +125,18 @@ trait HasCollaborators
     }
 
     /**
+     * Checks is a collaborator is an active entity member.
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    public function isCollaborator(User $user)
+    {
+        return (bool) $this->collaborators()->where('user_id', $user->id)->first();
+    }
+
+    /**
      * Validate collaborator association to entity.
      *
      * @param \App\Models\User $user
