@@ -5,7 +5,6 @@ namespace Tests\Feature\Node;
 use App\Models\Organization;
 use App\Models\Translations\Node;
 use App\Models\Translations\Project;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -30,7 +29,7 @@ class StoreTest extends TestCase
     }
 
     /** @test */
-    public function a_403_will_be_returned_when_storing_a_node_from_an_non_member_project()
+    public function a_403_will_be_returned_if_the_user_has_no_node_access()
     {
         // Given
         /** @var \App\Models\User $user1 */
@@ -46,6 +45,42 @@ class StoreTest extends TestCase
         $project = factory(Project::class)->create();
         $project->setOrganization($organization);
         $project->setOwner($user1);
+
+        /** @var \App\Models\Translations\Node $parent */
+        $parent = Node::create([
+            'key' => $this->faker->word,
+        ]);
+
+        $data = [
+            'project' => $project->uuid,
+            'parent'  => $parent->uuid,
+        ];
+
+        // When
+        $response = $this->signIn($user2)->post(route('nodes.store'), $data);
+
+        // Assert
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    /** @test */
+    public function a_403_will_be_returned_if_the_user_has_no_role_node_access()
+    {
+        // Given
+        /** @var \App\Models\User $user1 */
+        $user1 = $this->user();
+
+        /** @var \App\Models\User $user2 */
+        $user2 = $this->user();
+
+        /** @var \App\Models\Organization $organization */
+        $organization = factory(Organization::class)->create();
+
+        /** @var \App\Models\Translations\Project $project */
+        $project = factory(Project::class)->create();
+        $project->setOrganization($organization);
+        $project->setOwner($user1);
+        $project->setMember($user2, Project::PROJECT_TRANSLATOR_ROLE_ALIAS);
 
         /** @var \App\Models\Translations\Node $parent */
         $parent = Node::create([

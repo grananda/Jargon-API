@@ -61,7 +61,23 @@ class NodeService
 
         $this->nodeSortingService->normalizeChildNodesSortIndex($parentNode);
 
-        return $node->refresh();
+        return $node->fresh();
+    }
+
+    /**
+     * @param \App\Models\Translations\Node $node
+     * @param array                         $attributes
+     *
+     * @throws \Throwable
+     *
+     * @return \App\Models\Translations\Node
+     */
+    public function updateNode(Node $node, array $attributes): Node
+    {
+        /** @var \App\Models\Translations\Node $node */
+        $node = $this->nodeRepository->update($node, $attributes);
+
+        return $this->rebuildNodeBranchRoute($node);
     }
 
     /**
@@ -85,9 +101,36 @@ class NodeService
 
         if ($rootNode) {
             $rootNode->load('children');
+
             $this->nodeSortingService->normalizeChildNodesSortIndex($rootNode);
         } else {
             $this->nodeSortingService->normalizeChildRootNodesSortIndex($project);
         }
+    }
+
+    /**
+     * Recreates a node branch route.
+     *
+     * @param \App\Models\Translations\Node $node
+     *
+     * @throws \Throwable
+     *
+     * @return \App\Models\Translations\Node
+     */
+    private function rebuildNodeBranchRoute(Node $node): Node
+    {
+        /** @var \App\Models\Translations\Node $node */
+        $node = $this->nodeRepository->update($node, [
+            'route' => $node->isRoot() ? $node->key : implode('.', [$node->parent->route, $node->key]),
+        ]);
+
+        $node->descendants->each(function ($item) {
+            /* @var Node $item */
+            $this->nodeRepository->update($item, [
+                'route' => implode('.', [$item->parent->route, $item->key]),
+            ]);
+        });
+
+        return $node->fresh();
     }
 }

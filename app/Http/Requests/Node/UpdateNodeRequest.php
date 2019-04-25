@@ -28,7 +28,7 @@ class UpdateNodeRequest extends Request
     {
         $this->node = Node::findByUuidOrFail($this->route('id'));
 
-        return $this->user()->can('show', $this->node->project);
+        return $this->user()->can('update', $this->node);
     }
 
     /**

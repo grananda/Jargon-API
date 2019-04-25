@@ -47,11 +47,10 @@ class NodeSortingService
      */
     private function matchNodesSortIndexToSequence(Collection $siblings, array $siblingsSequence)
     {
-        /** @var \App\Models\Translations\Node $node */
-        foreach ($siblings as $node) {
-            $newIndex = array_search($node->id, $siblingsSequence);
-
-            $node->update(['sort_index' => $newIndex]);
-        }
+        /* @var \App\Models\Translations\Node $node */
+        $siblings->each(function ($node) use ($siblingsSequence) {
+            /* @var \App\Models\Translations\Node $node */
+            $node->update(['sort_index' => array_search($node->id, $siblingsSequence)]);
+        });
     }
 }

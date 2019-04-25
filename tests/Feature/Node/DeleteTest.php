@@ -5,7 +5,6 @@ namespace Tests\Feature\Node;
 use App\Models\Organization;
 use App\Models\Translations\Node;
 use App\Models\Translations\Project;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -46,6 +45,41 @@ class DeleteTest extends TestCase
         $project = factory(Project::class)->create();
         $project->setOrganization($organization);
         $project->setOwner($owner);
+
+        /** @var \App\Models\Translations\Node $node1_1 */
+        $node = Node::create([
+            'key'        => $this->faker->word,
+            'route'      => $this->faker->word,
+            'sort_index' => 0,
+            'project_id' => $project->id,
+        ]);
+
+        // When
+        $response = $this->signIn($user)->delete(route('nodes.destroy', [$node->uuid]));
+
+        // Then
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    /** @test */
+    public function a_403_will_be_returned_if_the_user_has_no_role_node_access()
+    {
+        // Given
+        /** @var \App\Models\User $user */
+        $user = $this->user();
+
+        /** @var \App\Models\User $owner */
+        $owner = $this->user();
+
+        /** @var \App\Models\Organization $organization */
+        $organization = factory(Organization::class)->create();
+
+        /** @var \App\Models\Translations\Project $project */
+        $project = factory(Project::class)->create();
+        $project->setOrganization($organization);
+        $project->setOwner($owner);
+        $project->setMember($user, Project::PROJECT_TRANSLATOR_ROLE_ALIAS);
+
 
         /** @var \App\Models\Translations\Node $node1_1 */
         $node = Node::create([

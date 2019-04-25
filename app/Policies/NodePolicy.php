@@ -48,4 +48,18 @@ class NodePolicy extends AbstractPolicy
         return $node->project->isCollaborator($user)
             && $user->hasRoles([Project::PROJECT_OWNER_ROLE_ALIAS, Project::PROJECT_MANAGER_ROLE_ALIAS]);
     }
+
+    /**
+     * Determines is a user can update nodes within a project.
+     *
+     * @param \App\Models\User              $user
+     * @param \App\Models\Translations\Node $node
+     *
+     * @return bool
+     */
+    public function update(User $user, Node $node)
+    {
+        return $node->project->isCollaborator($user)
+            && $user->hasRoles([Project::PROJECT_OWNER_ROLE_ALIAS, Project::PROJECT_MANAGER_ROLE_ALIAS]);
+    }
 }

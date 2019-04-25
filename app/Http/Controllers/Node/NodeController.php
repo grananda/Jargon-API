@@ -97,7 +97,7 @@ class NodeController extends ApiController
     public function update(UpdateNodeRequest $request)
     {
         try {
-            $node = $this->nodeRepository->update($request->node, $request->all());
+            $node = $this->nodeService->updateNode($request->node, $request->all());
 
             return $this->responseOk(new NodeResource($node));
         } catch (Throwable $e) {
