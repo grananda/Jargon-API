@@ -1,18 +1,31 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Traits;
 
 use App\Models\Translations\Node;
 use App\Models\Translations\Project;
+use App\Repositories\NodeRepository;
 use Illuminate\Database\Eloquent\Collection;
 
-/**
- * Class NodeSortingService.
- *
- * @package App\Services\Node
- */
-class NodeSortingService
+trait NodeToolsTrait
 {
+    /**
+     * The NodeRepository instance.
+     *
+     * @var \App\Repositories\NodeRepository
+     */
+    protected $nodeRepository;
+
+    /**
+     * NodeService constructor.
+     *
+     * @param \App\Repositories\NodeRepository $nodeRepository
+     */
+    public function __construct(NodeRepository $nodeRepository)
+    {
+        $this->nodeRepository = $nodeRepository;
+    }
+
     /**
      * Sets children nodes sort_index to fit the natural nodes sequence by id.
      *
@@ -37,6 +50,32 @@ class NodeSortingService
         $siblingsSequence = array_column($siblings->toArray(), 'id');
 
         $this->matchNodesSortIndexToSequence($siblings, $siblingsSequence);
+    }
+
+    /**
+     * Recreates a node branch route.
+     *
+     * @param \App\Models\Translations\Node $node
+     *
+     * @throws \Throwable
+     *
+     * @return \App\Models\Translations\Node
+     */
+    public function rebuildNodeBranchRoute(Node $node): Node
+    {
+        /** @var \App\Models\Translations\Node $node */
+        $node = $this->nodeRepository->update($node, [
+            'route' => $node->isRoot() ? $node->key : implode('.', [$node->parent->route, $node->key]),
+        ]);
+
+        $node->descendants->each(function ($item) {
+            /* @var Node $item */
+            $this->nodeRepository->update($item, [
+                'route' => implode('.', [$item->parent->route, $item->key]),
+            ]);
+        });
+
+        return $node->fresh();
     }
 
     /**

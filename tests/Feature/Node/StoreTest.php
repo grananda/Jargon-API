@@ -188,7 +188,7 @@ class StoreTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $responseData = $response->json()['data'];
         $this->assertDatabaseHas('nodes', [
-            'id'         => $responseData['id'],
+            'uuid'         => $responseData['id'],
             'parent_id'  => $parent->id,
             'project_id' => $project->id,
             'sort_index' => 1,
@@ -228,7 +228,7 @@ class StoreTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $responseData = $response->json()['data'];
         $this->assertDatabaseHas('nodes', [
-            'id'         => $responseData['id'],
+            'uuid'         => $responseData['id'],
             'parent_id'  => null,
             'project_id' => $project->id,
             'sort_index' => 1,

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Node;
 
 use App\Models\Translations\Node;
 use App\Models\Translations\Project;
 use App\Repositories\NodeRepository;
+use App\Services\Traits\NodeToolsTrait;
 
 /**
  * Class NodeService.
@@ -13,6 +14,8 @@ use App\Repositories\NodeRepository;
  */
 class NodeService
 {
+    use NodeToolsTrait;
+
     /**
      * The NodeRepository instance.
      *
@@ -21,22 +24,13 @@ class NodeService
     protected $nodeRepository;
 
     /**
-     * The TranslationNodeSortingService instance.
-     *
-     * @var \App\Services\NodeSortingService
-     */
-    protected $nodeSortingService;
-
-    /**
      * NodeService constructor.
      *
      * @param \App\Repositories\NodeRepository $nodeRepository
-     * @param \App\Services\NodeSortingService $nodeSortingService
      */
-    public function __construct(NodeRepository $nodeRepository, NodeSortingService $nodeSortingService)
+    public function __construct(NodeRepository $nodeRepository)
     {
-        $this->nodeRepository     = $nodeRepository;
-        $this->nodeSortingService = $nodeSortingService;
+        $this->nodeRepository = $nodeRepository;
     }
 
     /**
@@ -59,7 +53,7 @@ class NodeService
 
         $parentNode->load('children');
 
-        $this->nodeSortingService->normalizeChildNodesSortIndex($parentNode);
+        $this->normalizeChildNodesSortIndex($parentNode);
 
         return $node->fresh();
     }
@@ -91,9 +85,6 @@ class NodeService
      */
     public function deleteNode(Node $node): void
     {
-        /** @var \App\Models\Translations\Project $project */
-        $project = $node->project;
-
         /** @var \App\Models\Translations\Node $rootNode */
         $rootNode = $node->parent ?? null;
 
@@ -102,35 +93,12 @@ class NodeService
         if ($rootNode) {
             $rootNode->load('children');
 
-            $this->nodeSortingService->normalizeChildNodesSortIndex($rootNode);
+            $this->normalizeChildNodesSortIndex($rootNode);
         } else {
-            $this->nodeSortingService->normalizeChildRootNodesSortIndex($project);
+            /** @var \App\Models\Translations\Project $project */
+            $project = $node->project;
+
+            $this->normalizeChildRootNodesSortIndex($project);
         }
-    }
-
-    /**
-     * Recreates a node branch route.
-     *
-     * @param \App\Models\Translations\Node $node
-     *
-     * @throws \Throwable
-     *
-     * @return \App\Models\Translations\Node
-     */
-    private function rebuildNodeBranchRoute(Node $node): Node
-    {
-        /** @var \App\Models\Translations\Node $node */
-        $node = $this->nodeRepository->update($node, [
-            'route' => $node->isRoot() ? $node->key : implode('.', [$node->parent->route, $node->key]),
-        ]);
-
-        $node->descendants->each(function ($item) {
-            /* @var Node $item */
-            $this->nodeRepository->update($item, [
-                'route' => implode('.', [$item->parent->route, $item->key]),
-            ]);
-        });
-
-        return $node->fresh();
     }
 }

@@ -10,7 +10,7 @@ use App\Http\Requests\Node\UpdateNodeRequest;
 use App\Http\Resources\Node as NodeResource;
 use App\Http\Resources\NodeCollection;
 use App\Repositories\NodeRepository;
-use App\Services\NodeService;
+use App\Services\Node\NodeService;
 use Exception;
 use Throwable;
 
@@ -31,7 +31,7 @@ class NodeController extends ApiController
     /**
      * The TranslationNodeSortingService instance.
      *
-     * @var \App\Services\NodeSortingService
+     * @var \App\Services\NodeService
      */
     protected $nodeService;
 
@@ -39,7 +39,7 @@ class NodeController extends ApiController
      * NodeController constructor.
      *
      * @param \App\Repositories\NodeRepository $nodeRepository
-     * @param \App\Services\NodeService        $nodeService
+     * @param \App\Services\Node\NodeService   $nodeService
      */
     public function __construct(NodeRepository $nodeRepository, NodeService $nodeService)
     {

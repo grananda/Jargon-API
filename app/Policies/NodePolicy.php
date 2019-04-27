@@ -5,9 +5,12 @@ namespace App\Policies;
 use App\Models\Translations\Node;
 use App\Models\Translations\Project;
 use App\Models\User;
+use App\Policies\Traits\NodeCopyRestrictionsTrait;
 
 class NodePolicy extends AbstractPolicy
 {
+    use NodeCopyRestrictionsTrait;
+
     /**
      * Determines is a user can list nodes within a project.
      *
@@ -61,5 +64,24 @@ class NodePolicy extends AbstractPolicy
     {
         return $node->project->isCollaborator($user)
             && $user->hasRoles([Project::PROJECT_OWNER_ROLE_ALIAS, Project::PROJECT_MANAGER_ROLE_ALIAS]);
+    }
+
+    /**
+     * Determines is a user can update nodes within a project.
+     *
+     * @param \App\Models\User              $user
+     * @param \App\Models\Translations\Node $node
+     * @param \App\Models\Translations\Node $parent
+     *
+     * @return bool
+     */
+    public function copy(User $user, Node $node, Node $parent)
+    {
+        return $node->project->isCollaborator($user)
+            && $user->hasRoles([Project::PROJECT_OWNER_ROLE_ALIAS, Project::PROJECT_MANAGER_ROLE_ALIAS])
+            && $this->nodesBelongToSameProject($node, $parent)
+            && $this->nodesAreDifferent($node, $parent)
+            && $this->nodesBelongToDifferentBranch($node, $parent)
+            && $this->parentNodesAreDifferent($node, $parent);
     }
 }

@@ -118,9 +118,9 @@ class ListTest extends TestCase
 
         // Assert
         $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonFragment(['id' => $node1_1->id]);
-        $response->assertJsonFragment(['id' => $node1_2->id]);
-        $response->assertJsonMissing(['id' => $node2_1->id]);
-        $response->assertJsonMissing(['id' => $node3_1->id]);
+        $response->assertJsonFragment(['id' => $node1_1->uuid]);
+        $response->assertJsonFragment(['id' => $node1_2->uuid]);
+        $response->assertJsonMissing(['id' => $node2_1->uuid]);
+        $response->assertJsonMissing(['id' => $node3_1->uuid]);
     }
 }
