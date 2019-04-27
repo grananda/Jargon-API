@@ -21,24 +21,62 @@ class NodeDuplicationService
      */
     public function copyNode(Node $node, Node $parent)
     {
-        $parent->appendNode($node);
+        /** @var \App\Models\Translations\Node $new */
+        $new = $this->replicateNodeTree($node);
+
+        $parent->appendNode($new);
+
+        $parent->fresh();
 
         $this->rebuildNodeBranchRoute($parent);
 
-        /** @var \App\Models\Translations\Node $rootNode */
-        $rootNode = $parent->parent ?? null;
+        $this->normalizeChildNodesSortIndex($parent);
 
-        if ($rootNode) {
-            $rootNode->load('children');
+        return $parent->fresh();
+    }
 
-            $this->normalizeChildNodesSortIndex($rootNode);
-        } else {
-            /** @var \App\Models\Translations\Project $project */
-            $project = $node->project;
+    /**
+     * Replicates a node and its children into a brand new tree structure.
+     *
+     * @param \App\Models\Translations\Node $node
+     *
+     * @throws \Throwable
+     *
+     * @return \App\Models\Translations\Node
+     */
+    private function replicateNodeTree(Node $node): Node
+    {
+        /** @var \App\Models\Translations\Node $new */
+        $new = $node->copy();
 
-            $this->normalizeChildRootNodesSortIndex($project);
+        $this->copyChildren($node, $new);
+
+        return $new;
+    }
+
+    /**
+     * Recursively copies a node children.
+     *
+     * @param Node $node
+     * @param Node $parent
+     *
+     * @throws \Throwable
+     */
+    private function copyChildren(Node $node, Node $parent): void
+    {
+        $node->load('children');
+
+        /** @var Node $childNode */
+        foreach ($node->children as $childNode) {
+            $childNode->load('children');
+
+            /** @var \App\Models\Translations\Node $newChild */
+            $newChild = $childNode->copy();
+            $parent->appendNode($newChild);
+
+            if ($childNode->children()->count() > 0) {
+                $this->copyChildren($childNode, $newChild);
+            }
         }
-
-        return $node->fresh();
     }
 }

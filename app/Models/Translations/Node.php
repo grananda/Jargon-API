@@ -4,6 +4,7 @@ namespace App\Models\Translations;
 
 use App\Models\BaseEntity;
 use App\Models\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Model;
 use Kalnoy\Nestedset\NodeTrait;
 
 class Node extends BaseEntity
@@ -35,5 +36,18 @@ class Node extends BaseEntity
     public function translations()
     {
         return $this->hasMany(Translation::class);
+    }
+
+    /**
+     * Copies a single node.
+     *
+     * @return Model
+     */
+    public function copy(): Model
+    {
+        $new = $this->replicate();
+        $new->push();
+
+        return $new;
     }
 }

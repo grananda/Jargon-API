@@ -378,7 +378,7 @@ class UpdateTest extends TestCase
         $root2 = Node::create([
             'key'        => 'root2',
             'route'      => 'root2',
-            'sort_index' => 0,
+            'sort_index' => 1,
             'project_id' => $project->id,
         ]);
 
@@ -409,7 +409,7 @@ class UpdateTest extends TestCase
             'id'         => $root2->id,
             'route'      => 'root2',
             'parent_id'  => null,
-            'sort_index' => 0,
+            'sort_index' => 1,
         ]);
         $this->assertDatabaseHas('nodes', [
             'route'      => 'root2.root1',
@@ -418,8 +418,7 @@ class UpdateTest extends TestCase
         ]);
         $this->assertDatabaseHas('nodes', [
             'route'      => 'root2.root1.node1',
-            'parent_id'  => $root1->id,
-            'sort_index' => 1,
+            'sort_index' => 0,
         ]);
     }
 
@@ -480,7 +479,7 @@ class UpdateTest extends TestCase
         ]);
         $this->assertDatabaseHas('nodes', [
             'id'         => $node1->id,
-            'route'      => 'root1.node1',
+            'route'      => 'root1,node1',
             'parent_id'  => $root1->id,
             'sort_index' => 0,
         ]);
@@ -489,7 +488,7 @@ class UpdateTest extends TestCase
             'id'         => $root2->id,
             'route'      => 'root2',
             'parent_id'  => null,
-            'sort_index' => 0,
+            'sort_index' => 1,
         ]);
         $this->assertDatabaseHas('nodes', [
             'route'      => 'root2.node1',
