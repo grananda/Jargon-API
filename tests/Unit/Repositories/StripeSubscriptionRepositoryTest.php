@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Repositories;
-
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
@@ -18,6 +16,9 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class StripeSubscriptionRepositoryTest extends TestCase
 {
     use RefreshDatabase,
@@ -47,7 +48,6 @@ class StripeSubscriptionRepositoryTest extends TestCase
 
         /** @var \App\Repositories\Stripe\StripeSubscriptionRepository $stripeSubscriptionRepository */
         $stripeSubscriptionRepository = resolve(StripeSubscriptionRepository::class);
-
 
         // *** Create objects ***
 
@@ -137,9 +137,9 @@ class StripeSubscriptionRepositoryTest extends TestCase
         $subscriptionProduct->delete();
 
         // Then
-        $this->assertEquals($responseCreate['customer'], $user->stripe_id);
-        $this->assertEquals($responseCreate['plan']['id'], $subscriptionPlan->alias);
-        $this->assertEquals($responseUpdate['plan']['id'], $subscriptionPlan2->alias);
+        $this->assertSame($responseCreate['customer'], $user->stripe_id);
+        $this->assertSame($responseCreate['plan']['id'], $subscriptionPlan->alias);
+        $this->assertSame($responseUpdate['plan']['id'], $subscriptionPlan2->alias);
         $this->assertNotNull($responseCancel['cancel_at']);
         $this->assertNull($responseReactivate['cancel_at']);
     }

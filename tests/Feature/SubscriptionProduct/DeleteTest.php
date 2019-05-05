@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\SubscriptionProduct;
 
-
 use App\Events\SubscriptionProduct\SubscriptionProductWasDeleted;
 use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\Subscriptions\SubscriptionProduct;
@@ -13,6 +12,9 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class DeleteTest extends TestCase
 {
     use RefreshDatabase,

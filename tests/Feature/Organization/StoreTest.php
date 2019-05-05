@@ -8,6 +8,9 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class StoreTest extends TestCase
 {
     use RefreshDatabase,
@@ -29,7 +32,6 @@ class StoreTest extends TestCase
         // Given
         /** @var \App\Models\User $user */
         $user = $this->user();
-
 
         $this->createActiveSubscription(
             $user,

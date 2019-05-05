@@ -4,6 +4,7 @@ namespace App\Services\Node;
 
 use App\Models\Translations\Node;
 use App\Services\Traits\NodeToolsTrait;
+use Throwable;
 
 class NodeDuplicationService
 {
@@ -12,16 +13,16 @@ class NodeDuplicationService
     /**
      * Copies a node into a new parent.
      *
-     * @param \App\Models\Translations\Node $node
-     * @param \App\Models\Translations\Node $parent
+     * @param Node $node
+     * @param Node $parent
      *
-     * @throws \Throwable
+     * @throws Throwable
      *
-     * @return \App\Models\Translations\Node|null
+     * @return Node|null
      */
     public function copyNode(Node $node, Node $parent)
     {
-        /** @var \App\Models\Translations\Node $new */
+        /** @var Node $new */
         $new = $this->replicateNodeTree($node);
 
         $parent->appendNode($new);
@@ -38,15 +39,15 @@ class NodeDuplicationService
     /**
      * Replicates a node and its children into a brand new tree structure.
      *
-     * @param \App\Models\Translations\Node $node
+     * @param Node $node
      *
-     * @throws \Throwable
+     *@throws Throwable
      *
-     * @return \App\Models\Translations\Node
+     * @return Node
      */
     private function replicateNodeTree(Node $node): Node
     {
-        /** @var \App\Models\Translations\Node $new */
+        /** @var Node $new */
         $new = $node->copy();
 
         $this->copyChildren($node, $new);
@@ -60,7 +61,7 @@ class NodeDuplicationService
      * @param Node $node
      * @param Node $parent
      *
-     * @throws \Throwable
+     * @throws Throwable
      */
     private function copyChildren(Node $node, Node $parent): void
     {
@@ -70,7 +71,7 @@ class NodeDuplicationService
         foreach ($node->children as $childNode) {
             $childNode->load('children');
 
-            /** @var \App\Models\Translations\Node $newChild */
+            /** @var Node $newChild */
             $newChild = $childNode->copy();
             $parent->appendNode($newChild);
 

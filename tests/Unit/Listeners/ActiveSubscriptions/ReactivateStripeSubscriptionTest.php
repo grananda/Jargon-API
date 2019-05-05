@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Listeners\ActiveSubscriptions;
-
 
 use App\Events\ActiveSubscription\ActiveSubscriptionWasActivated;
 use App\Listeners\ReactivateStripeSubscription;
@@ -15,6 +13,9 @@ use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class ReactivateStripeSubscriptionTest extends TestCase
 {
     use RefreshDatabase,
@@ -32,12 +33,13 @@ class ReactivateStripeSubscriptionTest extends TestCase
         /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         $activeSubscription = $this->createActiveSubscription($user, 'professional-month-eur');
 
-        $this->mock(StripeSubscriptionRepository::class, function ($mock){
-            /** @var \Mockery\Mock $mock */
+        $this->mock(StripeSubscriptionRepository::class, function ($mock) {
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('reactivate')
                 ->withArgs([User::class, ActiveSubscription::class])
                 ->once()
-                ->andReturn($this->loadFixture('stripe/subscription.reactivate.success'));
+                ->andReturn($this->loadFixture('stripe/subscription.reactivate.success'))
+            ;
         });
 
         /** @var \App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated $event */
@@ -66,11 +68,12 @@ class ReactivateStripeSubscriptionTest extends TestCase
         ]);
 
         $this->mock(StripeSubscriptionRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('reactivate')
                 ->withArgs([User::class, ActiveSubscription::class])
                 ->never()
-                ->andReturn($this->loadFixture('stripe/subscription.reactivate.success'));
+                ->andReturn($this->loadFixture('stripe/subscription.reactivate.success'))
+            ;
         });
 
         /** @var \App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated $event */

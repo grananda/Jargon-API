@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\SubscriptionProduct;
 
-
 use App\Events\SubscriptionProduct\SubscriptionProductWasCreated;
 use App\Events\SubscriptionProduct\SubscriptionProductWasUpdated;
 use App\Models\Subscriptions\SubscriptionProduct;
@@ -12,6 +11,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class StoreTest extends TestCase
 {
     use RefreshDatabase;

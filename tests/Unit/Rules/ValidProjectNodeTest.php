@@ -7,13 +7,13 @@ use App\Models\Translations\Project;
 use App\Rules\ValidProjectNode;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
-
 use Tests\TestCase;
 
 /**
- * Class ValidProjectNodeTest
+ * Class ValidProjectNodeTest.
  *
  * @package Tests\Unit\Rules
+ * @coversNothing
  */
 class ValidProjectNodeTest extends TestCase
 {

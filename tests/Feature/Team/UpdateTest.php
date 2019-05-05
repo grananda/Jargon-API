@@ -2,16 +2,18 @@
 
 namespace Tests\Feature\Api\Team;
 
-
 use App\Events\Collaborator\CollaboratorAddedToTeam;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
-use Illuminate\Http\Response;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class UpdateTest extends TestCase
 {
     use RefreshDatabase,
@@ -80,7 +82,6 @@ class UpdateTest extends TestCase
         $team->setOwner($owner);
         $team->setMember($collaborator1, Team::TEAM_TRANSLATOR_ROLE_ALIAS);
 
-
         $this->createActiveSubscription(
             $owner,
             'professional-month-eur',
@@ -105,7 +106,6 @@ class UpdateTest extends TestCase
         // When
         $response = $this->signIn($owner)->put(route('teams.update', [$team->uuid]), $data);
 
-
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
 
@@ -115,7 +115,7 @@ class UpdateTest extends TestCase
     /** @test */
     public function a_200_will_be_returned_if_an_owner_updates_an_team()
     {
-        /** @var \App\Models\User $owner */
+        /* @var \App\Models\User $owner */
         Event::fake(CollaboratorAddedToTeam::class);
 
         /** @var User $owner */
@@ -127,7 +127,7 @@ class UpdateTest extends TestCase
         /** @var \App\Models\User $collaborator2 */
         $collaborator2 = factory(User::class)->create();
 
-        /** @var  \Illuminate\Database\Eloquent\Collection $collaborator1 */
+        /** @var \Illuminate\Database\Eloquent\Collection $collaborator1 */
         $collaborators = factory(User::class, 5)->create();
 
         /** @var \App\Models\Team $team */

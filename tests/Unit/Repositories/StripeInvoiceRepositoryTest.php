@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Repositories;
-
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
@@ -20,6 +18,9 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class StripeInvoiceRepositoryTest extends TestCase
 {
     use RefreshDatabase,
@@ -70,7 +71,6 @@ class StripeInvoiceRepositoryTest extends TestCase
         /** @var \App\Models\Subscriptions\SubscriptionProduct $subscriptionProduct */
         $subscriptionProduct = $subscriptionPlan->product;
 
-
         // *** Create Stripe elements ***
 
         /** @var array $customer */
@@ -112,8 +112,8 @@ class StripeInvoiceRepositoryTest extends TestCase
         $subscriptionProduct->delete();
 
         // Then
-        $this->assertEquals($responseCreate['customer'], $user->stripe_id);
-        $this->assertEquals($responseCreate['plan']['id'], $subscriptionPlan->alias);
-        $this->assertEquals($responseInvoices['data'][0]['customer'], $user->stripe_id);
+        $this->assertSame($responseCreate['customer'], $user->stripe_id);
+        $this->assertSame($responseCreate['plan']['id'], $subscriptionPlan->alias);
+        $this->assertSame($responseInvoices['data'][0]['customer'], $user->stripe_id);
     }
 }

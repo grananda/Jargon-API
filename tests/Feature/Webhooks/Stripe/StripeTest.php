@@ -4,6 +4,9 @@ namespace Tests\Feature\Webhooks\Stripe;
 
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @coversNothing
+ */
 class StripeTest extends AbstractStripeTestCase
 {
     /** @test */

@@ -2,18 +2,19 @@
 
 namespace Tests\Feature\ProjectInvitation;
 
-
 use App\Models\Organization;
 use App\Models\Team;
 use App\Models\Translations\Project;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Tests\TestCase;
-use Illuminate\Http\Response;
 
-
+/**
+ * @coversNothing
+ */
 class UpdateTest extends TestCase
 {
     use RefreshDatabase;
@@ -80,7 +81,6 @@ class UpdateTest extends TestCase
 
         $project->setMember($user, Team::TEAM_DEFAULT_ROLE_ALIAS);
 
-
         $token = $project->nonActiveMembers()->where('user_id', $user->id)->first()->pivot->validation_token;
 
         // When
@@ -88,6 +88,6 @@ class UpdateTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertEquals($project->fresh()->collaborators()->count(), 3);
+        $this->assertSame($project->fresh()->collaborators()->count(), 3);
     }
 }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Node;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Node\CopyNodeRequest;
 use App\Http\Resources\Node as NodeResource;
+use App\Models\Translations\Node;
 use App\Services\Node\NodeDuplicationService;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 /**
@@ -18,14 +20,14 @@ class NodeDuplicationController extends ApiController
     /**
      * The NodeService instance.
      *
-     * @var \App\Services\Node\NodeDuplicationService
+     * @var NodeDuplicationService
      */
     private $nodeDuplicationService;
 
     /**
      * NodeCopyController constructor.
      *
-     * @param \App\Services\Node\NodeDuplicationService $nodeDuplicationService
+     * @param NodeDuplicationService $nodeDuplicationService
      */
     public function __construct(NodeDuplicationService $nodeDuplicationService)
     {
@@ -35,14 +37,14 @@ class NodeDuplicationController extends ApiController
     /**
      * Update a node by uuid.
      *
-     * @param \App\Http\Requests\Node\CopyNodeRequest $request
+     * @param CopyNodeRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(CopyNodeRequest $request)
     {
         try {
-            /** @var \App\Models\Translations\Node $node */
+            /** @var Node $node */
             $node = $this->nodeDuplicationService->copyNode($request->node, $request->parent);
 
             return $this->responseOk(new NodeResource($node));

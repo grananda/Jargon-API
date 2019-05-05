@@ -2,15 +2,15 @@
 
 namespace Tests\Feature\SubscriptionOption;
 
-
-use App\Events\SubscriptionOption\SubscriptionOptionWasDeleted;
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class DeleteTest extends TestCase
 {
     use RefreshDatabase;

@@ -1,20 +1,14 @@
 <?php
 
-
 namespace Tests\Unit\Services;
-
 
 use App\Events\ActiveSubscription\ActiveSubscriptionWasActivated;
 use App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated;
 use App\Exceptions\ActiveSubscriptionStatusException;
-use App\Exceptions\StripeCardTokenMissingException;
 use App\Exceptions\StripeMissingCardException;
 use App\Exceptions\StripeMissingCustomerException;
 use App\Models\Card;
 use App\Models\Subscriptions\SubscriptionPlan;
-use App\Repositories\ActiveSubscriptionRepository;
-use App\Repositories\Stripe\StripeCardRepository;
-use App\Repositories\Stripe\StripeCustomerRepository;
 use App\Repositories\Stripe\StripeSubscriptionRepository;
 use App\Services\SubscriptionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -22,6 +16,9 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class SubscriptionServiceTest extends TestCase
 {
     use RefreshDatabase,
@@ -36,6 +33,7 @@ class SubscriptionServiceTest extends TestCase
      * @var array
      */
     private $stripeSubscriptionUpdateResponse;
+
     /**
      * @var array
      */
@@ -58,24 +56,27 @@ class SubscriptionServiceTest extends TestCase
 
         $this->stripeSubscriptionReactivateResponse = $this->loadFixture('stripe/subscription.reactivate.success');
 
-
         $this->mock(StripeSubscriptionRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('create')
                 ->withAnyArgs()
-                ->andReturn($this->stripeSubscriptionCreateResponse);
+                ->andReturn($this->stripeSubscriptionCreateResponse)
+            ;
 
             $mock->shouldReceive('swap')
                 ->withAnyArgs()
-                ->andReturn($this->stripeSubscriptionUpdateResponse);
+                ->andReturn($this->stripeSubscriptionUpdateResponse)
+            ;
 
             $mock->shouldReceive('cancel')
                 ->withAnyArgs()
-                ->andReturn($this->stripeSubscriptionCancelResponse);
+                ->andReturn($this->stripeSubscriptionCancelResponse)
+            ;
 
             $mock->shouldReceive('reactivate')
                 ->withAnyArgs()
-                ->andReturn($this->stripeSubscriptionReactivateResponse);
+                ->andReturn($this->stripeSubscriptionReactivateResponse)
+            ;
         });
     }
 
@@ -139,8 +140,8 @@ class SubscriptionServiceTest extends TestCase
         $activeSubscription = $subscriptionService->subscribe($user, $subscriptionPlan);
 
         // Then
-        $this->assertEquals($activeSubscription->subscriptionPlan->alias, $subscriptionPlan->alias);
-        $this->assertEquals($activeSubscription->stripe_id, $this->stripeSubscriptionCreateResponse['id']);
+        $this->assertSame($activeSubscription->subscriptionPlan->alias, $subscriptionPlan->alias);
+        $this->assertSame($activeSubscription->stripe_id, $this->stripeSubscriptionCreateResponse['id']);
     }
 
     /** @test */
@@ -170,8 +171,8 @@ class SubscriptionServiceTest extends TestCase
         $activeSubscription = $subscriptionService->subscribe($user, $subscriptionPlan);
 
         // Then
-        $this->assertEquals($activeSubscription->subscriptionPlan->alias, $subscriptionPlan->alias);
-        $this->assertEquals($activeSubscription->stripe_id, $this->stripeSubscriptionCreateResponse['id']);
+        $this->assertSame($activeSubscription->subscriptionPlan->alias, $subscriptionPlan->alias);
+        $this->assertSame($activeSubscription->stripe_id, $this->stripeSubscriptionCreateResponse['id']);
     }
 
     /** @test */
@@ -199,9 +200,9 @@ class SubscriptionServiceTest extends TestCase
         $activeSubscription = $subscriptionService->subscribe($user, $subscriptionPlan);
 
         // Then
-        $this->assertNotEquals($initialActiveSubscription->subscriptionPlan->alias, $activeSubscription->subscriptionPlan->alias);
-        $this->assertEquals($activeSubscription->subscriptionPlan->alias, $subscriptionPlan->alias);
-        $this->assertEquals($activeSubscription->stripe_id, $this->stripeSubscriptionUpdateResponse['id']);
+        $this->assertNotSame($initialActiveSubscription->subscriptionPlan->alias, $activeSubscription->subscriptionPlan->alias);
+        $this->assertSame($activeSubscription->subscriptionPlan->alias, $subscriptionPlan->alias);
+        $this->assertSame($activeSubscription->stripe_id, $this->stripeSubscriptionUpdateResponse['id']);
     }
 
     /** @test */
@@ -310,6 +311,5 @@ class SubscriptionServiceTest extends TestCase
         // Then
         $this->assertTrue($activeSubscription->fresh()->isSubscriptionActive());
         Event::assertDispatched(ActiveSubscriptionWasActivated::class);
-
     }
 }

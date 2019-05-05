@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Listeners\Collaborators;
 
-
 use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Listeners\SendProjectCollaboratorNotification;
 use App\Listeners\SendTeamCollaboratorNotification;
@@ -14,6 +13,9 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class SendProjectCollaboratorNotificationTest extends TestCase
 {
     use RefreshDatabase;

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Project;
 
-
 use App\Models\Organization;
 use App\Models\Team;
 use App\Models\Translations\Project;
@@ -11,6 +10,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class ListTest extends TestCase
 {
     use RefreshDatabase;

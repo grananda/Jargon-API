@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Listeners\Options;
 
-
 use App\Events\Option\OptionWasCreated;
 use App\Listeners\AddOptionUser;
 use App\Models\Options\Option;
@@ -12,6 +11,9 @@ use App\Repositories\OptionUserRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class AddOptionUserTest extends TestCase
 {
     use RefreshDatabase;

@@ -10,9 +10,10 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 /**
- * Class DeleteTest
+ * Class DeleteTest.
  *
  * @package Tests\Feature\Node
+ * @coversNothing
  */
 class DeleteTest extends TestCase
 {
@@ -79,7 +80,6 @@ class DeleteTest extends TestCase
         $project->setOrganization($organization);
         $project->setOwner($owner);
         $project->setMember($user, Project::PROJECT_TRANSLATOR_ROLE_ALIAS);
-
 
         /** @var \App\Models\Translations\Node $node1_1 */
         $node = Node::create([

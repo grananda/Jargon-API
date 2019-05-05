@@ -16,6 +16,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class ProjectModelTest extends TestCase
 {
     use RefreshDatabase;
@@ -58,7 +61,7 @@ class ProjectModelTest extends TestCase
             'role_id'     => $roleOwner->id,
         ]);
 
-        $members->each(function($member) use ($project, $roleMember){
+        $members->each(function ($member) use ($project, $roleMember) {
             $this->assertDatabaseHas('collaborators', [
                 'user_id'     => $member->id,
                 'entity_id'   => $project->id,
@@ -109,7 +112,7 @@ class ProjectModelTest extends TestCase
             'role_id'     => $roleOwner->id,
         ]);
 
-        $members->each(function($member) use ($project, $roleMember){
+        $members->each(function ($member) use ($project, $roleMember) {
             $this->assertDatabaseHas('collaborators', [
                 'user_id'     => $member->id,
                 'entity_id'   => $project->id,
@@ -166,9 +169,9 @@ class ProjectModelTest extends TestCase
         $project->setDialects([$dialect->id => ['is_default' => true]]);
 
         // Then
-        $this->assertEquals($organization->uuid, $project->organization->uuid);
-        $this->assertEquals($team->uuid, $project->teams->first()->uuid);
-        $this->assertEquals($dialect->id, $project->dialects()->first()->id);
+        $this->assertSame($organization->uuid, $project->organization->uuid);
+        $this->assertSame($team->uuid, $project->teams->first()->uuid);
+        $this->assertSame($dialect->id, $project->dialects()->first()->id);
         $this->assertDatabaseHas('dialect_project', [
             'project_id' => $project->id,
             'dialect_id' => $dialect->id,

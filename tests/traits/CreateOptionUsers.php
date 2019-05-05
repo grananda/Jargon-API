@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\traits;
-
 
 use App\Models\Options\Option;
 use App\Models\Options\OptionUser;

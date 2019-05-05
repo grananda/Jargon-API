@@ -10,9 +10,10 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 /**
- * Class ListTest
+ * Class ListTest.
  *
  * @package Tests\Feature\Node
+ * @coversNothing
  */
 class ListTest extends TestCase
 {

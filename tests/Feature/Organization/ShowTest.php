@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Organization;
 
-
 use App\Models\Organization;
 use App\Models\Team;
 use App\Models\Translations\Project;
@@ -11,6 +10,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class ShowTest extends TestCase
 {
     use RefreshDatabase;

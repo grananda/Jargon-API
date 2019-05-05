@@ -9,5 +9,5 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/nodes/{id}', 'Node\NodeController@destroy')->name('nodes.destroy');
 
     Route::put('/nodes/copy/{id}', 'Node\NodeDuplicationController@update')->name('nodes.copy.update');
-//    Route::put('/nodes/move/{id}', 'Node\NodeRelocationController@update')->name('nodes.move.update');
+    Route::put('/nodes/move/{id}', 'Node\NodeRelocationController@update')->name('nodes.move.update');
 });

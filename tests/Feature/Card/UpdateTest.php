@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Card;
-
 
 use App\Models\Card;
 use App\Repositories\Stripe\StripeCardRepository;
@@ -10,6 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class UpdateTest extends TestCase
 {
     use RefreshDatabase;
@@ -26,10 +27,11 @@ class UpdateTest extends TestCase
         $this->stripeUpdateResponse = $this->loadFixture('stripe/card.update.success');
 
         $this->mock(StripeCardRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('update')
                 ->withAnyArgs()
-                ->andReturn($this->stripeUpdateResponse);
+                ->andReturn($this->stripeUpdateResponse)
+            ;
         });
     }
 

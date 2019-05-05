@@ -2,17 +2,18 @@
 
 namespace Tests\Feature\Option;
 
-
 use App\Events\Option\OptionWasCreated;
 use App\Models\Options\Option;
 use App\Models\Options\OptionCategory;
-use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class StoreTest extends TestCase
 {
     use RefreshDatabase;
@@ -59,7 +60,7 @@ class StoreTest extends TestCase
     public function a_200_code_will_be_returned_when_creating_a_subscription_plan_option()
     {
         // Given
-        /** @var \App\Models\User $user */
+        /* @var \App\Models\User $user */
         Event::fake(OptionWasCreated::class);
 
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);

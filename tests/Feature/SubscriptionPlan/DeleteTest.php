@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\SubscriptionPlan;
 
-
 use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\Subscriptions\SubscriptionPlan;
@@ -14,6 +13,9 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class DeleteTest extends TestCase
 {
     use RefreshDatabase,
@@ -99,7 +101,7 @@ class DeleteTest extends TestCase
 
         /** @var \App\Models\Subscriptions\SubscriptionPlanOptionValue $subcriptionPlanOptionValue */
         $subcriptionPlanOptionValue = factory(SubscriptionPlanOptionValue::class)->make([
-            'option_key'   => $option->option_key,
+            'option_key' => $option->option_key,
         ]);
 
         $subscriptionPlan->addOption($subcriptionPlanOptionValue);

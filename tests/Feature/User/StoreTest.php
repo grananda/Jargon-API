@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\User;
-
 
 use App\Events\User\UserActivationTokenGenerated;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -10,6 +8,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class StoreTest extends TestCase
 {
     use RefreshDatabase;
@@ -21,7 +22,7 @@ class StoreTest extends TestCase
         Event::fake(UserActivationTokenGenerated::class);
 
         $password = $this->faker->password;
-        $data = [
+        $data     = [
             'name'                  => $this->faker->name,
             'email'                 => $this->faker->email,
             'password'              => $password,

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\User;
-
 
 use App\Events\User\UserWasDeleted;
 use App\Models\Subscriptions\SubscriptionPlan;
@@ -13,6 +11,9 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 use Tests\traits\CreateOptionUsers;
 
+/**
+ * @coversNothing
+ */
 class CancelTest extends TestCase
 {
     use RefreshDatabase,

@@ -5,12 +5,7 @@ namespace App\Http\Requests\Node;
 use App\Http\Requests\Request;
 use App\Models\Translations\Node;
 
-/**
- * Class UpdateNodeRequest.
- *
- * @package App\Http\Requests\Node
- */
-class CopyNodeRequest extends Request
+class RelocateNodeRequest extends Request
 {
     /**
      * The node instance to move.
@@ -36,7 +31,7 @@ class CopyNodeRequest extends Request
         $this->node   = Node::findByUuidOrFail($this->route('id'));
         $this->parent = Node::findByUuidOrFail($this->input('parent'));
 
-        return $this->user()->can('copy', [$this->node, $this->parent]);
+        return $this->user()->can('relocate', [$this->node, $this->parent]);
     }
 
     /**

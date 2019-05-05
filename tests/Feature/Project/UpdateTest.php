@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Project;
 
-
 use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Models\Organization;
 use App\Models\Team;
@@ -14,6 +13,9 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class UpdateTest extends TestCase
 {
     use RefreshDatabase,
@@ -90,12 +92,12 @@ class UpdateTest extends TestCase
             'collaborators' => [
                 [
                     'id'    => $collaborator1->uuid,
-                    'role' => Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    'role'  => Project::PROJECT_DEFAULT_ROLE_ALIAS,
                     'owner' => false,
                 ],
                 [
                     'id'    => $collaborator2->uuid,
-                    'role' => Project::PROJECT_DEFAULT_ROLE_ALIAS,
+                    'role'  => Project::PROJECT_DEFAULT_ROLE_ALIAS,
                     'owner' => false,
                 ],
             ],
@@ -125,7 +127,7 @@ class UpdateTest extends TestCase
         /** @var \App\Models\User $collaborator2 */
         $collaborator2 = factory(User::class)->create();
 
-        /** @var  \Illuminate\Database\Eloquent\Collection $collaborator1 */
+        /** @var \Illuminate\Database\Eloquent\Collection $collaborator1 */
         $collaborators = factory(User::class, 5)->create();
 
         /** @var \App\Models\Organization $organization */
@@ -163,7 +165,7 @@ class UpdateTest extends TestCase
                     'owner' => false,
                 ],
             ],
-            'teams'         => [
+            'teams' => [
                 [
                     $team->uuid,
                 ],

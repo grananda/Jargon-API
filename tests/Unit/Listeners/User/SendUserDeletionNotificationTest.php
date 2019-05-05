@@ -9,6 +9,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class SendUserDeletionNotificationTest extends TestCase
 {
     use RefreshDatabase;

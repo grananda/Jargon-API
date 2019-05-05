@@ -1,14 +1,15 @@
 <?php
 
-
 namespace Tests\Feature\User;
-
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class LoginTest extends TestCase
 {
     use RefreshDatabase;
@@ -69,6 +70,6 @@ class LoginTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertEquals(auth()->user()->id, $user->id);
+        $this->assertSame(auth()->user()->id, $user->id);
     }
 }

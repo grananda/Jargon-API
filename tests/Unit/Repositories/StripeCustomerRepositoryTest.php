@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Repositories;
-
 
 use App\Jobs\UpdateStripeCustomer;
 use App\Repositories\Stripe\StripeCustomerRepository;
@@ -10,6 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class StripeCustomerRepositoryTest extends TestCase
 {
     use RefreshDatabase;
@@ -46,8 +47,8 @@ class StripeCustomerRepositoryTest extends TestCase
         $responseCustomerDeleted = $stripeCustomerRepo->delete($user);
 
         // Then
-        $this->assertEquals($responseCustomerCreated['email'], $email1);
-        $this->assertEquals($responseCustomerUpdated['email'], $email2);
+        $this->assertSame($responseCustomerCreated['email'], $email1);
+        $this->assertSame($responseCustomerUpdated['email'], $email2);
         $this->assertTrue($responseCustomerDeleted);
 
         Bus::assertDispatched(UpdateStripeCustomer::class);

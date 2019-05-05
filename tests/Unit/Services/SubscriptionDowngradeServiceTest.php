@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Services;
-
 
 use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Events\Collaborator\CollaboratorAddedToTeam;
@@ -20,6 +18,9 @@ use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class SubscriptionDowngradeServiceTest extends TestCase
 {
     use RefreshDatabase,
@@ -61,7 +62,7 @@ class SubscriptionDowngradeServiceTest extends TestCase
             'rank' => 10,
         ]);
 
-        /** @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
+        /* @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
         $this->subscriptionPlan = factory(SubscriptionPlan::class)->create([
             'subscription_product_id' => $subscriptionProduct->id,
         ]);
@@ -106,7 +107,7 @@ class SubscriptionDowngradeServiceTest extends TestCase
         /** @var \Illuminate\Database\Eloquent\Collection $projects */
         $projects = factory(Project::class, 7)->create();
         $projects->each(function ($item) {
-            /** @var \App\Models\Translations\Project $item */
+            /* @var \App\Models\Translations\Project $item */
             $item->setOwner($this->user);
         });
 
@@ -123,7 +124,7 @@ class SubscriptionDowngradeServiceTest extends TestCase
         /** @var \Illuminate\Database\Eloquent\Collection $teams */
         $teams = factory(Team::class, 7)->create();
         $teams->each(function ($item) {
-            /** @var \App\Models\Team $item */
+            /* @var \App\Models\Team $item */
             $item->setOwner($this->user);
         });
 
@@ -140,7 +141,7 @@ class SubscriptionDowngradeServiceTest extends TestCase
         /** @var \Illuminate\Database\Eloquent\Collection $organizations */
         $organizations = factory(Organization::class, 7)->create();
         $organizations->each(function ($item) {
-            /** @var \App\Models\Organization $item */
+            /* @var \App\Models\Organization $item */
             $item->setOwner($this->user);
         });
 
@@ -165,7 +166,7 @@ class SubscriptionDowngradeServiceTest extends TestCase
         /** @var \Illuminate\Database\Eloquent\Collection $members */
         $members = factory(User::class, 7)->create();
         $members->each(function ($item) use ($project, $team) {
-            /** @var \App\Models\User $item */
+            /* @var \App\Models\User $item */
             $project->setMember($item);
             $project->validateMember($item);
 
@@ -184,21 +185,21 @@ class SubscriptionDowngradeServiceTest extends TestCase
         /** @var \Illuminate\Database\Eloquent\Collection $projects */
         $projects = factory(Project::class, 3)->create();
         $projects->each(function ($item) {
-            /** @var \App\Models\Translations\Project $item */
+            /* @var \App\Models\Translations\Project $item */
             $item->setOwner($this->user);
         });
 
         /** @var \Illuminate\Database\Eloquent\Collection $teams */
         $teams = factory(Team::class, 3)->create();
         $teams->each(function ($item) {
-            /** @var \App\Models\Team $item */
+            /* @var \App\Models\Team $item */
             $item->setOwner($this->user);
         });
 
         /** @var \Illuminate\Database\Eloquent\Collection $organizations */
         $organizations = factory(Organization::class, 3)->create();
         $organizations->each(function ($item) {
-            /** @var \App\Models\Organization $item */
+            /* @var \App\Models\Organization $item */
             $item->setOwner($this->user);
         });
 
@@ -209,7 +210,7 @@ class SubscriptionDowngradeServiceTest extends TestCase
         /** @var \Illuminate\Database\Eloquent\Collection $members */
         $members = factory(User::class, 3)->create();
         $members->each(function ($item) use ($project) {
-            /** @var \App\Models\User $item */
+            /* @var \App\Models\User $item */
             $project->setMember($item);
             $project->validateMember($item);
         });

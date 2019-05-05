@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Repositories;
-
 
 use App\Models\Card;
 use App\Repositories\Stripe\StripeCardRepository;
@@ -10,6 +8,9 @@ use App\Repositories\Stripe\StripeCustomerRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class StripeCardRepositoryTest extends TestCase
 {
     use RefreshDatabase;
@@ -39,8 +40,8 @@ class StripeCardRepositoryTest extends TestCase
         $stripeCustomerRepository->delete($user);
 
         //Then
-        $this->assertEquals($response['object'], 'card');
-        $this->assertEquals($response['customer'], $customer['id']);
+        $this->assertSame($response['object'], 'card');
+        $this->assertSame($response['customer'], $customer['id']);
     }
 
     /** @test */
@@ -79,9 +80,9 @@ class StripeCardRepositoryTest extends TestCase
         $stripeCustomerRepository->delete($user);
 
         //Then
-        $this->assertEquals($responseCreate['object'], 'card');
-        $this->assertEquals($responseCreate['customer'], $customer['id']);
-        $this->assertEquals($responseUpdate['address_country'], 'Spain');
+        $this->assertSame($responseCreate['object'], 'card');
+        $this->assertSame($responseCreate['customer'], $customer['id']);
+        $this->assertSame($responseUpdate['address_country'], 'Spain');
         $this->assertTrue($responseDelete);
     }
 }

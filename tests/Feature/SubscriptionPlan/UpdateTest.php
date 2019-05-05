@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\SubscriptionPlan;
 
-
 use App\Events\SubscriptionPlan\SubscriptionPlanWasUpdated;
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\Subscriptions\SubscriptionPlan;
@@ -13,6 +12,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class UpdateTest extends TestCase
 {
     use RefreshDatabase;
@@ -77,7 +79,7 @@ class UpdateTest extends TestCase
         /** @var \App\Models\Subscriptions\SubscriptionOption $option2 */
         $option2 = factory(SubscriptionOption::class)->create();
 
-        $optionValue = $this->faker->numberBetween(1, 5);
+        $optionValue    = $this->faker->numberBetween(1, 5);
         $newOptionValue = $this->faker->numberBetween(6, 10);
 
         /** @var \App\Models\Subscriptions\SubscriptionPlan $subscriptionPlan */
@@ -92,8 +94,8 @@ class UpdateTest extends TestCase
         $subscriptionPlan->addOption($subscriptionPlanOptionValue);
 
         $data = [
-            'is_active'  => false,
-            'options' => [
+            'is_active' => false,
+            'options'   => [
                 [
                     'option_key'   => $option->option_key,
                     'option_value' => $newOptionValue,

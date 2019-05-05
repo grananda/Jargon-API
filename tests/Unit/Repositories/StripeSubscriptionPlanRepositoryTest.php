@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Repositories;
-
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
@@ -51,7 +49,7 @@ class StripeSubscriptionPlanRepositoryTest extends TestCase
 
         // When
         $responseCreateProduct = $stripeProductRepo->create($product);
-        $responseCreatePlan = $stripePlanRepo->create($plan);
+        $responseCreatePlan    = $stripePlanRepo->create($plan);
 
         $plan->is_active = false;
         $plan->save();
@@ -63,11 +61,10 @@ class StripeSubscriptionPlanRepositoryTest extends TestCase
         $responseDeleteProduct = $stripeProductRepo->delete($product);
 
         // Then
-        $this->assertEquals($responseCreateProduct['id'], $product->alias);
+        $this->assertSame($responseCreateProduct['id'], $product->alias);
         $this->assertTrue($responseCreatePlan['active']);
         $this->assertFalse($responseUpdatePlan['active']);
         $this->assertTrue($responseDeletePlan);
         $this->assertTrue($responseDeleteProduct);
-
     }
 }

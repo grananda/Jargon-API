@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Option;
 
-
 use App\Events\Option\OptionWasDeleted;
 use App\Models\Options\Option;
 use App\Models\User;
@@ -11,6 +10,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class DeleteTest extends TestCase
 {
     use RefreshDatabase;

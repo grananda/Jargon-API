@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Node;
-
 
 use App\Models\Organization;
 use App\Models\Translations\Node;
@@ -11,6 +9,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class UpdateTest extends TestCase
 {
     use RefreshDatabase;
@@ -125,7 +126,7 @@ class UpdateTest extends TestCase
 
         /** @var \App\Models\Translations\Node $node2 */
         $node2 = Node::create([
-            'key'        =>'node1',
+            'key'        => 'node1',
             'route'      => 'node1.node2',
             'sort_index' => 0,
             'project_id' => $project->id,

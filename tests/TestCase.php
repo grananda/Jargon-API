@@ -9,7 +9,6 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -34,7 +33,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
         $this->faker = app(Generator::class);
 
-        if (!self::$migrated) {
+        if (! self::$migrated) {
             Artisan::call('migrate:fresh');
             self::$migrated = true;
         }
@@ -113,12 +112,13 @@ abstract class TestCase extends BaseTestCase
      *
      * @param string $name
      *
-     * @return array
      * @throws \Exception
+     *
+     * @return array
      */
     protected function loadFixture(string $name)
     {
-        $file = __DIR__ . "/fixtures/{$name}.json";
+        $file = __DIR__."/fixtures/{$name}.json";
 
         if (file_exists($file)) {
             return json_decode(file_get_contents($file), true);

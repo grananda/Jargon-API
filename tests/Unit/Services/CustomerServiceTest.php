@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Services;
-
 
 use App\Jobs\UpdateStripeCustomer;
 use App\Repositories\Stripe\StripeCustomerRepository;
@@ -11,6 +9,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class CustomerServiceTest extends TestCase
 {
     use RefreshDatabase;
@@ -29,7 +30,8 @@ class CustomerServiceTest extends TestCase
 
         $stripeCustomerRepository = $this->createMock(StripeCustomerRepository::class);
         $stripeCustomerRepository->method('create')
-            ->willReturn($response);
+            ->willReturn($response)
+        ;
 
         /** @var \App\Services\CustomerService $customerService */
         $customerService = new CustomerService($stripeCustomerRepository);
@@ -39,7 +41,7 @@ class CustomerServiceTest extends TestCase
         $user = $customerService->registerCustomer($user);
 
         // Then
-        $this->assertEquals($user->stripe_id, $response['id']);
+        $this->assertSame($user->stripe_id, $response['id']);
 
         Bus::assertNotDispatched(UpdateStripeCustomer::class);
     }

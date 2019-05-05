@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\User;
-
 
 use App\Events\User\PasswordResetRequested;
 use App\Repositories\PasswordResetRepository;
@@ -12,6 +10,9 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class PasswordResetTest extends TestCase
 {
     use RefreshDatabase;

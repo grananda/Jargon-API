@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Feature\User;
 
 use App\Events\User\UserWasDeactivated;
@@ -10,6 +9,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class DeactivationTest extends TestCase
 {
     use RefreshDatabase;

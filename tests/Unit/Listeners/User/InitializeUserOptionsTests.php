@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Listeners\User;
-
 
 use App\Events\User\UserWasActivated;
 use App\Listeners\InitializeUserOptions;
@@ -11,6 +9,9 @@ use App\Repositories\OptionUserRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class InitializeUserOptionsTests extends TestCase
 {
     use RefreshDatabase;
@@ -35,7 +36,7 @@ class InitializeUserOptionsTests extends TestCase
         $listener->handle($event);
 
         // Then
-        $this->assertEquals($user->fresh()->options()->count(), Option::where('option_scope', Option::USER_OPTION)->count());
+        $this->assertSame($user->fresh()->options()->count(), Option::where('option_scope', Option::USER_OPTION)->count());
     }
 
     /** @test */
@@ -72,7 +73,7 @@ class InitializeUserOptionsTests extends TestCase
         $listener->handle($event);
 
         // Then
-        $this->assertEquals($user->fresh()->options()->count(), Option::where('option_scope', Option::USER_OPTION)->count());
+        $this->assertSame($user->fresh()->options()->count(), Option::where('option_scope', Option::USER_OPTION)->count());
         $this->assertDatabaseHas('option_users', [
             'user_id'      => $user->id,
             'option_key'   => $option->option_key,

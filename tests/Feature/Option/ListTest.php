@@ -2,13 +2,15 @@
 
 namespace Tests\Feature\Option;
 
-
 use App\Models\Options\Option;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class ListTest extends TestCase
 {
     use RefreshDatabase;
@@ -41,7 +43,7 @@ class ListTest extends TestCase
     public function a_200_code_will_be_returned_when_requesting_subscription_plan_options()
     {
         // Given
-        $user= $this->staff(User::JUNIOR_STAFF_MEMBER);
+        $user = $this->staff(User::JUNIOR_STAFF_MEMBER);
 
         $optionValue = $this->faker->word;
 

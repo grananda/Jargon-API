@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\User;
-
 
 use App\Events\User\PasswordResetRequested;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -10,6 +8,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class RequestPasswordResetTest extends TestCase
 {
     use RefreshDatabase;

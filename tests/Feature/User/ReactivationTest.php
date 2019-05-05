@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\User;
-
 
 use App\Events\User\UserActivationTokenGenerated;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,6 +9,9 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class ReactivationTest extends TestCase
 {
     use RefreshDatabase;
@@ -78,7 +79,7 @@ class ReactivationTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_NO_CONTENT);
-        $this->assertNotEquals($user->fresh()->actiovation_token, $activation_token);
+        $this->assertNotSame($user->fresh()->actiovation_token, $activation_token);
 
         Event::assertDispatched(UserActivationTokenGenerated::class);
     }

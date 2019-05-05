@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\User;
-
 
 use App\Jobs\UpdateStripeCustomer;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -10,6 +8,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class UpdateTest extends TestCase
 {
     use RefreshDatabase;

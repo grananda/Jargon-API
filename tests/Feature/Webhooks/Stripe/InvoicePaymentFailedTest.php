@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Webhooks\Stripe;
-
 
 use App\Events\ActiveSubscription\ActiveSubscriptionWasActivated;
 use App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated;
@@ -13,6 +11,9 @@ use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class InvoicePaymentFailedTest extends AbstractStripeTestCase
 {
     use CreateActiveSubscription;

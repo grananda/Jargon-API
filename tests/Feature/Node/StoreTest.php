@@ -10,9 +10,10 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 /**
- * Class StoreTest
+ * Class StoreTest.
  *
  * @package Tests\Feature\Node
+ * @coversNothing
  */
 class StoreTest extends TestCase
 {
@@ -166,7 +167,6 @@ class StoreTest extends TestCase
             'route'      => implode('.', [$parentKey, $this->faker->word]),
             'sort_index' => 0,
             'project_id' => $project->id,
-
         ], $parent);
 
         Node::create([
@@ -188,7 +188,7 @@ class StoreTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $responseData = $response->json()['data'];
         $this->assertDatabaseHas('nodes', [
-            'uuid'         => $responseData['id'],
+            'uuid'       => $responseData['id'],
             'parent_id'  => $parent->id,
             'project_id' => $project->id,
             'sort_index' => 1,
@@ -228,7 +228,7 @@ class StoreTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $responseData = $response->json()['data'];
         $this->assertDatabaseHas('nodes', [
-            'uuid'         => $responseData['id'],
+            'uuid'       => $responseData['id'],
             'parent_id'  => null,
             'project_id' => $project->id,
             'sort_index' => 1,

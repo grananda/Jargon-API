@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Customer;
-
 
 use App\Models\User;
 use App\Repositories\Stripe\StripeCustomerRepository;
@@ -10,6 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class CreateTest extends TestCase
 {
     use RefreshDatabase;
@@ -26,10 +27,11 @@ class CreateTest extends TestCase
         $this->stripeCustomerResponse = $this->loadFixture('stripe/customer.create.success');
 
         $this->mock(StripeCustomerRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('create')
                 ->withArgs([User::class])
-                ->andReturn($this->stripeCustomerResponse);
+                ->andReturn($this->stripeCustomerResponse)
+            ;
         });
     }
 
@@ -87,6 +89,6 @@ class CreateTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertEquals($user->fresh()->stripe_id, $this->stripeCustomerResponse['id']);
+        $this->assertSame($user->fresh()->stripe_id, $this->stripeCustomerResponse['id']);
     }
 }

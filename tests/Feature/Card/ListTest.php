@@ -1,14 +1,15 @@
 <?php
 
-
 namespace Tests\Feature\Card;
-
 
 use App\Models\Card;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class ListTest extends TestCase
 {
     use RefreshDatabase;
@@ -50,6 +51,5 @@ class ListTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $response->assertDontSee($card1->uuid);
         $response->assertDontSeeText($card2->uuid);
-
     }
 }
