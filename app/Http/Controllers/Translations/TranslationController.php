@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Translations;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Translation\DeleteTranslationRequest;
 use App\Http\Requests\Translation\IndexTranslationRequest;
-use App\Http\Requests\Translation\ShowTranslationRequest;
+use App\Http\Requests\Translation\StoreTranslationRequest;
+use App\Http\Requests\Translation\UpdateTranslationRequest;
+use App\Http\Resources\Translation as TranslationResource;
 use App\Http\Resources\TranslationCollection;
 use App\Repositories\TranslationRepository;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 
 class TranslationController extends ApiController
 {
@@ -53,25 +54,19 @@ class TranslationController extends ApiController
     /**
      * Store a newly created resource in storage.
      *
-     * @param IndexTranslationRequest $request
+     * @param \App\Http\Requests\Translation\StoreTranslationRequest $request
+     *
+     * @throws \Throwable
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store()
-    {
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Http\Requests\Translation\ShowTranslationRequest $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ShowTranslationRequest $request)
+    public function store(StoreTranslationRequest $request)
     {
         try {
-            return $request->translation;
+            /** @var \App\Models\Translations\Translation $translation */
+            $translation = $this->translationRepository->createTranslation($request->node, $request->validated());
+
+            return $this->responseOk(new TranslationResource($translation));
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
         }
@@ -80,14 +75,22 @@ class TranslationController extends ApiController
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param \App\Http\Requests\Translation\UpdateTranslationRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @throws \Throwable
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTranslationRequest $request)
     {
-        //
+        try {
+            /** @var \App\Models\Translations\Translation $translation */
+            $translation = $this->translationRepository->update($request->translation, $request->validated());
+
+            return $this->responseOk(new TranslationResource($translation));
+        } catch (Exception $e) {
+            return $this->responseInternalError($e->getMessage());
+        }
     }
 
     /**

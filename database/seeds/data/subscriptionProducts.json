@@ -36,7 +36,7 @@
       },
       {
         "option_key": "translation_count",
-        "option_value": 250
+        "option_value": 300
       },
       {
         "option_key": "customer_service",
@@ -136,7 +136,7 @@
       },
       {
         "option_key": "language_count",
-        "option_value": 10000
+        "option_value": 50
       },
       {
         "option_key": "translation_count",
@@ -188,7 +188,7 @@
       },
       {
         "option_key": "language_count",
-        "option_value": 10000
+        "option_value": 1000000
       },
       {
         "option_key": "translation_count",

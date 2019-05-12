@@ -64,7 +64,7 @@ trait ActiveSubscriptionRestrictionsTrait
         /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         if ($activeSubscription = $user->activeSubscription) {
             $subscriptionTranslationQuota = $activeSubscription->getAllowedTranslations();
-            $currentTranslationCount      = $user->getActiveTranslations();
+            $currentTranslationCount      = $user->getTranslationCount();
 
             $subscriptionTranslationQuota -= $currentTranslationCount;
 

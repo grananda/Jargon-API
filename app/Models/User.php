@@ -445,17 +445,17 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return int
      */
-    public function getCurrentSubscriptionTranslationQuota()
+    public function getTranslationCount()
     {
         $counter = 0;
 
-        $this->projects->each($project, function () use (&$counter) {
+        foreach ($this->projects as $project) {
             /* @var Project $project */
-            $project->nodes->each($node, function () use (&$counter) {
+            foreach ($project->nodes as $node) {
                 /* @var Node $node */
                 $counter += $node->translations()->count();
-            });
-        });
+            };
+        };
 
         return $counter;
     }

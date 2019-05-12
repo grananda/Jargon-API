@@ -3,9 +3,19 @@
 namespace App\Http\Requests\Translation;
 
 use App\Http\Requests\Request;
+use App\Models\Translations\Translation;
+use App\Rules\ValidDialect;
+use App\Rules\ValidProjectDialect;
 
 class UpdateTranslationRequest extends Request
 {
+    /**
+     * The Translation instance.
+     *
+     * @var \App\Models\Translations\Translation
+     */
+    public $translation;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +23,9 @@ class UpdateTranslationRequest extends Request
      */
     public function authorize()
     {
-        return false;
+        $this->translation = Translation::findByUuidOrFail($this->route('id'));
+
+        return $this->user()->can('update', [Translation::class, $this->translation->node->project]);
     }
 
     /**
@@ -24,7 +36,8 @@ class UpdateTranslationRequest extends Request
     public function rules()
     {
         return [
-            //
+            'definition' => ['required', 'string'],
+            'dialect'    => ['sometimes', new ValidDialect(), new ValidProjectDialect($this->node->project)],
         ];
     }
 }

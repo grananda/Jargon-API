@@ -48,7 +48,7 @@ class TranslationPolicy extends AbstractPolicy
     {
         return $project->isCollaborator($user)
             && $user->hasRoles([Project::PROJECT_OWNER_ROLE_ALIAS, Project::PROJECT_MANAGER_ROLE_ALIAS])
-            && (bool) $user->getCurrentSubscriptionTranslationQuota();
+            && (bool) $this->getCurrentSubscriptionTranslationQuota($user);
     }
 
     /**
