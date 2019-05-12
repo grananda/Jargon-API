@@ -405,7 +405,7 @@ class UpdateTest extends TestCase
             'id'         => $root1->id,
             'route'      => 'root2.root1',
             'parent_id'  => $root2->id,
-            'sort_index' => 1,
+            'sort_index' => 0,
         ]);
         $this->assertDatabaseHas('nodes', [
             'id'         => $node1->id,
@@ -424,7 +424,7 @@ class UpdateTest extends TestCase
             'id'         => $node2->id,
             'route'      => 'root2.node2',
             'parent_id'  => $root2->id,
-            'sort_index' => 0,
+            'sort_index' => 1,
         ]);
     }
 
@@ -494,7 +494,7 @@ class UpdateTest extends TestCase
             'id'         => $node1->id,
             'route'      => 'root2.node1',
             'parent_id'  => $root2->id,
-            'sort_index' => 1,
+            'sort_index' => 0,
         ]);
 
         $this->assertDatabaseHas('nodes', [
@@ -507,7 +507,7 @@ class UpdateTest extends TestCase
             'id'         => $node2->id,
             'route'      => 'root2.node2',
             'parent_id'  => $root2->id,
-            'sort_index' => 0,
+            'sort_index' => 1,
         ]);
     }
 }
