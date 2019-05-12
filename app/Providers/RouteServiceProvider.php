@@ -34,6 +34,7 @@ class RouteServiceProvider extends ServiceProvider
         'cards',
         'webhooks',
         'nodes',
+        'translations',
     ];
 
     /**

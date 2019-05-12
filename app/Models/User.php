@@ -11,6 +11,7 @@ use App\Models\Options\OptionUser;
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Traits\HasRegistration;
 use App\Models\Traits\HasUuid;
+use App\Models\Translations\Node;
 use App\Models\Translations\Project;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -435,6 +436,26 @@ class User extends Authenticatable implements MustVerifyEmail
         foreach ($this->projects as $project) {
             $counter += $project->members()->count();
         }
+
+        return $counter;
+    }
+
+    /**
+     * Returns total translations per users.
+     *
+     * @return int
+     */
+    public function getCurrentSubscriptionTranslationQuota()
+    {
+        $counter = 0;
+
+        $this->projects->each($project, function () use (&$counter) {
+            /* @var Project $project */
+            $project->nodes->each($node, function () use (&$counter) {
+                /* @var Node $node */
+                $counter += $node->translations()->count();
+            });
+        });
 
         return $counter;
     }
