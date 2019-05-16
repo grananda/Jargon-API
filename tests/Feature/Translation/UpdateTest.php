@@ -6,18 +6,16 @@ use App\Models\Dialect;
 use App\Models\Organization;
 use App\Models\Translations\Node;
 use App\Models\Translations\Project;
+use App\Models\Translations\Translation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
- * Class StoreTest.
- *
- * @package Tests\Feature\Node
  * @coversNothing
  */
-class StoreTest extends TestCase
+class UpdateTest extends TestCase
 {
     use RefreshDatabase,
         CreateActiveSubscription;
@@ -26,7 +24,7 @@ class StoreTest extends TestCase
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
         // When
-        $response = $this->post(route('translations.store'), []);
+        $response = $this->put(route('translations.update', [123]), []);
 
         // Assert
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -35,7 +33,6 @@ class StoreTest extends TestCase
     /** @test */
     public function a_403_will_be_returned_if_the_user_has_no_node_access()
     {
-        // Given
         /** @var \App\Models\User $user1 */
         $user1 = $this->user();
 
@@ -60,63 +57,26 @@ class StoreTest extends TestCase
             'project_id' => $project->id,
         ]);
 
-        $data = [
+        /** @var \App\Models\Translations\Translation $translation */
+        $translation = factory(Translation::class)->create([
             'definition' => $this->faker->paragraph,
-            'dialect'    => Dialect::inRandomOrder()->first()->uuid,
-            'node'       => $node->uuid,
-        ];
-
-        // When
-        $response = $this->signIn($user2)->post(route('translations.store'), $data);
-
-        // Assert
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    /** @test */
-    public function a_403_will_be_returned_if_the_user_has_no_role_node_access()
-    {
-        // Given
-        /** @var \App\Models\User $user1 */
-        $user1 = $this->user();
-
-        /** @var \App\Models\User $user2 */
-        $user2 = $this->user();
-
-        $this->createActiveSubscription($user1, 'professional-month-eur');
-
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-
-        /** @var \App\Models\Translations\Project $project */
-        $project = factory(Project::class)->create();
-        $project->setOrganization($organization);
-        $project->setOwner($user1);
-        $project->setMember($user2, Project::PROJECT_TRANSLATOR_ROLE_ALIAS);
-
-        /** @var \App\Models\Translations\Node $node1_1 */
-        $node = Node::create([
-            'key'        => $this->faker->word,
-            'route'      => $this->faker->word,
-            'sort_index' => 0,
-            'project_id' => $project->id,
+            'dialect_id' => Dialect::inRandomOrder()->first()->uuid,
+            'node_id'    => $node->id,
         ]);
 
         $data = [
             'definition' => $this->faker->paragraph,
-            'dialect'    => Dialect::inRandomOrder()->first()->uuid,
-            'node'       => $node->uuid,
         ];
 
         // When
-        $response = $this->signIn($user2)->post(route('translations.store'), $data);
+        $response = $this->signIn($user2)->put(route('translations.update', [$translation->uuid]), $data);
 
         // Assert
         $response->assertStatus(Response::HTTP_FORBIDDEN);
     }
 
     /** @test */
-    public function a_403_will_be_returned_when_storing_a_translation_to_a_parent_of_a_non_member_node()
+    public function a_200_will_be_returned_when_storing_a_translation_to_a_different_node()
     {
         // Given
         /** @var \App\Models\User $user */
@@ -152,62 +112,34 @@ class StoreTest extends TestCase
             'project_id' => $project2->id,
         ]);
 
-        $data = [
+        /** @var \App\Models\Translations\Translation $translation */
+        $translation = factory(Translation::class)->create([
             'definition' => $this->faker->paragraph,
-            'dialect'    => Dialect::inRandomOrder()->first()->uuid,
-            'node'       => $node2->uuid,
-        ];
-
-        // When
-        $response = $this->signIn($user)->post(route('translations.store'), $data);
-
-        // Assert
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    /** @test */
-    public function a_403_will_be_returned_if_the_user_creates_a_new_translation_without_translation_quota()
-    {
-        // Given
-        /** @var \App\Models\User $user */
-        $user = $this->user();
-
-        $this->createActiveSubscription(
-            $user,
-            'professional-month-eur',
-            ['translation_count' => 0]);
-
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-
-        /** @var \App\Models\Translations\Project $project */
-        $project = factory(Project::class)->create();
-        $project->setOrganization($organization);
-        $project->setOwner($user);
-
-        /** @var \App\Models\Translations\Node $node1 */
-        $node = Node::create([
-            'key'        => $this->faker->word,
-            'route'      => $this->faker->word,
-            'sort_index' => 0,
-            'project_id' => $project->id,
+            'dialect_id' => Dialect::inRandomOrder()->first()->id,
+            'node_id'    => $node->id,
         ]);
 
         $data = [
             'definition' => $this->faker->paragraph,
-            'dialect'    => 123,
-            'node'       => $node->uuid,
+            'node_id'    => $node2->uuid,
         ];
 
         // When
-        $response = $this->signIn($user)->post(route('translations.store'), $data);
+        $response = $this->signIn($user)->put(route('translations.update', [$translation->uuid]), $data);
 
         // Assert
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertStatus(Response::HTTP_OK);
+
+        $this->assertDatabaseHas('translations', [
+            'uuid'       => $translation->uuid,
+            'node_id'    => $node->id,
+            'dialect_id' => $translation->dialect->id,
+            'definition' => $data['definition'],
+        ]);
     }
 
     /** @test */
-    public function a_422_will_be_returned_when_storing_a_translation_with_a_non_valid_dialect()
+    public function a_200_will_be_returned_when_storing_a_translation_to_a_different_dialect()
     {
         // Given
         /** @var \App\Models\User $user */
@@ -223,6 +155,10 @@ class StoreTest extends TestCase
         $project->setOrganization($organization);
         $project->setOwner($user);
 
+        /** @var \App\Models\Translations\Project $project2 */
+        $project2 = factory(Project::class)->create();
+        $project2->setOrganization($organization);
+
         /** @var \App\Models\Translations\Node $node1 */
         $node = Node::create([
             'key'        => $this->faker->word,
@@ -231,44 +167,57 @@ class StoreTest extends TestCase
             'project_id' => $project->id,
         ]);
 
+        /** @var \App\Models\Dialect $dialect */
+        $dialect = Dialect::where('locale', 'es_ES')->first();
+
+        /** @var \App\Models\Translations\Translation $translation */
+        $translation = factory(Translation::class)->create([
+            'definition' => $this->faker->paragraph,
+            'dialect_id' => $dialect->id,
+            'node_id'    => $node->id,
+        ]);
+
         $data = [
             'definition' => $this->faker->paragraph,
-            'dialect'    => 123,
-            'node'       => $node->uuid,
+            'dialect'    => Dialect::where('locale', 'es_MX')->first()->uuid,
         ];
 
         // When
-        $response = $this->signIn($user)->post(route('translations.store'), $data);
+        $response = $this->signIn($user)->put(route('translations.update', [$translation->uuid]), $data);
 
         // Assert
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertStatus(Response::HTTP_OK);
+
+        $this->assertDatabaseHas('translations', [
+            'uuid'       => $translation->uuid,
+            'node_id'    => $node->id,
+            'dialect_id' => $dialect->id,
+            'definition' => $data['definition'],
+        ]);
     }
 
     /** @test */
-    public function a_422_will_be_returned_when_storing_a_translation_with_dialect_not_in_project()
+    public function a_200_will_be_returned_if_the_user_has_low_role_node_access()
     {
-        // Given
-        /** @var \App\Models\User $user */
-        $user = $this->user();
+        /** @var \App\Models\User $user1 */
+        $user1 = $this->user();
 
-        $this->createActiveSubscription($user, 'professional-month-eur');
+        /** @var \App\Models\User $user2 */
+        $user2 = $this->user();
+
+        $this->createActiveSubscription($user1, 'professional-month-eur');
 
         /** @var \App\Models\Organization $organization */
         $organization = factory(Organization::class)->create();
 
-        /** @var \App\Models\Dialect $dialect */
-        $dialect = Dialect::where('locale', 'es_MX')->first();
-
-        /** @var \App\Models\Dialect $dialect */
-        $dialect2 = Dialect::where('locale', 'es_ES')->first();
-
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();
         $project->setOrganization($organization);
-        $project->setOwner($user);
-        $project->dialects()->save($dialect);
+        $project->setOwner($user1);
+        $project->setMember($user2, Project::PROJECT_TRANSLATOR_ROLE_ALIAS);
+        $project->validateMember($user2);
 
-        /** @var \App\Models\Translations\Node $node1 */
+        /** @var \App\Models\Translations\Node $node1_1 */
         $node = Node::create([
             'key'        => $this->faker->word,
             'route'      => $this->faker->word,
@@ -276,17 +225,22 @@ class StoreTest extends TestCase
             'project_id' => $project->id,
         ]);
 
+        /** @var \App\Models\Translations\Translation $translation */
+        $translation = factory(Translation::class)->create([
+            'definition' => $this->faker->paragraph,
+            'dialect_id' => Dialect::inRandomOrder()->first()->id,
+            'node_id'    => $node->id,
+        ]);
+
         $data = [
             'definition' => $this->faker->paragraph,
-            'dialect'    => $dialect2->locale,
-            'node'       => $node->uuid,
         ];
 
         // When
-        $response = $this->signIn($user)->post(route('translations.store'), $data);
+        $response = $this->signIn($user2)->put(route('translations.update', [$translation->uuid]), $data);
 
         // Assert
-        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     /** @test */
@@ -318,23 +272,29 @@ class StoreTest extends TestCase
             'project_id' => $project->id,
         ]);
 
+        /** @var \App\Models\Translations\Translation $translation */
+        $translation = factory(Translation::class)->create([
+            'definition' => $this->faker->paragraph,
+            'dialect_id' => $dialect->id,
+            'node_id'    => $node->id,
+        ]);
+
         $data = [
             'definition' => $this->faker->paragraph,
-            'dialect'    => $dialect->locale,
-            'node'       => $node->uuid,
         ];
 
         // When
-        $response = $this->signIn($user)->post(route('translations.store'), $data);
+        $response = $this->signIn($user)->put(route('translations.update', [$translation->uuid]), $data);
 
         // Assert
         $response->assertStatus(Response::HTTP_OK);
         $responseData = $response->json()['data'];
 
         $this->assertDatabaseHas('translations', [
-            'uuid'       => $responseData['id'],
+            'uuid'       => $translation->uuid,
             'node_id'    => $node->id,
             'dialect_id' => $dialect->id,
+            'definition' => $data['definition'],
         ]);
 
         $response->assertJsonFragment([

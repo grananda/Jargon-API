@@ -4,8 +4,6 @@ namespace App\Http\Requests\Translation;
 
 use App\Http\Requests\Request;
 use App\Models\Translations\Translation;
-use App\Rules\ValidDialect;
-use App\Rules\ValidProjectDialect;
 
 class UpdateTranslationRequest extends Request
 {
@@ -37,7 +35,6 @@ class UpdateTranslationRequest extends Request
     {
         return [
             'definition' => ['required', 'string'],
-            'dialect'    => ['sometimes', new ValidDialect(), new ValidProjectDialect($this->node->project)],
         ];
     }
 }
