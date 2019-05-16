@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\SubscriptionProduct;
 
-
 use App\Events\SubscriptionProduct\SubscriptionProductWasUpdated;
 use App\Models\Subscriptions\SubscriptionProduct;
 use App\Models\User;
@@ -11,6 +10,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class UpdateTest extends TestCase
 {
     use RefreshDatabase;
@@ -75,7 +77,6 @@ class UpdateTest extends TestCase
         $data = [
             'is_active' => false,
         ];
-
 
         // When
         $response = $this->signIn($user)->put(route('subscriptions.products.update', [$subscriptionProduct->uuid]), $data);

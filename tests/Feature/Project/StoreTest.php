@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Project;
 
-
 use App\Events\Collaborator\CollaboratorAddedToProject;
 use App\Models\Organization;
 use App\Models\Team;
@@ -14,6 +13,9 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class StoreTest extends TestCase
 {
     use RefreshDatabase,
@@ -154,8 +156,8 @@ class StoreTest extends TestCase
                     'owner' => false,
                 ],
             ],
-            'teams'         => [
-                [$team->uuid,],
+            'teams' => [
+                [$team->uuid],
             ],
         ];
 

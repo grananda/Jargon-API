@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Unit\Listeners\User;
 
 use App\Events\ActiveSubscription\ActiveSubscriptionWasActivated;
@@ -14,6 +13,9 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class InitializeActiveSubscriptionTest extends TestCase
 {
     use RefreshDatabase,
@@ -47,8 +49,8 @@ class InitializeActiveSubscriptionTest extends TestCase
         $user = $user->fresh();
 
         // Then
-        $this->assertEquals($user->activeSubscription->subscriptionPlan->id, $subscription->id);
-        $this->assertEquals($user->activeSubscription->options()->count(), $subscription->options()->count());
+        $this->assertSame($user->activeSubscription->subscriptionPlan->id, $subscription->id);
+        $this->assertSame($user->activeSubscription->options()->count(), $subscription->options()->count());
     }
 
     /** @test */
@@ -84,9 +86,9 @@ class InitializeActiveSubscriptionTest extends TestCase
         $user = $user->fresh();
 
         // Then
-        $this->assertEquals($user->activeSubscription->subscriptionPlan->id, $subscription->id);
+        $this->assertSame($user->activeSubscription->subscriptionPlan->id, $subscription->id);
         $this->assertTrue($user->activeSubscription->subscription_active);
-        $this->assertEquals($user->activeSubscription->options()->count(), $subscription->options()->count());
+        $this->assertSame($user->activeSubscription->options()->count(), $subscription->options()->count());
 
         Event::assertDispatched(ActiveSubscriptionWasActivated::class);
     }

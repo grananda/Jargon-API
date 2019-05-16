@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Listeners\User;
-
 
 use App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated;
 use App\Events\User\UserWasDeactivated;
@@ -13,6 +11,9 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class DeactivateActiveSubscriptionTest extends TestCase
 {
     use RefreshDatabase,
@@ -32,7 +33,6 @@ class DeactivateActiveSubscriptionTest extends TestCase
 
         /** @var \App\Events\User\UserWasActivated $event */
         $event = new UserWasDeactivated($user);
-
 
         /** @var \App\Listeners\DeactivateActiveSubscription $listener */
         $listener = new DeactivateActiveSubscription();

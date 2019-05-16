@@ -10,6 +10,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class ListTest extends TestCase
 {
     use RefreshDatabase;

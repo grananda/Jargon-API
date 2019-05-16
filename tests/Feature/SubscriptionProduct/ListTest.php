@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\SubscriptionProduct;
 
-
 use App\Models\Subscriptions\SubscriptionProduct;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class ListTest extends TestCase
 {
     use RefreshDatabase;

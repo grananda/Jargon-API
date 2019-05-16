@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Rules;
-
 
 use App\Models\Options\OptionCategory;
 use App\Rules\ValidOptionCategory;
@@ -10,6 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class ValidOptionCategoryTest extends TestCase
 {
     use RefreshDatabase;

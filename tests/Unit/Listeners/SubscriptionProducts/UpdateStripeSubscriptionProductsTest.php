@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Listeners\SubscriptionProducts;
-
 
 use App\Events\SubscriptionProduct\SubscriptionProductWasCreated;
 use App\Events\SubscriptionProduct\SubscriptionProductWasUpdated;
@@ -13,6 +11,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class UpdateStripeSubscriptionProductsTest extends TestCase
 {
     use RefreshDatabase;
@@ -31,7 +32,8 @@ class UpdateStripeSubscriptionProductsTest extends TestCase
 
         $stripeProductRepository = $this->createMock(StripeSubscriptionProductRepository::class);
         $stripeProductRepository->method('update')
-            ->willReturn($this->loadFixture('stripe/product.update.success'));
+            ->willReturn($this->loadFixture('stripe/product.update.success'))
+        ;
 
         /** @var \App\Listeners\SubscriptionProducts\UpdateStripeSubscriptionProduct $listener */
         $listener = new UpdateStripeSubscriptionProduct($stripeProductRepository);

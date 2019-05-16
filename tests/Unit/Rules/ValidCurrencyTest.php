@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Unit\Rules;
 
 use App\Rules\ValidCurrencyCode;
@@ -8,6 +7,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class ValidCurrencyTest extends TestCase
 {
     use RefreshDatabase;

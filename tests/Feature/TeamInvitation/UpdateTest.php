@@ -2,17 +2,18 @@
 
 namespace Tests\Feature\TeamInvitation;
 
-
 use App\Models\Organization;
 use App\Models\Team;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Tests\TestCase;
-use Illuminate\Http\Response;
 
-
+/**
+ * @coversNothing
+ */
 class UpdateTest extends TestCase
 {
     use RefreshDatabase;
@@ -45,7 +46,7 @@ class UpdateTest extends TestCase
         $team->setOwner($owner);
         $team->setMember($user, Team::TEAM_DEFAULT_ROLE_ALIAS);
 
-        $team->nonActiveMembers()->updateExistingPivot($user->id, ['created_at'=> Carbon::now()->subDays(40)]);
+        $team->nonActiveMembers()->updateExistingPivot($user->id, ['created_at' => Carbon::now()->subDays(40)]);
 
         $token = $team->nonActiveMembers()->where('user_id', $user->id)->first()->pivot->validation_token;
 
@@ -86,6 +87,6 @@ class UpdateTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertEquals($team->fresh()->collaborators()->count(), 3);
+        $this->assertSame($team->fresh()->collaborators()->count(), 3);
     }
 }

@@ -2,9 +2,7 @@
 
 namespace Tests\Unit\Models;
 
-
 use App\Models\Organization;
-use App\Models\Role;
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Subscriptions\ActiveSubscriptionOptionValue;
 use App\Models\Subscriptions\SubscriptionPlan;
@@ -13,6 +11,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class TeamModelTest extends TestCase
 {
     use RefreshDatabase;
@@ -53,6 +54,6 @@ class TeamModelTest extends TestCase
         $team->setOwner($user);
 
         // Then
-        $this->assertEquals($user->uuid, $team->owners()->first()->uuid);
+        $this->assertSame($user->uuid, $team->owners()->first()->uuid);
     }
 }

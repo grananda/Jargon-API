@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Rules;
-
 
 use App\Models\Subscriptions\SubscriptionProduct;
 use App\Rules\ValidSubscriptionProduct;
@@ -10,6 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class ValidSubscriptionProductTest extends TestCase
 {
     use RefreshDatabase;

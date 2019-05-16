@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\User;
-
 
 use App\Events\User\UserWasActivated;
 use App\Models\User;
@@ -12,6 +10,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class ActivationTest extends TestCase
 {
     use RefreshDatabase;

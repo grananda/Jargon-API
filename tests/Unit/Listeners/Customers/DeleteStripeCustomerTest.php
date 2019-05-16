@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Listeners\Customers;
-
 
 use App\Events\User\UserWasDeleted;
 use App\Listeners\DeleteStripeCustomer;
@@ -11,6 +9,9 @@ use App\Repositories\Stripe\StripeCustomerRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class DeleteStripeCustomerTest extends TestCase
 {
     use RefreshDatabase;
@@ -23,11 +24,12 @@ class DeleteStripeCustomerTest extends TestCase
         $user = $this->user();
 
         $this->mock(StripeCustomerRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('delete')
                 ->withArgs([User::class])
                 ->once()
-                ->andReturn($this->loadFixture('stripe/customer.delete.success'));
+                ->andReturn($this->loadFixture('stripe/customer.delete.success'))
+            ;
         });
 
         /** @var \App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated $event */
@@ -50,11 +52,12 @@ class DeleteStripeCustomerTest extends TestCase
         ]);
 
         $this->mock(StripeCustomerRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('delete')
                 ->withArgs([User::class])
                 ->never()
-                ->andReturn($this->loadFixture('stripe/customer.delete.success'));
+                ->andReturn($this->loadFixture('stripe/customer.delete.success'))
+            ;
         });
 
         /** @var \App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated $event */

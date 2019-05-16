@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Listeners\Options;
 
-
 use App\Events\Option\OptionWasDeleted;
 use App\Listeners\DeleteOptionUser;
 use App\Models\Options\Option;
@@ -11,6 +10,9 @@ use App\Repositories\OptionUserRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class DeleteOptionUserTest extends TestCase
 {
     use RefreshDatabase;

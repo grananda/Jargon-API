@@ -17,7 +17,7 @@ class Node extends JsonResource
     {
         return
             [
-                'id'         => $this->id,
+                'id'         => $this->uuid,
                 'key'        => $this->key,
                 'route'      => $this->route,
                 'is_root'    => ! (bool) $this->parent_id,

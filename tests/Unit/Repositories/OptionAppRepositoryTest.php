@@ -3,13 +3,14 @@
 namespace Tests\Feature;
 
 use App\Models\Options\Option;
-use App\Models\User;
 use App\Repositories\OptionAppRepository;
 use App\Repositories\OptionRepository;
-use App\Repositories\OptionUserRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class OptionAppRepositoryTest extends TestCase
 {
     use RefreshDatabase;
@@ -97,7 +98,7 @@ class OptionAppRepositoryTest extends TestCase
 
         $optionAppRepository->createUserOptions();
 
-        $optionKey = $options->first()->option_key;
+        $optionKey   = $options->first()->option_key;
         $optionValue = $this->faker->word;
 
         $attributes = [

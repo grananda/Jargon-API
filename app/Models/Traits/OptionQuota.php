@@ -55,4 +55,17 @@ trait OptionQuota
             ->first()
             ->option_value;
     }
+
+    /**
+     * Returns ActiveSubscription allowed translations.
+     *
+     * @return mixed
+     */
+    public function getAllowedTranslations()
+    {
+        return $this->options()
+            ->where('option_key', 'translation_count')
+            ->first()
+            ->option_value;
+    }
 }

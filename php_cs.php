@@ -123,7 +123,7 @@ $fixers = [
 
     // PHPUnit
     'php_unit_strict'                     => true,
-    'php_unit_test_class_requires_covers' => false,
+    'php_unit_test_class_requires_covers' => true,
     'general_phpdoc_annotation_remove'    => [
         'expectedException', 'expectedExceptionMessage', 'expectedExceptionMessageRegExp',
     ],
@@ -137,7 +137,6 @@ $excludeDirs = [
     'public/',
     'resources/',
     'storage/',
-    'tests/',
     'vendor/',
     '.circleci/',
 ];

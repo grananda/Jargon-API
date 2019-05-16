@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Listeners\SubscriptionPlans;
-
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasUpdated;
@@ -13,6 +11,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class UpdateStripeSubscriptionPlanTest extends TestCase
 {
     use RefreshDatabase;
@@ -31,7 +32,8 @@ class UpdateStripeSubscriptionPlanTest extends TestCase
 
         $stripePlanRepository = $this->createMock(StripeSubscriptionPlanRepository::class);
         $stripePlanRepository->method('update')
-            ->willReturn($this->loadFixture('stripe/plan.update.success'));
+            ->willReturn($this->loadFixture('stripe/plan.update.success'))
+        ;
 
         /** @var \App\Listeners\SubscriptionPlans\UpdateStripeSubscriptionPlan $listener */
         $listener = new UpdateStripeSubscriptionPlan($stripePlanRepository);

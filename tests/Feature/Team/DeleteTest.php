@@ -2,13 +2,15 @@
 
 namespace Tests\Feature\Team;
 
-
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class DeleteTest extends TestCase
 {
     use RefreshDatabase;

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Listeners\ActiveSubscriptions;
-
 
 use App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated;
 use App\Listeners\CancelStripeSubscription;
@@ -15,6 +13,9 @@ use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class CancelStripeSubscriptionTest extends TestCase
 {
     use RefreshDatabase,
@@ -33,11 +34,12 @@ class CancelStripeSubscriptionTest extends TestCase
         $activeSubscription = $this->createActiveSubscription($user, 'professional-month-eur');
 
         $this->mock(StripeSubscriptionRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('cancel')
                 ->withArgs([User::class, ActiveSubscription::class])
                 ->once()
-                ->andReturn($this->loadFixture('stripe/subscription.cancel.success'));
+                ->andReturn($this->loadFixture('stripe/subscription.cancel.success'))
+            ;
         });
 
         /** @var \App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated $event */
@@ -51,7 +53,6 @@ class CancelStripeSubscriptionTest extends TestCase
 
         // Then
         Mail::assertSent(SendSubscriptionDeactivationEmail::class);
-
     }
 
     /** @test */
@@ -67,11 +68,12 @@ class CancelStripeSubscriptionTest extends TestCase
         ]);
 
         $this->mock(StripeSubscriptionRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('cancel')
                 ->withArgs([User::class, ActiveSubscription::class])
                 ->never()
-                ->andReturn($this->loadFixture('stripe/subscription.cancel.success'));
+                ->andReturn($this->loadFixture('stripe/subscription.cancel.success'))
+            ;
         });
 
         /** @var \App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated $event */

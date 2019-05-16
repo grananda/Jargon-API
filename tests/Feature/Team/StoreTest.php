@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class StoreTest extends TestCase
 {
     use RefreshDatabase,

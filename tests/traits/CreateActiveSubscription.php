@@ -2,7 +2,6 @@
 
 namespace Tests\traits;
 
-
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Subscriptions\ActiveSubscriptionOptionValue;
 use App\Models\Subscriptions\SubscriptionPlan;
@@ -15,9 +14,7 @@ trait CreateActiveSubscription
      *
      * @param \App\Models\User $user
      * @param string           $subscriptionType
-     *
      * @param array            $options
-     *
      * @param array            $arguments
      *
      * @return \App\Models\Subscriptions\ActiveSubscription

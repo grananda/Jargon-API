@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Repositories;
-
 
 use App\Models\Subscriptions\SubscriptionProduct;
 use App\Repositories\Stripe\StripeSubscriptionProductRepository;
@@ -35,8 +33,8 @@ class StripeSubscriptionProductRepositoryTest extends TestCase
         $responseDelete = $repo->delete($product);
 
         // Then
-        $this->assertEquals($responseCreate['name'], $product->title);
-        $this->assertEquals($responseUpdate['name'], $productUpdated->title);
+        $this->assertSame($responseCreate['name'], $product->title);
+        $this->assertSame($responseUpdate['name'], $productUpdated->title);
         $this->assertTrue($responseDelete);
     }
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Card;
-
 
 use App\Models\Card;
 use App\Repositories\Stripe\StripeCardRepository;
@@ -10,6 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class DeleteTest extends TestCase
 {
     use RefreshDatabase;
@@ -26,10 +27,11 @@ class DeleteTest extends TestCase
         $this->stripeDeleteResponse = $this->loadFixture('stripe/card.delete.success');
 
         $this->mock(StripeCardRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('delete')
                 ->withAnyArgs()
-                ->andReturn($this->stripeDeleteResponse);
+                ->andReturn($this->stripeDeleteResponse)
+            ;
         });
     }
 

@@ -5,10 +5,13 @@ namespace Tests\Feature\Unit\Rules;
 use App\Models\Organization;
 use App\Models\User;
 use App\Rules\ValidMember;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
+/**
+ * @coversNothing
+ */
 class ValidateMemberTest extends TestCase
 {
     use RefreshDatabase;
@@ -20,8 +23,7 @@ class ValidateMemberTest extends TestCase
         $user = $this->user();
 
         $this->assertTrue($this->validator([
-            'collaborators' =>
-                [
+            'collaborators' => [
                     'id'    => $user->uuid,
                     'role'  => Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS,
                     'owner' => false,
@@ -29,8 +31,7 @@ class ValidateMemberTest extends TestCase
         ])->passes());
 
         $this->assertFalse($this->validator([
-            'collaborators' =>
-                [
+            'collaborators' => [
                     'id'    => $user->id,
                     'role'  => Organization::ORGANIZATION_DEFAULT_ROLE_ALIAS,
                     'owner' => false,

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Feature\ActiveSubscription;
 
 use App\Models\Card;
@@ -11,6 +10,9 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class DowngradeTest extends TestCase
 {
     use RefreshDatabase,
@@ -39,10 +41,11 @@ class DowngradeTest extends TestCase
         $this->stripeSubscriptionResponse = $this->loadFixture('stripe/subscription.update.success');
 
         $this->mock(StripeSubscriptionRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('swap')
                 ->withArgs([$this->user, SubscriptionPlan::class])
-                ->andReturn($this->stripeSubscriptionResponse);
+                ->andReturn($this->stripeSubscriptionResponse)
+            ;
         });
     }
 
@@ -65,7 +68,6 @@ class DowngradeTest extends TestCase
 
         /** @var \App\Models\Subscriptions\SubscriptionPlan $subscription */
         $subscription = SubscriptionPlan::where('alias', 'premium-month-eur')->first();
-
 
         // When
         $response = $this->signIn($this->user)->put(route('activeSubscriptions.downgrade.update'), [

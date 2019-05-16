@@ -2,14 +2,16 @@
 
 namespace Tests\Feature\Api\Organization;
 
-
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use Illuminate\Http\Response;
+use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class UpdateTest extends TestCase
 {
     use RefreshDatabase,
@@ -82,7 +84,7 @@ class UpdateTest extends TestCase
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonFragment(['name' => $data['name']]);
         $this->assertDatabaseHas('organizations', [
-            'uuid'  => $response->json('data')['id'],
+            'uuid' => $response->json('data')['id'],
             'name' => $response->json('data')['name'],
         ]);
         $this->assertDatabaseHas('collaborators', [

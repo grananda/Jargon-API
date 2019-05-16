@@ -1,5 +1,5 @@
 {
-    "name": "Jargon API v1",
+    "name": "jargon/api",
     "type": "project",
     "description": "I18n manager for Laravel",
     "keywords": [

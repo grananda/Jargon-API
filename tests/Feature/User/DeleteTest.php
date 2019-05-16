@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\User;
-
 
 use App\Events\User\UserWasDeleted;
 use App\Models\Subscriptions\SubscriptionPlan;
@@ -14,6 +12,9 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 use Tests\traits\CreateOptionUsers;
 
+/**
+ * @coversNothing
+ */
 class DeleteTest extends TestCase
 {
     use RefreshDatabase,
@@ -28,8 +29,6 @@ class DeleteTest extends TestCase
 
         /** @var \App\Models\User $user */
         $user = $this->user();
-
-
 
         /** @var \App\Models\User $user */
         $staff = $this->staff(User::JUNIOR_STAFF_MEMBER);

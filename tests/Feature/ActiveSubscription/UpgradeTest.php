@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Feature\ActiveSubscription;
 
 use App\Models\Card;
@@ -11,6 +10,9 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
+/**
+ * @coversNothing
+ */
 class UpgradeTest extends TestCase
 {
     use RefreshDatabase,
@@ -41,22 +43,23 @@ class UpgradeTest extends TestCase
             'user_id' => $this->user->id,
         ]);
 
-        /** @var array $stripeSubscriptionCreateResponse */
+        /* @var array $stripeSubscriptionCreateResponse */
         $this->stripeSubscriptionCreateResponse = $this->loadFixture('stripe/subscription.create.success');
 
-        /** @var array $stripeSubscriptionResponse */
+        /* @var array $stripeSubscriptionResponse */
         $this->stripeSubscriptionUpdateResponse = $this->loadFixture('stripe/subscription.update.success');
 
-
         $this->mock(StripeSubscriptionRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('create')
                 ->withArgs([$this->user, SubscriptionPlan::class])
-                ->andReturn($this->stripeSubscriptionCreateResponse);
+                ->andReturn($this->stripeSubscriptionCreateResponse)
+            ;
 
             $mock->shouldReceive('swap')
                 ->withArgs([$this->user, SubscriptionPlan::class])
-                ->andReturn($this->stripeSubscriptionUpdateResponse);
+                ->andReturn($this->stripeSubscriptionUpdateResponse)
+            ;
         });
     }
 

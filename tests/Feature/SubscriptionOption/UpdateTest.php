@@ -2,15 +2,15 @@
 
 namespace Tests\Feature\SubscriptionOption;
 
-
-use App\Events\SubscriptionOption\SubscriptionOptionWasUpdated;
 use App\Models\Subscriptions\SubscriptionOption;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class UpdateTest extends TestCase
 {
     use RefreshDatabase;
@@ -66,12 +66,12 @@ class UpdateTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->staff(User::SENIOR_STAFF_MEMBER);
 
-        $optionKey = $this->faker->word;
+        $optionKey    = $this->faker->word;
         $newOptionKey = $this->faker->word;
 
         /** @var \App\Models\Subscriptions\SubscriptionOption $options */
         $options = factory(SubscriptionOption::class)->create([
-            'option_key'   => $optionKey,
+            'option_key' => $optionKey,
         ]);
 
         $data = [

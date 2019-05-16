@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Listeners\SubscriptionPlans;
-
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Listeners\SubscriptionPlans\CreateStripeSubscriptionPlan;
@@ -12,6 +10,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class CreateStripeSubscriptionPlanTest extends TestCase
 {
     use RefreshDatabase;
@@ -30,7 +31,8 @@ class CreateStripeSubscriptionPlanTest extends TestCase
 
         $stripePlanRepository = $this->createMock(StripeSubscriptionPlanRepository::class);
         $stripePlanRepository->method('create')
-            ->willReturn($this->loadFixture('stripe/plan.create.success'));
+            ->willReturn($this->loadFixture('stripe/plan.create.success'))
+        ;
 
         /** @var \App\Listeners\SubscriptionPlans\CreateStripeSubscriptionProduct $listener */
         $listener = new CreateStripeSubscriptionPlan($stripePlanRepository);

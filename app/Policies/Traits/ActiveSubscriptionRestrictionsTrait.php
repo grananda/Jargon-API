@@ -41,12 +41,34 @@ trait ActiveSubscriptionRestrictionsTrait
     {
         /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         if ($activeSubscription = $user->activeSubscription) {
-            $subscriptionProjectQuota = $activeSubscription->getAllowedOrganizations();
-            $currentOrganizationCount = $user->getActiveOrganizations();
+            $subscriptionOrganizationQuota = $activeSubscription->getAllowedOrganizations();
+            $currentOrganizationCount      = $user->getActiveOrganizations();
 
-            $subscriptionProjectQuota -= $currentOrganizationCount;
+            $subscriptionOrganizationQuota -= $currentOrganizationCount;
 
-            return $subscriptionProjectQuota;
+            return $subscriptionOrganizationQuota;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns user subscription translation quota.
+     *
+     * @param \App\Models\User $user
+     *
+     * @return int
+     */
+    public function getCurrentSubscriptionTranslationQuota(User $user)
+    {
+        /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
+        if ($activeSubscription = $user->activeSubscription) {
+            $subscriptionTranslationQuota = $activeSubscription->getAllowedTranslations();
+            $currentTranslationCount      = $user->getTranslationCount();
+
+            $subscriptionTranslationQuota -= $currentTranslationCount;
+
+            return $subscriptionTranslationQuota;
         }
 
         return false;

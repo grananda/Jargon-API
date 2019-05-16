@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Jobs;
-
 
 use App\Events\ActiveSubscription\ActiveSubscriptionWasActivated;
 use App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated;
@@ -15,6 +13,9 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class InvoicePaymentSucceededTest extends TestCase
 {
     use RefreshDatabase;

@@ -5,6 +5,9 @@ namespace Tests\Unit\Models;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class UserModelTest extends TestCase
 {
     use RefreshDatabase;

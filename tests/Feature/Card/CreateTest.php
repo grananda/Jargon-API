@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Feature\Card;
-
 
 use App\Exceptions\StripeApiCallException;
 use App\Models\Card;
@@ -11,6 +9,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class CreateTest extends TestCase
 {
     use RefreshDatabase;
@@ -34,14 +35,16 @@ class CreateTest extends TestCase
         $this->stripeDeleteResponse = $this->loadFixture('stripe/card.delete.success');
 
         $this->mock(StripeCardRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('create')
                 ->withAnyArgs()
-                ->andReturn($this->stripeCreateResponse);
+                ->andReturn($this->stripeCreateResponse)
+            ;
 
             $mock->shouldReceive('delete')
                 ->withAnyArgs()
-                ->andReturn($this->stripeDeleteResponse);
+                ->andReturn($this->stripeDeleteResponse)
+            ;
         });
     }
 
@@ -78,10 +81,11 @@ class CreateTest extends TestCase
     {
         // Given
         $this->mock(StripeCardRepository::class, function ($mock) {
-            /** @var \Mockery\Mock $mock */
+            /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('create')
                 ->withAnyArgs()
-                ->andThrowExceptions([new StripeApiCallException()]);
+                ->andThrowExceptions([new StripeApiCallException()])
+            ;
         });
 
         /** @var \App\Models\User $user */
@@ -114,7 +118,7 @@ class CreateTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_CREATED);
-        $this->assertEquals(1, $user->fresh()->cards()->count());
+        $this->assertSame(1, $user->fresh()->cards()->count());
         $this->assertDatabaseHas('cards', [
             'user_id'   => $user->id,
             'stripe_id' => $this->stripeCreateResponse['id'],
@@ -141,7 +145,7 @@ class CreateTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_CREATED);
-        $this->assertEquals(1, $user->fresh()->cards()->count());
+        $this->assertSame(1, $user->fresh()->cards()->count());
         $this->assertDatabaseHas('cards', [
             'user_id'   => $user->id,
             'stripe_id' => $this->stripeCreateResponse['id'],

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Services;
-
 
 use App\Exceptions\StripeApiCallException;
 use App\Models\Card;
@@ -12,6 +10,9 @@ use App\Services\CardService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class CardServiceTest extends TestCase
 {
     use RefreshDatabase;
@@ -33,7 +34,8 @@ class CardServiceTest extends TestCase
 
         $stripeCardRepository = $this->createMock(StripeCardRepository::class);
         $stripeCardRepository->method('create')
-            ->willReturn($response);
+            ->willReturn($response)
+        ;
 
         /** @var CardService $cardService */
         $cardService = new CardService($stripeCardRepository, $cardRepository);
@@ -42,7 +44,7 @@ class CardServiceTest extends TestCase
         $card = $cardService->registerCard($user, $cardToken);
 
         // Then
-        $this->assertEquals($card->stripe_id, $response['id']);
+        $this->assertSame($card->stripe_id, $response['id']);
     }
 
     /** @test */
@@ -60,7 +62,8 @@ class CardServiceTest extends TestCase
 
         $stripeCardRepository = $this->createMock(StripeCardRepository::class);
         $stripeCardRepository->method('create')
-            ->willThrowException(new StripeApiCallException());
+            ->willThrowException(new StripeApiCallException())
+        ;
 
         /** @var CardService $cardService */
         $cardService = new CardService($stripeCardRepository, $cardRepository);
@@ -95,10 +98,11 @@ class CardServiceTest extends TestCase
         $stripeCardRepository = $this->createMock(StripeCardRepository::class);
 
         $stripeCardRepository->method('create')
-            ->willReturn($responseCreated);
+            ->willReturn($responseCreated)
+        ;
         $stripeCardRepository->method('delete')
-            ->willReturn($responseDeleted);
-
+            ->willReturn($responseDeleted)
+        ;
 
         /** @var CardService $cardService */
         $cardService = new CardService($stripeCardRepository, $cardRepository);
@@ -107,14 +111,14 @@ class CardServiceTest extends TestCase
         $replacedCard = $cardService->registerCard($user, $cardToken);
 
         // Then
-        $this->assertEquals($replacedCard->stripe_id, $responseCreated['id']);
+        $this->assertSame($replacedCard->stripe_id, $responseCreated['id']);
         $this->assertDatabaseMissing('cards', [
-            'stripe_id'=>$card->stripe_id,
-            'user_id' => $user->id,
+            'stripe_id' => $card->stripe_id,
+            'user_id'   => $user->id,
         ]);
         $this->assertDatabaseHas('cards', [
-            'stripe_id'=>$replacedCard->stripe_id,
-            'user_id' => $user->id,
+            'stripe_id' => $replacedCard->stripe_id,
+            'user_id'   => $user->id,
         ]);
     }
 
@@ -133,7 +137,8 @@ class CardServiceTest extends TestCase
 
         $stripeCardRepository = $this->createMock(StripeCardRepository::class);
         $stripeCardRepository->method('update')
-            ->willReturn($response);
+            ->willReturn($response)
+        ;
 
         /** @var CardService $cardService */
         $cardService = new CardService($stripeCardRepository, $cardRepository);
@@ -152,8 +157,8 @@ class CardServiceTest extends TestCase
         $card = $cardService->updateCard($card, $attributes);
 
         // Then
-        $this->assertEquals($card->address_city, $attributes['address_city']);
-        $this->assertEquals($card->address_country, $attributes['address_country']);
+        $this->assertSame($card->address_city, $attributes['address_city']);
+        $this->assertSame($card->address_country, $attributes['address_country']);
     }
 
     /** @test */
@@ -171,7 +176,8 @@ class CardServiceTest extends TestCase
 
         $stripeCardRepository = $this->createMock(StripeCardRepository::class);
         $stripeCardRepository->method('delete')
-            ->willReturn($response);
+            ->willReturn($response)
+        ;
 
         /** @var CardService $cardService */
         $cardService = new CardService($stripeCardRepository, $cardRepository);

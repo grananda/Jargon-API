@@ -11,6 +11,7 @@ use App\Models\Options\OptionUser;
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Traits\HasRegistration;
 use App\Models\Traits\HasUuid;
+use App\Models\Translations\Node;
 use App\Models\Translations\Project;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -225,6 +226,18 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * @param array $roles
+     *
+     * @return bool
+     */
+    public function hasRoles(array $roles)
+    {
+        $roles = array_column($this->roles->toArray(), 'alias');
+
+        return (bool) array_intersect($roles, $roles);
+    }
+
+    /**
      * @param string $v
      */
     public function setPassword($v)
@@ -423,6 +436,26 @@ class User extends Authenticatable implements MustVerifyEmail
         foreach ($this->projects as $project) {
             $counter += $project->members()->count();
         }
+
+        return $counter;
+    }
+
+    /**
+     * Returns total translations per users.
+     *
+     * @return int
+     */
+    public function getTranslationCount()
+    {
+        $counter = 0;
+
+        foreach ($this->projects as $project) {
+            /* @var Project $project */
+            foreach ($project->nodes as $node) {
+                /* @var Node $node */
+                $counter += $node->translations()->count();
+            };
+        };
 
         return $counter;
     }

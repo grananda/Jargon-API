@@ -1,19 +1,19 @@
 <?php
 
-
 namespace Tests\Unit\Listeners\User;
-
 
 use App\Events\User\PasswordResetRequested;
 use App\Listeners\SendPasswordRecoveryNotification;
 use App\Mail\SendPasswordRecoveryEmail;
-use App\Models\PasswordReset;
 use App\Repositories\PasswordResetRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
+/**
+ * @coversNothing
+ */
 class SendPasswordRecoveryNotificationTest extends TestCase
 {
     use RefreshDatabase;

@@ -15,7 +15,6 @@ class Translation extends BaseEntity
 
     protected $fillable = [
         'definition',
-        'dialect_id',
     ];
 
     protected $dates = [
