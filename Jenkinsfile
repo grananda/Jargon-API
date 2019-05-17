@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Test API') {
           steps {
-            sh 'composer test:api'
+            sh 'composer test:feature'
           }
         }
         stage('Test external-service') {
