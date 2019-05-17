@@ -13,6 +13,12 @@ pipeline {
       }
     }
     stage('Linters') {
+      agent {
+        dockerfile {
+          filename 'Dockerfile'
+        }
+
+      }
       steps {
         sh 'composer cs:check'
       }
@@ -26,16 +32,34 @@ pipeline {
     stage('Test unit') {
       parallel {
         stage('Test unit') {
+          agent {
+            dockerfile {
+              filename 'Dockerfile'
+            }
+
+          }
           steps {
             sh 'composer test:unit'
           }
         }
         stage('Test API') {
+          agent {
+            dockerfile {
+              filename 'Dockerfile'
+            }
+
+          }
           steps {
             sh 'composer test:api'
           }
         }
         stage('Test external-service') {
+          agent {
+            dockerfile {
+              filename 'Dockerfile'
+            }
+
+          }
           steps {
             sh 'composer test:external-service'
           }
