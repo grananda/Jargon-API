@@ -2,6 +2,12 @@ pipeline {
   agent any
   stages {
     stage('Build dependencies') {
+      agent {
+        dockerfile {
+          filename 'Dockerfile'
+        }
+
+      }
       steps {
         sh 'composer install'
       }
@@ -37,12 +43,7 @@ pipeline {
       }
     }
     stage('Deploy to staging') {
-      agent {
-        dockerfile {
-          filename 'Dockerfile'
-        }
-
-      }
+      agent any
       steps {
         sh 'composer deploy:staging'
       }
