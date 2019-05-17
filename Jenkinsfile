@@ -29,9 +29,9 @@ pipeline {
             sh 'composer test:api'
           }
         }
-        stage('Test third-party') {
+        stage('Test external-service') {
           steps {
-            sh 'composer test:third-party'
+            sh 'composer test:external-service'
           }
         }
       }
