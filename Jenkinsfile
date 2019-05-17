@@ -8,8 +8,7 @@ pipeline {
   stages {
     stage('Setting environment') {
       steps {
-        sh '''cp .env.ci .env
-  '''
+        sh 'cp .env.ci .env'
       }
     }
     stage('Build dependencies') {
