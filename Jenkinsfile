@@ -40,27 +40,10 @@ pipeline {
         }
       }
     }
-     stage('Deploy') {
-                parallel {
-                    stage('Deploy to staging') {
-                        when {
-                            branch 'development'
-                        }
-                        steps {
-                             php artisan deploy
-                        }
-                    }
-                    stage('Deploy to production') {
-                        when {
-                            branch 'master'
-                        }
-                        steps {
-                            dir('endpoint-test') {
-                                php artisan deploy
-                            }
-                        }
-                    }
-                }
-            }
+    stage('Deploy to staging') {
+      steps {
+        sh 'composer deploy:staging'
+      }
+    }
   }
 }
