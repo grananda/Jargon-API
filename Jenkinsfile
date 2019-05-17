@@ -11,7 +11,7 @@ pipeline {
         sh 'composer cs:check'
       }
     }
-    stage('Setting enviroment') {
+    stage('Setting environment') {
       steps {
         sh '''cp .env.ci .env
 '''
