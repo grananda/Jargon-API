@@ -1,6 +1,17 @@
 pipeline {
   agent any
+
+   options {
+          ansiColor('xterm')
+      }
+
   stages {
+      stage('Setting environment') {
+        steps {
+          sh '''cp .env.ci .env
+  '''
+        }
+      }
     stage('Build dependencies') {
       agent {
         dockerfile {
@@ -23,12 +34,7 @@ pipeline {
         sh 'composer cs:check'
       }
     }
-    stage('Setting environment') {
-      steps {
-        sh '''cp .env.ci .env
-'''
-      }
-    }
+
     stage('Test unit') {
       parallel {
         stage('Test unit') {
