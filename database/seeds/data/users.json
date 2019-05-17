@@ -1,0 +1,48 @@
+[
+    {
+        "name": "Admin Team",
+        "email": "admin@jargon.network",
+        "username": "adminuser",
+        "password": "123456",
+        "role": "super-admin"
+    },
+    {
+        "name": "staff Team",
+        "email": "staff@jargon.network",
+        "username": "staffmember",
+        "password": "123456",
+        "role": "staff"
+    },
+    {
+        "name": "John Freemium",
+        "email": "freemium@jargon.network",
+        "username": "jFreemium",
+        "password": "123456",
+        "role": "registered-user",
+        "subscription": "freemium-month-eur"
+    },
+    {
+        "name": "John Premium",
+        "email": "premium@jargon.network",
+        "username": "jPremium",
+        "password": "123456",
+        "role": "registered-user",
+        "subscription": "premium-month-eur"
+    },
+    {
+        "name": "John Professional",
+        "email": "Pprofessional@jargon.network",
+        "username": "jProfessional",
+        "password": "123456",
+        "role": "registered-user",
+        "subscription": "professional-month-eur"
+    },
+    {
+        "name": "John Enterprise",
+        "email": "enterprise@jargon.network",
+        "username": "jEnterprise",
+        "password": "123456",
+        "role": "registered-user",
+        "subscription": "enterprise-month-eur"
+    }
+]

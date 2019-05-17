@@ -1,0 +1,203 @@
+[
+  {
+    "title": "Freemium",
+    "description": "FREE and Ideal for developers with a  small project",
+    "alias": "freemium",
+    "rank": 10,
+    "plans": [
+      {
+        "alias": "freemium-month-eur",
+        "amount": 0,
+        "sort_order": 10,
+        "interval": "month",
+        "currency": "EUR"
+      }
+    ],
+    "options": [
+      {
+        "option_key": "project_count",
+        "option_value": 1
+      },
+      {
+        "option_key": "team_count",
+        "option_value": 0
+      },
+      {
+        "option_key": "organization_count",
+        "option_value": 0
+      },
+      {
+        "option_key": "collaborator_count",
+        "option_value": 0
+      },
+      {
+        "option_key": "language_count",
+        "option_value": 2
+      },
+      {
+        "option_key": "translation_count",
+        "option_value": 300
+      },
+      {
+        "option_key": "customer_service",
+        "option_value": 0
+      }
+    ]
+  },
+  {
+    "title": "Premium",
+    "description": "Ideal for small start-ups and freelancers",
+    "alias": "premium",
+    "rank": 20,
+    "plans": [
+      {
+        "alias": "premium-month-eur",
+        "amount": 8,
+        "sort_order": 10,
+        "interval": "month",
+        "currency": "EUR"
+      },
+      {
+        "alias": "premium-year-eur",
+        "amount": 86,
+        "sort_order": 20,
+        "interval": "year",
+        "currency": "EUR"
+      }
+    ],
+    "options": [
+      {
+        "option_key": "project_count",
+        "option_value": 5
+      },
+      {
+        "option_key": "team_count",
+        "option_value": 5
+      },
+      {
+        "option_key": "organization_count",
+        "option_value": 2
+      },
+      {
+        "option_key": "collaborator_count",
+        "option_value": 10
+      },
+      {
+        "option_key": "language_count",
+        "option_value": 5
+      },
+      {
+        "option_key": "translation_count",
+        "option_value": 10000
+      },
+      {
+        "option_key": "customer_service",
+        "option_value": 1
+      }
+    ]
+  },
+  {
+    "title": "Professional",
+    "description": "Perfect for medium size businesses or professional freelancers",
+    "alias": "professional",
+    "rank": 30,
+    "plans": [
+      {
+        "alias": "professional-month-eur",
+        "amount": 25,
+        "sort_order": 10,
+        "interval": "month",
+        "currency": "EUR"
+      },
+      {
+        "alias": "professional-year-eur",
+        "amount": 270,
+        "sort_order": 20,
+        "interval": "year",
+        "currency": "EUR"
+      }
+    ],
+    "options": [
+      {
+        "option_key": "project_count",
+        "option_value": 25
+      },
+      {
+        "option_key": "team_count",
+        "option_value": 25
+      },
+      {
+        "option_key": "organization_count",
+        "option_value": 5
+      },
+      {
+        "option_key": "collaborator_count",
+        "option_value": 25
+      },
+      {
+        "option_key": "language_count",
+        "option_value": 50
+      },
+      {
+        "option_key": "translation_count",
+        "option_value": 100000
+      },
+      {
+        "option_key": "customer_service",
+        "option_value": 1
+      }
+    ]
+  },
+  {
+    "title": "Enterprise",
+    "description": "Full package for big sized business",
+    "alias": "enterprise",
+    "rank": 40,
+    "plans": [
+      {
+        "alias": "enterprise-month-eur",
+        "amount": 45,
+        "sort_order": 10,
+        "interval": "month",
+        "currency": "EUR"
+      },
+      {
+        "alias": "enterprise-year-eur",
+        "amount": 486,
+        "sort_order": 20,
+        "interval": "year",
+        "currency": "EUR"
+      }
+    ],
+    "options": [
+      {
+        "option_key": "project_count",
+        "option_value": 50
+      },
+      {
+        "option_key": "team_count",
+        "option_value": 50
+      },
+      {
+        "option_key": "organization_count",
+        "option_value": 10
+      },
+      {
+        "option_key": "collaborator_count",
+        "option_value": 50
+      },
+      {
+        "option_key": "language_count",
+        "option_value": 1000000
+      },
+      {
+        "option_key": "translation_count",
+        "option_value": 1000000
+      },
+      {
+        "option_key": "customer_service",
+        "option_value": 1
+      }
+    ]
+  }
+]

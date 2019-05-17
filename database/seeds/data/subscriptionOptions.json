@@ -1,0 +1,44 @@
+[
+    {
+        "title": "Total projects",
+        "description": "Total number fo allowed projects per account",
+        "description_template": "{1} Only one project allowed|[2,*] Work with up to :value projects",
+        "option_key": "project_count"
+    },
+    {
+        "title": "Total teams",
+        "description": "Total number of teams allowed per account.",
+        "description_template": "{0}|[1,*]Create up to :value work teams",
+        "option_key": "team_count"
+    },
+    {
+        "title": "Total organizations",
+        "description": "Total number of organizations allowed per account",
+        "description_template": "{0}|[1,*]Manage up to :value organizations",
+        "option_key": "organization_count"
+    },
+    {
+        "title": "Total collaborators",
+        "description": "Total number of collaborators allowed per account.",
+        "description_template": "{0} No collaborators, just you|[1,*]Invite up to :value collaborators",
+        "option_key": "collaborator_count"
+    },
+    {
+        "title": "Language collaborators",
+        "description": "Total number of languages allowed per project.",
+        "description_template": "[1,*]Translate into :value languages",
+        "option_key": "language_count"
+    },
+    {
+        "title": "Total translation units",
+        "description": "Total amount of translation units allowed per project.",
+        "description_template": "{0} Unlimited translation units|[1,*] Limited to :value translation units",
+        "option_key": "translation_count"
+    },
+    {
+        "title": "Customer service",
+        "description": "Customer service support 8x5",
+        "description_template": "{0} Knowledge base support|[1,*]Customer service support 8x5",
+        "option_key": "customer_service"
+    }
+]
