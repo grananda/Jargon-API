@@ -94,7 +94,7 @@
       "./vendor/bin/phpunit --verbose --colors=always --group unit --testdox --configuration=phpunit.xml --log-junit /dev/shm/phpunit/junit.xml"
     ],
     "tests:external": [
-      "./vendor/bin/phpunit --verbose --colors=always --group external-service --testdox --configuration=phpunit.xml --log-junit /dev/shm/phpunit/junit.xml"
+      "./vendor/bin/phpunit --verbose --colors=always --group external --testdox --configuration=phpunit.xml --log-junit /dev/shm/phpunit/junit.xml"
     ],
     "deploy:staging": [
       ""
