@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Communications;
 
+use App\Models\BaseEntity;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Memo extends BaseEntity

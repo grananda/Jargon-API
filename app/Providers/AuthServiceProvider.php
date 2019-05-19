@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Card;
+use App\Models\Communications\Memo;
 use App\Models\Options\Option;
 use App\Models\Organization;
 use App\Models\Subscriptions\SubscriptionOption;
@@ -14,6 +15,7 @@ use App\Models\Translations\Project;
 use App\Models\Translations\Translation;
 use App\Models\User;
 use App\Policies\CardPolicy;
+use App\Policies\MemoPolicy;
 use App\Policies\NodePolicy;
 use App\Policies\OptionPolicy;
 use App\Policies\OrganizationPolicy;
@@ -46,6 +48,7 @@ class AuthServiceProvider extends ServiceProvider
         Card::class                => CardPolicy::class,
         Node::class                => NodePolicy::class,
         Translation::class         => TranslationPolicy::class,
+        Memo::class                => MemoPolicy::class,
     ];
 
     /**

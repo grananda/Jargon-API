@@ -7,6 +7,7 @@ use App\Events\User\UserWasActivated;
 use App\Events\User\UserWasDeactivated;
 use App\Events\User\UserWasDeleted;
 use App\Jobs\UpdateStripeCustomer;
+use App\Models\Communications\Memo;
 use App\Models\Options\OptionUser;
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Traits\HasRegistration;
