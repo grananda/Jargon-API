@@ -47,8 +47,8 @@ class AuthService
      * @param array $credentials
      * @param bool  $rememberMe
      *
-     * @throws \App\Exceptions\UserNotActivated
      * @throws \App\Exceptions\UnauthorizedUserException
+     * @throws \App\Exceptions\UserNotActivated
      *
      * @return \Laravel\Passport\PersonalAccessTokenResult
      */
@@ -65,9 +65,10 @@ class AuthService
             throw new UserNotActivated(trans('User is not active'));
         }
 
-        if (password_needs_rehash($user->password, PASSWORD_DEFAULT)) {
-            $user->update(compact('password'));
-        }
+//        TODO: Fix block
+//        if (password_needs_rehash($user->password, PASSWORD_DEFAULT)) {
+//            $user->update(compact('password'));
+//        }
 
         /** @var \Laravel\Passport\PersonalAccessTokenResult $tokenResult */
         $tokenResult = $user->createToken('Personal Access Token');
