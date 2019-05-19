@@ -19,8 +19,8 @@ use Tests\traits\CreateActiveSubscription;
  */
 class ReactivateStripeSubscriptionTest extends TestCase
 {
-    use RefreshDatabase,
-        CreateActiveSubscription;
+    use RefreshDatabase;
+    use CreateActiveSubscription;
 
     /** @test */
     public function a_stripe_subscription_is_canceled()

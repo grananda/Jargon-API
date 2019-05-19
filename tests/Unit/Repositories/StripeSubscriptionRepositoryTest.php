@@ -22,8 +22,8 @@ use Tests\traits\CreateActiveSubscription;
  */
 class StripeSubscriptionRepositoryTest extends TestCase
 {
-    use RefreshDatabase,
-        CreateActiveSubscription;
+    use RefreshDatabase;
+    use CreateActiveSubscription;
 
     /** @test */
     public function creates_updates_cancels_and_reactivates_a_stripe_subscription()

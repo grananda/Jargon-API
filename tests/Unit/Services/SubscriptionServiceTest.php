@@ -22,8 +22,8 @@ use Tests\traits\CreateActiveSubscription;
  */
 class SubscriptionServiceTest extends TestCase
 {
-    use RefreshDatabase,
-        CreateActiveSubscription;
+    use RefreshDatabase;
+    use CreateActiveSubscription;
 
     /**
      * @var array

@@ -16,7 +16,8 @@ use Tests\traits\CreateActiveSubscription;
  */
 class DowngradeTest extends TestCase
 {
-    use RefreshDatabase,
+    use RefreshDatabase;
+    use
         CreateActiveSubscription;
 
     /**

@@ -18,7 +18,8 @@ use Tests\traits\CreateActiveSubscription;
  */
 class DeleteTest extends TestCase
 {
-    use RefreshDatabase,
+    use RefreshDatabase;
+    use
         CreateActiveSubscription;
 
     /** @test */

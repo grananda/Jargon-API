@@ -24,8 +24,8 @@ use Tests\traits\CreateActiveSubscription;
  */
 class SubscriptionDowngradeServiceTest extends TestCase
 {
-    use RefreshDatabase,
-        CreateActiveSubscription;
+    use RefreshDatabase;
+    use CreateActiveSubscription;
 
     /**
      * @var \App\Models\User

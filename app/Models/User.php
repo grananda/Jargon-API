@@ -25,11 +25,11 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens,
-        Notifiable,
-        HasRegistration,
-        HasUuid,
-        HasStripeId;
+    use HasApiTokens;
+    use        Notifiable;
+    use        HasRegistration;
+    use        HasUuid;
+    use        HasStripeId;
 
     const ACTIVATION_EXPIRES_AT      = 48;
     const ACTIVATION_TOKEN_LENGTH    = 32;

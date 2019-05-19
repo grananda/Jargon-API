@@ -19,7 +19,8 @@ use Tests\traits\CreateActiveSubscription;
  */
 class UpdateTest extends TestCase
 {
-    use RefreshDatabase,
+    use RefreshDatabase;
+    use
         CreateActiveSubscription;
 
     /** @test */

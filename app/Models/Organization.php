@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Organization extends BaseEntity
 {
-    use HasUuid,
+    use HasUuid;
+    use
         HasCollaborators;
 
     const ITEM_TOKEN_LENGTH = 50;
