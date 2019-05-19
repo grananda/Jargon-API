@@ -40,27 +40,5 @@ pipeline {
         }
       }
     }
-     stage('Deploy') {
-        parallel {
-            stage('Deploy to staging') {
-                when {
-                    branch 'development'
-                }
-                steps {
-                     sh 'php artisan deploy'
-                }
-            }
-            stage('Deploy to production') {
-                when {
-                    branch 'master'
-                }
-                steps {
-                    dir('endpoint-test') {
-                        sh 'php artisan deploy¡'
-                    }
-                }
-            }
-        }
-    }
   }
 }
