@@ -2,19 +2,19 @@
 
 namespace App\Policies;
 
-use Illuminate\Auth\Access\HandlesAuthorization;
+use App\Models\User;
 
-class MemoPolicy
+class MemoPolicy extends AbstractPolicy
 {
-    use HandlesAuthorization;
-
     /**
-     * Create a new policy instance.
+     * Determines is a user can list projects.
      *
-     * @return void
+     * @param \App\Models\User $user
+     *
+     * @return bool
      */
-    public function __construct()
+    public function list(User $user)
     {
-        //
+        return true;
     }
 }

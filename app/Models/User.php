@@ -183,7 +183,15 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function memos()
     {
-        return $this->hasMany(Memo::class, 'user_id', 'id');
+        return $this->hasMany(Memo::class)
+            ->withPivot([
+                'created_at',
+                'updated_at',
+                'is_read',
+            ])
+            ->withTimeStamp()
+            ->orderBy('updated_at', 'desc')
+        ;
     }
 
     /**

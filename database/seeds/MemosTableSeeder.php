@@ -1,9 +1,7 @@
 <?php
 
-use App\Models\Memo;
+use App\Models\Communications\Memo;
 use App\Models\User;
-use App\Notifications\MemoSentNotification;
-use Illuminate\Support\Facades\Notification;
 
 class MemosTableSeeder extends AbstractSeeder
 {
@@ -14,20 +12,17 @@ class MemosTableSeeder extends AbstractSeeder
      */
     public function run()
     {
-        $this->truncateTables(['notifications']);
+        $this->truncateTables(['memos', 'memo_user']);
 
+        /** @var \Illuminate\Database\Eloquent\Collection $users */
         $users = User::all();
 
-        /** @var \App\Models\User $user */
-        foreach ($users as $user) {
-            factory(Memo::class, 5)->create(['user_id' => $user->id]);
-        }
+        /** @var \Illuminate\Database\Eloquent\Collection $memos */
+        $memos = factory(Memo::class, 10)->create();
 
-        $memos = Memo::all();
-
-        /** @var Memo $memo */
         foreach ($memos as $memo) {
-            Notification::send($user, new MemoSentNotification($memo));
+            /* @var Memo $memo */
+            $memo->setRecipients($users->pluck('uuid')->toArray());
         }
     }
 }

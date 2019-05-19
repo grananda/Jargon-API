@@ -3,9 +3,6 @@
 namespace Test\Feature\Memo;
 
 use App\Models\Communications\Memo;
-use App\Models\Organization;
-use App\Models\Translations\Project;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -35,13 +32,22 @@ class ListTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->user();
 
-        $memo = factory(Memo::class, 10)->create();
+        /** @var \App\Models\User $other */
+        $other = $this->user();
+
+        factory(Memo::class, 5)->create([
+            'user_id' => $user->id,
+        ]);
+
+        factory(Memo::class, 5)->create([
+            'user_id' => $other->id,
+        ]);
 
         // When
         $response = $this->signIn($user)->get(route('memos.index'));
 
         // Then
-        $response->assertStatus(\Symfony\Component\HttpFoundation\Response::HTTP_OK);
-        $response->assertJsonCount(0, 'data');
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonCount(5, 'data');
     }
 }

@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Communication;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Request;
+use App\Models\Communications\Memo;
 
-class IndexMemoRequest extends FormRequest
+class IndexMemoRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,18 +14,6 @@ class IndexMemoRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-            //
-        ];
+        return $this->user()->can('list', [Memo::class]);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Models\Communications;
 
 use App\Models\BaseEntity;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Memo extends BaseEntity
 {
@@ -29,18 +28,27 @@ class Memo extends BaseEntity
     ];
 
     /**
-     * @return BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function sender()
+    public function recipients()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsToMany(User::class)
+            ->withTimestamps()
+        ;
     }
 
     /**
-     * @return string
+     * @param array $users
      */
-    public function getCreatedAtHuman()
+    public function setRecipients(array $users)
     {
-        return $this->created_at->diffForHumans();
+        /** @var array $userCollection */
+        $userCollection = [];
+
+        foreach ($users as $user) {
+            $userCollection[] = User::findByUuidOrFail($user);
+        }
+
+        $this->recipients()->sync(collect($userCollection)->pluck('id')->toArray());
     }
 }
