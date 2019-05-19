@@ -47,7 +47,7 @@ pipeline {
                     branch 'development'
                 }
                 steps {
-                     php artisan deploy
+                     sh 'php artisan deploy'
                 }
             }
             stage('Deploy to production') {
@@ -56,7 +56,7 @@ pipeline {
                 }
                 steps {
                     dir('endpoint-test') {
-                        php artisan deploy
+                        sh 'php artisan deploy¡'
                     }
                 }
             }
