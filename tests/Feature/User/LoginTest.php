@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class LoginTest extends TestCase

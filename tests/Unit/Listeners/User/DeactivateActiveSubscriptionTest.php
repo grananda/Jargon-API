@@ -12,6 +12,7 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class DeactivateActiveSubscriptionTest extends TestCase

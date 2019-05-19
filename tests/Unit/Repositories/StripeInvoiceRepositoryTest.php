@@ -19,6 +19,7 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
+ * @group external
  * @coversNothing
  */
 class StripeInvoiceRepositoryTest extends TestCase

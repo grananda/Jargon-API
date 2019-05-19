@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class UpdateTest extends TestCase

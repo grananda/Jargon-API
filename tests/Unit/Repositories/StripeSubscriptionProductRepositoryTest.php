@@ -7,7 +7,10 @@ use App\Repositories\Stripe\StripeSubscriptionProductRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/** @group using-external-service */
+/**
+ * @group external
+ * @coversNothing
+ */
 class StripeSubscriptionProductRepositoryTest extends TestCase
 {
     use RefreshDatabase;

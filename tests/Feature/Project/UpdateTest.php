@@ -14,6 +14,7 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class UpdateTest extends TestCase

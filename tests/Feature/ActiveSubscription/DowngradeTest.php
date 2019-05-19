@@ -11,6 +11,7 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class DowngradeTest extends TestCase

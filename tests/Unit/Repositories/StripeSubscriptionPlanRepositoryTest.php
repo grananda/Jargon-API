@@ -14,7 +14,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
-/** @group using-external-service */
+/**
+ * @group external
+ * @coversNothing
+ */
 class StripeSubscriptionPlanRepositoryTest extends TestCase
 {
     use RefreshDatabase;

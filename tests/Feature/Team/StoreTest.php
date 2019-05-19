@@ -12,6 +12,7 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class StoreTest extends TestCase

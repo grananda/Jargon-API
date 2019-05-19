@@ -17,6 +17,7 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
+ * @group external
  * @coversNothing
  */
 class StripeSubscriptionRepositoryTest extends TestCase

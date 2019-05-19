@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class ListTest extends TestCase

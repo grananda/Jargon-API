@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class ListTest extends TestCase

@@ -13,6 +13,7 @@ use Tests\traits\CreateActiveSubscription;
 use Tests\traits\CreateOptionUsers;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class DeleteTest extends TestCase

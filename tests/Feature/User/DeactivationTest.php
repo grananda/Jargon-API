@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class DeactivationTest extends TestCase

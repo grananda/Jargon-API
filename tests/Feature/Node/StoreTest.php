@@ -10,9 +10,7 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 /**
- * Class StoreTest.
- *
- * @package Tests\Feature\Node
+ * @group feature
  * @coversNothing
  */
 class StoreTest extends TestCase

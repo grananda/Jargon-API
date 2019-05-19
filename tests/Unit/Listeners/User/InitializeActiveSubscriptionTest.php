@@ -14,6 +14,7 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class InitializeActiveSubscriptionTest extends TestCase
