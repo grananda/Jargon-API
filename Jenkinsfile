@@ -64,7 +64,7 @@ pipeline {
           }
           steps {
             dir('endpoint-test') {
-            sh 'php artisan deploy¡'
+            sh 'php artisan deploy'
           }
         }
       }
