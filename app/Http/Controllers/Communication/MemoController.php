@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Communication\DeleteMemoRequest;
 use App\Http\Requests\Communication\IndexMemoRequest;
 use App\Http\Requests\Communication\ShowMemoRequest;
-use App\Http\Requests\Communication\StoreMemoRequest;
 use App\Http\Requests\Communication\UpdateMemoRequest;
 use App\Repositories\MemoRepository;
 use Exception;
@@ -43,27 +42,6 @@ class MemoController extends ApiController
             $memos = $request->user()->memos;
 
             return $this->responseOk($memos);
-        } catch (Exception $e) {
-            return $this->responseInternalError($e->getMessage());
-        }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \App\Http\Requests\Communication\StoreMemoRequest $request
-     *
-     * @throws \Throwable
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function store(StoreMemoRequest $request)
-    {
-        try {
-            /** @var \App\Models\Communications\Memo $memo */
-            $memo = $this->memoRepository->createMemo($request->validated());
-
-            return $this->responseOk($memo);
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
         }

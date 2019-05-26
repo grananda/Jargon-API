@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Memo;
+namespace Tests\Feature\MemoManagement;
 
 use App\Models\Communications\Memo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,28 +19,41 @@ class ShowTest extends TestCase
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
         // When
-        $response = $this->get(route('memos.show', [123]));
+        $response = $this->get(route('memos.staff.show', [123]));
+
+        // Then
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function a_401_will_be_returned_if_the_user_is_not_a_staff()
+    {
+        // Given
+        /** @var \App\Models\User $user */
+        $user = $this->user();
+
+        // When
+        $response = $this->get(route('memos.staff.show', [123]));
 
         // Then
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
     /** @test */
-    public function a_403_will_be_returned_when_displaying_a_memo_message_for_non_recipient()
+    public function a_403_will_be_returned_when_displaying_a_memo_message_for_junior_staff()
     {
         // Given
         /** @var \App\Models\User $user */
         $user = $this->user();
 
         /** @var \App\Models\User $other */
-        $other = $this->user();
+        $staff = $this->user('junior-staff');
 
         /** @var \App\Models\Communications\Memo $memo1 */
-        $memo1 = factory(Memo::class)->create(['status' => 'sent']);
+        $memo1 = factory(Memo::class)->create();
         $memo1->setRecipients([$user->uuid]);
 
         // When
-        $response = $this->signIn($other)->get(route('memos.show', [$memo1->uuid]));
+        $response = $this->signIn($staff)->get(route('memos.staff.show', [$memo1->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -53,36 +66,21 @@ class ShowTest extends TestCase
     }
 
     /** @test */
-    public function a_403_will_be_returned_when_displaying_a_draft_memo_message_for_recipient()
+    public function a_200_will_be_returned_when_displaying_a_memo_message_for_staff()
     {
         // Given
         /** @var \App\Models\User $user */
         $user = $this->user();
 
+        /** @var \App\Models\User $other */
+        $staff = $this->user();
+
         /** @var \App\Models\Communications\Memo $memo1 */
-        $memo1 = factory(Memo::class)->create(['status' => 'draft']);
+        $memo1 = factory(Memo::class)->create();
         $memo1->setRecipients([$user->uuid]);
 
         // When
-        $response = $this->signIn($user)->get(route('memos.show', [$memo1->uuid]));
-
-        // Then
-        $response->assertStatus(Response::HTTP_FORBIDDEN);
-    }
-
-    /** @test */
-    public function a_200_will_be_returned_when_displaying_a_memo_message_for_recipient()
-    {
-        // Given
-        /** @var \App\Models\User $user */
-        $user = $this->user();
-
-        /** @var \App\Models\Communications\Memo $memo1 */
-        $memo1 = factory(Memo::class)->create(['status' => 'sent']);
-        $memo1->setRecipients([$user->uuid]);
-
-        // When
-        $response = $this->signIn($user)->get(route('memos.show', [$memo1->uuid]));
+        $response = $this->signIn($staff)->get(route('memos.staff.show', [$memo1->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
@@ -91,7 +89,7 @@ class ShowTest extends TestCase
         $this->assertDatabaseHas('memo_user', [
             'user_id' => $user->id,
             'memo_id' => $memo1->id,
-            'is_read' => true,
+            'is_read' => false,
         ]);
     }
 }
