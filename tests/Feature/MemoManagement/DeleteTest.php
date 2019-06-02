@@ -39,6 +39,7 @@ class DeleteTest extends TestCase
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
+    /** @test */
     public function a_403_will_be_returned_when_a_junior_staff_member_deletes_a_memo_message()
     {
         // Given
@@ -46,14 +47,14 @@ class DeleteTest extends TestCase
         $user = $this->user();
 
         /** @var \App\Models\User $staff */
-        $staff = $this->staff();
+        $staff = $this->staff('junior-staff');
 
         /** @var \App\Models\Communications\Memo $memo1 */
         $memo1 = factory(Memo::class)->create();
         $memo1->setRecipients([$user->uuid]);
 
         // When
-        $response = $this->signIn($staff)->delete(route('memos.staff.delete', [$memo1->uuid]));
+        $response = $this->signIn($staff)->delete(route('memos.staff.destroy', [$memo1->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -74,7 +75,7 @@ class DeleteTest extends TestCase
         $memo1->setRecipients([$user->uuid]);
 
         // When
-        $response = $this->signIn($staff)->delete(route('memos.staff.delete', [$memo1->uuid]));
+        $response = $this->signIn($staff)->delete(route('memos.staff.destroy', [$memo1->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_NO_CONTENT);

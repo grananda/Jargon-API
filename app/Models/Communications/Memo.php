@@ -34,6 +34,15 @@ class Memo extends BaseEntity
         'item_token',
     ];
 
+    static public function boot()
+    {
+        parent::boot();
+
+        static::deleting(function (self $model) {
+            $model->recipients()->detach();
+        });
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */

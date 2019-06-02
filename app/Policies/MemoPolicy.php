@@ -51,4 +51,14 @@ class MemoPolicy extends AbstractPolicy
     {
         return $memo->status === 'sent' && $memo->recipients()->find($user->id);
     }
+
+    /**
+     * @param \App\Models\User                $user
+     *
+     * @return bool
+     */
+    public function staffDelete(User $user)
+    {
+        return $user->checkUserHasRoleType('staff') && !$user->checkUserHasRole('junior-staff');
+    }
 }

@@ -2,11 +2,32 @@
 
 namespace App\Http\Controllers\Communication;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\ApiController;
+use App\Http\Requests\Communication\DeleteMemoRequest;
+use App\Http\Requests\Communication\DeleteMemoStaffRequest;
+use App\Repositories\MemoRepository;
+use Exception;
 use Illuminate\Http\Request;
 
-class MemoManagementController extends Controller
+class MemoManagementController extends ApiController
 {
+    /**
+     * The MemoRepository instance.
+     *
+     * @var \App\Repositories\MemoRepository
+     */
+    private $memoRepository;
+
+    /**
+     * MemoController constructor.
+     *
+     * @param \App\Repositories\MemoRepository $memoRepository
+     */
+    public function __construct(MemoRepository $memoRepository)
+    {
+        $this->memoRepository = $memoRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -45,7 +66,7 @@ class MemoManagementController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -57,12 +78,18 @@ class MemoManagementController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\Communication\DeleteMemoStaffRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Throwable
      */
-    public function destroy($id)
+    public function destroy(DeleteMemoStaffRequest $request)
     {
-        //
+        try {
+            $this->memoRepository->delete($request->memo);
+
+            return $this->responseNoContent();
+        } catch (Exception $e) {
+            return $this->responseInternalError($e->getMessage());
+        }
     }
 }

@@ -16,7 +16,6 @@ use App\Models\Translations\Node;
 use App\Models\Translations\Project;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -184,7 +183,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function memos()
     {
         return $this->belongsToMany(Memo::class);
-
     }
 
     /**
