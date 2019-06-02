@@ -2,10 +2,18 @@
 
 namespace App\Http\Requests\Communication;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\Request;
+use App\Models\Communications\Memo;
 
-class UpdateMemoRequest extends FormRequest
+class UpdateMemoRequest extends Request
 {
+    /**
+     * The Memo instance.
+     *
+     * @var \App\Models\Communications\Memo
+     */
+    public $memo;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +21,9 @@ class UpdateMemoRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        $this->memo = Memo::findByUuidOrFail($this->route('id'));
+
+        return $this->user()->can('update', $this->memo);
     }
 
     /**
@@ -24,7 +34,7 @@ class UpdateMemoRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'is_read' => ['required', 'boolean'],
         ];
     }
 }

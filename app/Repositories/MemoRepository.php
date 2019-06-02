@@ -21,6 +21,7 @@ class MemoRepository extends CoreRepository
 
     /**
      * @param \App\Models\User $user
+     *
      * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public function getUserMemos(User $user)
@@ -34,9 +35,11 @@ class MemoRepository extends CoreRepository
 
     /**
      * @param \App\Models\Communications\Memo $memo
-     * @param \App\Models\User $recipient
-     * @return mixed
+     * @param \App\Models\User                $recipient
+     *
      * @throws \Throwable
+     *
+     * @return mixed
      */
     public function deleteRecipient(Memo $memo, User $recipient)
     {
@@ -49,15 +52,17 @@ class MemoRepository extends CoreRepository
 
     /**
      * @param \App\Models\Communications\Memo $memo
-     * @param \App\Models\User $recipient
-     * @param bool $isRead
-     * @return mixed
+     * @param \App\Models\User                $recipient
+     * @param bool                            $isRead
+     *
      * @throws \Throwable
+     *
+     * @return mixed
      */
     public function setRead(Memo $memo, User $recipient, bool $isRead = true)
     {
         return $this->dbConnection->transaction(function () use ($memo, $recipient, $isRead) {
-            $memo->recipients()->updateExistingPivot($recipient, ['is_read' => $isRead]);
+            $memo->setIsRead($recipient, $isRead);
 
             return $memo->fresh();
         });

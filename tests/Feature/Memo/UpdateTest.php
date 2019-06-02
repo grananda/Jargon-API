@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @covers \App\Http\Controllers\Communication\MemoRecipientController::update
+ * @covers \App\Http\Controllers\Communication\MemoController::update
  */
 class UpdateTest extends TestCase
 {
@@ -19,7 +19,7 @@ class UpdateTest extends TestCase
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
         // When
-        $response = $this->put(route('memos.recipient.update', [123]), []);
+        $response = $this->put(route('memos.update', [123]), []);
 
         // Then
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -40,7 +40,7 @@ class UpdateTest extends TestCase
         $memo1->setRecipients([$user->uuid]);
 
         // When
-        $response = $this->signIn($other)->put(route('memos.recipient.update', [$memo1->uuid]), [
+        $response = $this->signIn($other)->put(route('memos.update', [$memo1->uuid]), [
             'is_read' => false,
         ]);
 
@@ -61,7 +61,7 @@ class UpdateTest extends TestCase
         $memo1->setIsRead($user, true);
 
         // When
-        $response = $this->signIn($user)->put(route('memos.recipient.update', [$memo1->uuid]), [
+        $response = $this->signIn($user)->put(route('memos.update', [$memo1->uuid]), [
             'is_read' => false,
         ]);
 

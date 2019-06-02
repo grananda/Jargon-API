@@ -19,14 +19,32 @@ class MemoPolicy extends AbstractPolicy
         return true;
     }
 
+    /**
+     * @param \App\Models\User                $user
+     * @param \App\Models\Communications\Memo $memo
+     *
+     * @return bool
+     */
     public function show(User $user, Memo $memo)
     {
         return $memo->status === 'sent' && $memo->recipients()->find($user->id);
     }
 
     /**
-     * @param \App\Models\User $user
+     * @param \App\Models\User                $user
      * @param \App\Models\Communications\Memo $memo
+     *
+     * @return bool
+     */
+    public function update(User $user, Memo $memo)
+    {
+        return $memo->status === 'sent' && $memo->recipients()->find($user->id);
+    }
+
+    /**
+     * @param \App\Models\User                $user
+     * @param \App\Models\Communications\Memo $memo
+     *
      * @return bool
      */
     public function delete(User $user, Memo $memo)

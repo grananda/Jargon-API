@@ -14,7 +14,7 @@ class Memo extends BaseEntity
 {
     use HasUuid;
 
-    const ITEM_TOKEN_LENGTH = 50;
+    const ITEM_TOKEN_LENGTH    = 50;
     const EXPIRATION_THRESHOLD = 15;
 
     protected $created_at_human;
@@ -47,7 +47,7 @@ class Memo extends BaseEntity
                 'is_read',
             ])
             ->orderBy('updated_at', 'desc')
-            ;
+        ;
     }
 
     /**
@@ -63,5 +63,16 @@ class Memo extends BaseEntity
         }
 
         $this->recipients()->sync(collect($userCollection)->pluck('id')->toArray());
+    }
+
+    /**
+     * @param \App\Models\User $user
+     * @param bool             $isRead
+     *
+     * @return int
+     */
+    public function setIsRead(User $user, bool $isRead)
+    {
+        return $this->recipients()->updateExistingPivot($user, ['is_read' => $isRead]);
     }
 }
