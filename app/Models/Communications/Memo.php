@@ -3,11 +3,17 @@
 namespace App\Models\Communications;
 
 use App\Models\BaseEntity;
+use App\Models\Traits\HasUuid;
 use App\Models\User;
 
+/**
+ * @property \Illuminate\Support\Collection recipients
+ */
 class Memo extends BaseEntity
 {
-    const ITEM_TOKEN_LENGTH    = 50;
+    use HasUuid;
+
+    const ITEM_TOKEN_LENGTH = 50;
     const EXPIRATION_THRESHOLD = 15;
 
     protected $created_at_human;
@@ -33,8 +39,7 @@ class Memo extends BaseEntity
     public function recipients()
     {
         return $this->belongsToMany(User::class)
-            ->withTimestamps()
-        ;
+            ->withTimestamps();
     }
 
     /**

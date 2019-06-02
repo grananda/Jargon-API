@@ -96,7 +96,7 @@ class MemoController extends ApiController
     public function destroy(DeleteMemoRequest $request)
     {
         try {
-            $this->memoRepository->delete($request->memo);
+            $this->memoRepository->deleteRecipient($request->memo, $request->user());
 
             return $this->responseNoContent();
         } catch (Exception $e) {

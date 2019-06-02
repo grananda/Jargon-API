@@ -25,6 +25,7 @@ class DeleteTest extends TestCase
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
+    /** @test */
     public function a_403_will_be_returned_when_a_non_recipient_deletes_a_memo_message()
     {
         // Given
@@ -39,7 +40,7 @@ class DeleteTest extends TestCase
         $memo1->setRecipients([$user->uuid]);
 
         // When
-        $response = $this->signIn($other)->delete(route('memos.delete', [$memo1->uuid]));
+        $response = $this->signIn($other)->delete(route('memos.destroy', [$memo1->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -57,7 +58,7 @@ class DeleteTest extends TestCase
         $memo1->setRecipients([$user->uuid]);
 
         // When
-        $response = $this->signIn($user)->delete(route('memos.delete', [$memo1->uuid]));
+        $response = $this->signIn($user)->delete(route('memos.destroy', [$memo1->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_NO_CONTENT);

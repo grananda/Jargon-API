@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\Feature\Memo;
+namespace Test\Feature\MemoManagement;
 
 use App\Models\Communications\Memo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
