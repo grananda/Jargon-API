@@ -86,7 +86,6 @@ class ShowTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonCount(1, 'data');
 
         $this->assertDatabaseHas('memo_user', [
             'user_id' => $user->id,

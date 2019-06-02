@@ -47,6 +47,24 @@ class DeleteTest extends TestCase
     }
 
     /** @test */
+    public function a_403_will_be_returned_when_a_recipient_deletes_a_draft_memo_message()
+    {
+        // Given
+        /** @var \App\Models\User $user */
+        $user = $this->user();
+
+        /** @var \App\Models\Communications\Memo $memo1 */
+        $memo1 = factory(Memo::class)->create(['status' => 'draft']);
+        $memo1->setRecipients([$user->uuid]);
+
+        // When
+        $response = $this->signIn($user)->delete(route('memos.destroy', [$memo1->uuid]));
+
+        // Then
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
+
+    /** @test */
     public function a_200_will_be_returned_when_a_recipient_deletes_a_memo_message()
     {
         // Given

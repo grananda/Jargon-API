@@ -39,7 +39,7 @@ class MemoController extends ApiController
     public function index(IndexMemoRequest $request)
     {
         try {
-            $memos = $request->user()->memos;
+            $memos = $this->memoRepository->getUserMemos($request->user());
 
             return $this->responseOk($memos);
         } catch (Exception $e) {
@@ -57,6 +57,7 @@ class MemoController extends ApiController
     public function show(ShowMemoRequest $request)
     {
         try {
+            $this->memoRepository->setRead($request->memo, $request->user(), true);
             return $this->responseOk($request->memo);
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
@@ -68,9 +69,9 @@ class MemoController extends ApiController
      *
      * @param \App\Http\Requests\Communication\UpdateMemoRequest $request
      *
+     * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateMemoRequest $request)
     {
@@ -89,9 +90,9 @@ class MemoController extends ApiController
      *
      * @param \App\Http\Requests\Communication\DeleteMemoRequest $request
      *
+     * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(DeleteMemoRequest $request)
     {

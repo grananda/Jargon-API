@@ -43,6 +43,10 @@ class ListTest extends TestCase
         $memo2 = factory(Memo::class)->create();
         $memo2->setRecipients([$other->uuid]);
 
+        /** @var \App\Models\Communications\Memo $memo3 */
+        $memo3 = factory(Memo::class)->create(['status' => 'draft']);
+        $memo3->setRecipients([$user->uuid]);
+
         // When
         $response = $this->signIn($user)->get(route('memos.index'));
 

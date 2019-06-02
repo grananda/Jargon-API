@@ -19,6 +19,11 @@ class MemoPolicy extends AbstractPolicy
         return true;
     }
 
+    public function show(User $user, Memo $memo)
+    {
+        return $memo->status === 'sent' && $memo->recipients()->find($user->id);
+    }
+
     /**
      * @param \App\Models\User $user
      * @param \App\Models\Communications\Memo $memo
@@ -26,6 +31,6 @@ class MemoPolicy extends AbstractPolicy
      */
     public function delete(User $user, Memo $memo)
     {
-        return (bool) $memo->recipients()->find($user->id);
+        return $memo->status === 'sent' && $memo->recipients()->find($user->id);
     }
 }

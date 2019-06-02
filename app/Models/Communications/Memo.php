@@ -8,6 +8,7 @@ use App\Models\User;
 
 /**
  * @property \Illuminate\Support\Collection recipients
+ * @property string status
  */
 class Memo extends BaseEntity
 {
@@ -40,6 +41,7 @@ class Memo extends BaseEntity
     {
         return $this->belongsToMany(User::class)
             ->withPivot([
+                'user_id',
                 'created_at',
                 'updated_at',
                 'is_read',
