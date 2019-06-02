@@ -39,7 +39,13 @@ class Memo extends BaseEntity
     public function recipients()
     {
         return $this->belongsToMany(User::class)
-            ->withTimestamps();
+            ->withPivot([
+                'created_at',
+                'updated_at',
+                'is_read',
+            ])
+            ->orderBy('updated_at', 'desc')
+            ;
     }
 
     /**

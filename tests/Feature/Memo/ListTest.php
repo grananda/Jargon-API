@@ -49,5 +49,13 @@ class ListTest extends TestCase
         // Then
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonCount(1, 'data');
+        $this->assertDatabaseHas('memo_user', [
+            'user_id' => $user->id,
+            'memo_id' => $memo1->id,
+        ]);
+        $this->assertDatabaseHas('memo_user', [
+            'user_id' => $other->id,
+            'memo_id' => $memo2->id,
+        ]);
     }
 }

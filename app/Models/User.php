@@ -179,19 +179,12 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * @return HasMany
+     * @return belongsToMany
      */
     public function memos()
     {
-        return $this->hasMany(Memo::class)
-            ->withPivot([
-                'created_at',
-                'updated_at',
-                'is_read',
-            ])
-            ->withTimeStamp()
-            ->orderBy('updated_at', 'desc')
-        ;
+        return $this->belongsToMany(Memo::class);
+
     }
 
     /**
