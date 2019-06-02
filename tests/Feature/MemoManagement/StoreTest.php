@@ -11,7 +11,7 @@ use Tests\TestCase;
  * @group feature
  * @covers \App\Http\Controllers\Communication\MemoManagementController::store
  */
-class ListTest extends TestCase
+class StoreTest extends TestCase
 {
     use RefreshDatabase;
 

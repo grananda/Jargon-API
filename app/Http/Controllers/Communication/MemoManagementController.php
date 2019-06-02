@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Communication;
 
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Communication\DeleteMemoRequest;
-use App\Http\Requests\Communication\DeleteMemoStaffRequest;
+use App\Http\Requests\Communication\Staff\DeleteMemoStaffRequest;
+use App\Http\Requests\Communication\Staff\IndexMemoStaffRequest;
 use App\Repositories\MemoRepository;
 use Exception;
 use Illuminate\Http\Request;
@@ -31,11 +31,18 @@ class MemoManagementController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\Communication\Staff\IndexMemoStaffRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(IndexMemoStaffRequest $request)
     {
-        //
+        try {
+            $memos = $this->memoRepository->findAllBy([]);
+
+            return $this->responseOk($memos);
+        } catch (Exception $e) {
+            return $this->responseInternalError($e->getMessage());
+        }
     }
 
     /**
@@ -78,7 +85,7 @@ class MemoManagementController extends ApiController
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Http\Requests\Communication\DeleteMemoStaffRequest $request
+     * @param \App\Http\Controllers\Communication\DeleteMemoStaffRequest $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Throwable
      */

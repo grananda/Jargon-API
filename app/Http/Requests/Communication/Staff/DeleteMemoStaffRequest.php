@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Communication;
+namespace App\Http\Requests\Communication\Staff;
 
 use App\Http\Requests\Request;
 use App\Models\Communications\Memo;
