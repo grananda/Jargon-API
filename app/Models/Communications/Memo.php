@@ -34,7 +34,7 @@ class Memo extends BaseEntity
         'item_token',
     ];
 
-    static public function boot()
+    public static function boot()
     {
         parent::boot();
 
@@ -60,18 +60,15 @@ class Memo extends BaseEntity
     }
 
     /**
-     * @param array $users
+     * @param array $recipients
+     *
+     * @return \App\Models\Communications\Memo
      */
-    public function setRecipients(array $users)
+    public function setRecipients(array $recipients)
     {
-        /** @var array $userCollection */
-        $userCollection = [];
+        $this->recipients()->sync($recipients);
 
-        foreach ($users as $user) {
-            $userCollection[] = User::findByUuidOrFail($user);
-        }
-
-        $this->recipients()->sync(collect($userCollection)->pluck('id')->toArray());
+        return $this->refresh();
     }
 
     /**

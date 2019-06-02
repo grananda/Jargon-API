@@ -73,7 +73,7 @@ class ShowTest extends TestCase
         $user = $this->user();
 
         /** @var \App\Models\User $other */
-        $staff = $this->user();
+        $staff = $this->staff();
 
         /** @var \App\Models\Communications\Memo $memo1 */
         $memo1 = factory(Memo::class)->create();
@@ -84,7 +84,6 @@ class ShowTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonCount(1, 'data');
 
         $this->assertDatabaseHas('memo_user', [
             'user_id' => $user->id,

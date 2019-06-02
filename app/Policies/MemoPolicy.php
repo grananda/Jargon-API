@@ -20,13 +20,13 @@ class MemoPolicy extends AbstractPolicy
     }
 
     /**
-     * @param \App\Models\User                $user
+     * @param \App\Models\User $user
      *
      * @return bool
      */
     public function staffList(User $user)
     {
-        return $user->checkUserHasRoleType('staff') && !$user->checkUserHasRole('junior-staff');
+        return $user->checkUserHasRoleType('staff') && ! $user->checkUserHasRole('junior-staff');
     }
 
     /**
@@ -46,9 +46,40 @@ class MemoPolicy extends AbstractPolicy
      *
      * @return bool
      */
+    public function staffShow(User $user, Memo $memo)
+    {
+        return $user->checkUserHasRoleType('staff') && ! $user->checkUserHasRole('junior-staff');
+    }
+
+    /**
+     * @param \App\Models\User $user
+     *
+     * @return bool
+     */
+    public function staffStore(User $user)
+    {
+        return $user->checkUserHasRoleType('staff') && ! $user->checkUserHasRole('junior-staff');
+    }
+
+    /**
+     * @param \App\Models\User                $user
+     * @param \App\Models\Communications\Memo $memo
+     *
+     * @return bool
+     */
     public function update(User $user, Memo $memo)
     {
         return $memo->status === 'sent' && $memo->recipients()->find($user->id);
+    }
+
+    /**
+     * @param \App\Models\User $user
+     *
+     * @return bool
+     */
+    public function staffUpdate(User $user)
+    {
+        return $user->checkUserHasRoleType('staff') && ! $user->checkUserHasRole('junior-staff');
     }
 
     /**
@@ -63,12 +94,12 @@ class MemoPolicy extends AbstractPolicy
     }
 
     /**
-     * @param \App\Models\User                $user
+     * @param \App\Models\User $user
      *
      * @return bool
      */
     public function staffDelete(User $user)
     {
-        return $user->checkUserHasRoleType('staff') && !$user->checkUserHasRole('junior-staff');
+        return $user->checkUserHasRoleType('staff') && ! $user->checkUserHasRole('junior-staff');
     }
 }

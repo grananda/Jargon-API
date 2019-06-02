@@ -62,7 +62,9 @@ class UpdateTest extends TestCase
         ]);
 
         $data = [
-            'subject'    => $this->faker->words(5),
+            'subject'    => $this->faker->sentence(5),
+            'body'       => $this->faker->text,
+            'status'     => 'sent',
             'recipients' => [
                 $user->uuid,
                 $other->uuid,
@@ -99,7 +101,9 @@ class UpdateTest extends TestCase
         ]);
 
         $data = [
-            'subject'    => $this->faker->words(5),
+            'subject'    => $this->faker->sentence(5),
+            'body'       => $this->faker->text,
+            'status'     => 'sent',
             'recipients' => [
                 $user->uuid,
                 $other->uuid,

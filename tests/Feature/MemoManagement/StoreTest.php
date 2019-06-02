@@ -52,12 +52,12 @@ class StoreTest extends TestCase
         /** @var \App\Models\User $other */
         $other = $this->user();
 
-        /** @var \App\Models\Communications\Memo $memo */
+        /** @var array $memo */
         $memo = factory(Memo::class)->make([
             'status' => 'sent',
-        ]);
+        ])->toArray();
 
-        $data = array_merge($memo->toArray(), [
+        $data = array_merge($memo, [
             'recipients' => [
                 $user->uuid,
                 $other->uuid,
@@ -84,7 +84,7 @@ class StoreTest extends TestCase
         /** @var \App\Models\User $other */
         $other = $this->user();
 
-        /** @var array$memo */
+        /** @var array $memo */
         $memo = factory(Memo::class)->make([
             'status' => 'sent',
         ])->toArray();
@@ -101,16 +101,18 @@ class StoreTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_CREATED);
+        $obj = Memo::findByUuidOrFail($response->json('data.uuid'));
+
         $this->assertDatabaseHas('memos', [
             'subject' => $memo['subject'],
         ]);
         $this->assertDatabaseHas('memo_user', [
             'user_id' => $user->id,
-            'memo_id' => $memo->id,
+            'memo_id' => $obj->id,
         ]);
         $this->assertDatabaseHas('memo_user', [
             'user_id' => $other->id,
-            'memo_id' => $memo->id,
+            'memo_id' => $obj->id,
         ]);
     }
 }
