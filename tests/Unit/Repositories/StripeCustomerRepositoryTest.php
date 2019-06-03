@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 /**
+ * @group external
  * @coversNothing
  */
 class StripeCustomerRepositoryTest extends TestCase

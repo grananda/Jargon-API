@@ -11,9 +11,7 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 /**
- * Class CopyTest.
- *
- * @package Tests\Feature\NodeCopy
+ * @group feature
  * @coversNothing
  */
 class UpdateTest extends TestCase

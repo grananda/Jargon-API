@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class SendUserDeactivationNotificationTest extends TestCase

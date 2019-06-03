@@ -12,14 +12,13 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
- * Class StoreTest.
- *
- * @package Tests\Feature\Node
+ * @group feature
  * @coversNothing
  */
 class StoreTest extends TestCase
 {
-    use RefreshDatabase,
+    use RefreshDatabase;
+    use
         CreateActiveSubscription;
 
     /** @test */

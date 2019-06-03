@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class UpdateTest extends TestCase

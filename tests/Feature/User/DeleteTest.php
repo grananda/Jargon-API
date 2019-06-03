@@ -13,13 +13,14 @@ use Tests\traits\CreateActiveSubscription;
 use Tests\traits\CreateOptionUsers;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class DeleteTest extends TestCase
 {
-    use RefreshDatabase,
-        CreateActiveSubscription,
-        CreateOptionUsers;
+    use RefreshDatabase;
+    use CreateActiveSubscription;
+    use CreateOptionUsers;
 
     /** @test */
     public function a_403_will_be_returned_when_a_user_is_deleted_by_a_non_senior_staff()

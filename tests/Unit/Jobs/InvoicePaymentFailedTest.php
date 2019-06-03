@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class InvoicePaymentFailedTest extends TestCase

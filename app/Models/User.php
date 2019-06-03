@@ -7,6 +7,7 @@ use App\Events\User\UserWasActivated;
 use App\Events\User\UserWasDeactivated;
 use App\Events\User\UserWasDeleted;
 use App\Jobs\UpdateStripeCustomer;
+use App\Models\Communications\Memo;
 use App\Models\Options\OptionUser;
 use App\Models\Subscriptions\ActiveSubscription;
 use App\Models\Traits\HasRegistration;
@@ -15,7 +16,6 @@ use App\Models\Translations\Node;
 use App\Models\Translations\Project;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -25,11 +25,11 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens,
-        Notifiable,
-        HasRegistration,
-        HasUuid,
-        HasStripeId;
+    use HasApiTokens;
+    use        Notifiable;
+    use        HasRegistration;
+    use        HasUuid;
+    use        HasStripeId;
 
     const ACTIVATION_EXPIRES_AT      = 48;
     const ACTIVATION_TOKEN_LENGTH    = 32;
@@ -178,11 +178,11 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * @return HasMany
+     * @return belongsToMany
      */
     public function memos()
     {
-        return $this->hasMany(Memo::class, 'user_id', 'id');
+        return $this->belongsToMany(Memo::class);
     }
 
     /**

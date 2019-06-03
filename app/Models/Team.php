@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Team extends BaseEntity
 {
-    use HasCollaborators,
+    use HasCollaborators;
+    use
         HasUuid;
 
     const ITEM_TOKEN_LENGTH = 50;

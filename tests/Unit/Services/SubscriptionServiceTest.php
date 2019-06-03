@@ -17,12 +17,13 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class SubscriptionServiceTest extends TestCase
 {
-    use RefreshDatabase,
-        CreateActiveSubscription;
+    use RefreshDatabase;
+    use CreateActiveSubscription;
 
     /**
      * @var array

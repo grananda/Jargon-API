@@ -11,9 +11,7 @@ use Illuminate\Http\Response;
 use Tests\TestCase;
 
 /**
- * Class DeleteTest.
- *
- * @package Tests\Feature\Node
+ * @group feature
  * @coversNothing
  */
 class DeleteTest extends TestCase

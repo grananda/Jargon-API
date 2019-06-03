@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Bus;
 use Tests\TestCase;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class ProjectModelTest extends TestCase

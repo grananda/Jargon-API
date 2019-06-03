@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 /**
- * Class ValidProjectNodeTest.
- *
- * @package Tests\Unit\Rules
+ * @group unit
  * @coversNothing
  */
 class ValidProjectNodeTest extends TestCase

@@ -13,8 +13,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SubscriptionPlan extends BaseEntity
 {
-    use HasUuid,
-        HasAlias,
+    use HasUuid;
+    use
+        HasAlias;
+    use
         OptionQuota;
 
     const DEFAULT_SUBSCRIPTION_PLAN  = 'freemium-month-eur';

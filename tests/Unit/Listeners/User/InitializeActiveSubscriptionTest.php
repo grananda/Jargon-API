@@ -14,12 +14,13 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class InitializeActiveSubscriptionTest extends TestCase
 {
-    use RefreshDatabase,
-        CreateActiveSubscription;
+    use RefreshDatabase;
+    use CreateActiveSubscription;
 
     /** @test */
     public function active_subscription_is_created_when_activating_a_user()

@@ -19,12 +19,13 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
+ * @group external
  * @coversNothing
  */
 class StripeInvoiceRepositoryTest extends TestCase
 {
-    use RefreshDatabase,
-        CreateActiveSubscription;
+    use RefreshDatabase;
+    use CreateActiveSubscription;
 
     /** @test */
     public function a_customer_invoice_is_retrieved()

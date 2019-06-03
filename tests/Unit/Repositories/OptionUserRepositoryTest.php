@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class OptionUserRepositoryTest extends TestCase

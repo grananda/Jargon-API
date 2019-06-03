@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class UpdateStripeSubscriptionPlanTest extends TestCase

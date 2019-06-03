@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class ValidProjectDialectTest extends TestCase

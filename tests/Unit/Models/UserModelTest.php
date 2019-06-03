@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class UserModelTest extends TestCase

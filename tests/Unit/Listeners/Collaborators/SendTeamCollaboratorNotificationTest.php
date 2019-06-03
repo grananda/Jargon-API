@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class SendTeamCollaboratorNotificationTest extends TestCase

@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Tests\TestCase;
 
 /**
+ * @group unit
  * @coversNothing
  */
 class SendProjectCollaboratorNotificationTest extends TestCase

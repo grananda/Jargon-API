@@ -13,7 +13,8 @@ use App\Models\User;
 
 class Project extends BaseEntity
 {
-    use HasUuid,
+    use HasUuid;
+    use
         HasCollaborators;
 
     const ITEM_TOKEN_LENGTH = 50;

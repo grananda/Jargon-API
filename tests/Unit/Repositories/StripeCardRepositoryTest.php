@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
+ * @group external
  * @coversNothing
  */
 class StripeCardRepositoryTest extends TestCase

@@ -12,13 +12,14 @@ use Tests\traits\CreateActiveSubscription;
 use Tests\traits\CreateOptionUsers;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class CancelTest extends TestCase
 {
-    use RefreshDatabase,
-        CreateActiveSubscription,
-        CreateOptionUsers;
+    use RefreshDatabase;
+    use CreateActiveSubscription;
+    use CreateOptionUsers;
 
     /** @test */
     public function a_403_will_returned_when_user_account_can_be_cancelled_by_another_user()

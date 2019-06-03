@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class StoreTest extends TestCase

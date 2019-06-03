@@ -11,7 +11,9 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 abstract class ApiController extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
     /**
      * @param mixed $data

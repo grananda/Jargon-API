@@ -9,19 +9,17 @@ class CreateMemosTable extends Migration
     public function up()
     {
         Schema::create('memos', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
+            $table->uuid('uuid');
             $table->string('subject');
             $table->longText('body');
             $table->string('status')->default('draft');
-            $table->string('item_token')->nullable();
-            $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
 
         Schema::table('memos', function (Blueprint $table) {
             $table->index('status');
             $table->index('subject');
-            $table->unique('item_token');
         });
     }
 

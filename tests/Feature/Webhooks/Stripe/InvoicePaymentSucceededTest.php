@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Tests\traits\CreateActiveSubscription;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class InvoicePaymentSucceededTest extends AbstractStripeTestCase

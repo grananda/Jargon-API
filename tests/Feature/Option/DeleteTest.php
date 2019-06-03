@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class DeleteTest extends TestCase

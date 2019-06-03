@@ -11,11 +11,13 @@ use Tests\TestCase;
 use Tests\traits\CreateActiveSubscription;
 
 /**
+ * @group feature
  * @coversNothing
  */
 class UpgradeTest extends TestCase
 {
-    use RefreshDatabase,
+    use RefreshDatabase;
+    use
         CreateActiveSubscription;
 
     /**
