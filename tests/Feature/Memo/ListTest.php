@@ -37,15 +37,15 @@ class ListTest extends TestCase
 
         /** @var \App\Models\Communications\Memo $memo1 */
         $memo1 = factory(Memo::class)->create();
-        $memo1->setRecipients([$user->uuid]);
+        $memo1->setRecipients([$user->id]);
 
         /** @var \App\Models\Communications\Memo $memo2 */
         $memo2 = factory(Memo::class)->create();
-        $memo2->setRecipients([$other->uuid]);
+        $memo2->setRecipients([$other->id]);
 
         /** @var \App\Models\Communications\Memo $memo3 */
         $memo3 = factory(Memo::class)->create(['status' => 'draft']);
-        $memo3->setRecipients([$user->uuid]);
+        $memo3->setRecipients([$user->id]);
 
         // When
         $response = $this->signIn($user)->get(route('memos.index'));

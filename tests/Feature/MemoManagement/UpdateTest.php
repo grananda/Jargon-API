@@ -19,7 +19,7 @@ class UpdateTest extends TestCase
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
         // When
-        $response = $this->put(route('memos.staff.update'), []);
+        $response = $this->put(route('memos.staff.update', [123]), []);
 
         // Then
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -33,7 +33,7 @@ class UpdateTest extends TestCase
         $user = $this->user();
 
         // When
-        $response = $this->signIn($user)->put(route('memos.staff.update'), []);
+        $response = $this->signIn($user)->put(route('memos.staff.update', [123]), []);
 
         // Then
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -53,7 +53,7 @@ class UpdateTest extends TestCase
         $other = $this->user();
 
         /** @var \App\Models\Communications\Memo $memo */
-        $memo = factory(Memo::class)->make([
+        $memo = factory(Memo::class)->create([
             'status' => 'draft',
         ]);
         $memo->setRecipients([
@@ -72,7 +72,7 @@ class UpdateTest extends TestCase
         ];
 
         // When
-        $response = $this->signIn($staff)->put(route('memos.staff.update'), $data);
+        $response = $this->signIn($staff)->put(route('memos.staff.update', [$memo->uuid]), $data);
 
         // Then
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -92,7 +92,7 @@ class UpdateTest extends TestCase
         $other = $this->user();
 
         /** @var \App\Models\Communications\Memo $memo */
-        $memo = factory(Memo::class)->make([
+        $memo = factory(Memo::class)->create([
             'status' => 'sent',
         ]);
         $memo->setRecipients([
@@ -111,7 +111,7 @@ class UpdateTest extends TestCase
         ];
 
         // When
-        $response = $this->signIn($staff)->put(route('memos.staff.update'), $data);
+        $response = $this->signIn($staff)->put(route('memos.staff.update', [$memo->uuid]), $data);
 
         // Then
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -134,7 +134,7 @@ class UpdateTest extends TestCase
         $newUser = $this->user();
 
         /** @var \App\Models\Communications\Memo $memo */
-        $memo = factory(Memo::class)->make([
+        $memo = factory(Memo::class)->create([
             'status' => 'draft',
         ]);
         $memo->setRecipients([
@@ -143,7 +143,9 @@ class UpdateTest extends TestCase
         ]);
 
         $data = [
-            'subject'    => $this->faker->words(5),
+            'subject'    => $this->faker->sentence(5),
+            'body'       => $this->faker->text,
+            'status'     => 'sent',
             'recipients' => [
                 $user->uuid,
                 $newUser->uuid,
@@ -151,10 +153,10 @@ class UpdateTest extends TestCase
         ];
 
         // When
-        $response = $this->signIn($staff)->put(route('memos.staff.update'), $data);
+        $response = $this->signIn($staff)->put(route('memos.staff.update', [$memo->uuid]), $data);
 
         // Then
-        $response->assertStatus(Response::HTTP_CREATED);
+        $response->assertStatus(Response::HTTP_OK);
         $this->assertDatabaseHas('memos', [
             'subject' => $data['subject'],
         ]);

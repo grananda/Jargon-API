@@ -37,7 +37,7 @@ class ShowTest extends TestCase
 
         /** @var \App\Models\Communications\Memo $memo1 */
         $memo1 = factory(Memo::class)->create(['status' => 'sent']);
-        $memo1->setRecipients([$user->uuid]);
+        $memo1->setRecipients([$user->id]);
 
         // When
         $response = $this->signIn($other)->get(route('memos.show', [$memo1->uuid]));
@@ -61,7 +61,7 @@ class ShowTest extends TestCase
 
         /** @var \App\Models\Communications\Memo $memo1 */
         $memo1 = factory(Memo::class)->create(['status' => 'draft']);
-        $memo1->setRecipients([$user->uuid]);
+        $memo1->setRecipients([$user->id]);
 
         // When
         $response = $this->signIn($user)->get(route('memos.show', [$memo1->uuid]));
@@ -79,7 +79,7 @@ class ShowTest extends TestCase
 
         /** @var \App\Models\Communications\Memo $memo1 */
         $memo1 = factory(Memo::class)->create(['status' => 'sent']);
-        $memo1->setRecipients([$user->uuid]);
+        $memo1->setRecipients([$user->id]);
 
         // When
         $response = $this->signIn($user)->get(route('memos.show', [$memo1->uuid]));

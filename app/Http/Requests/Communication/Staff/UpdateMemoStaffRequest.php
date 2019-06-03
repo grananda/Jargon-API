@@ -4,7 +4,6 @@ namespace App\Http\Requests\Communication\Staff;
 
 use App\Http\Requests\Request;
 use App\Models\Communications\Memo;
-use App\Rules\ValidMember;
 use Illuminate\Validation\Rule;
 
 class UpdateMemoStaffRequest extends Request
@@ -40,7 +39,7 @@ class UpdateMemoStaffRequest extends Request
             'body'         => ['required', 'string'],
             'status'       => ['required', Rule::in(['draft', 'sent'])],
             'recipients'   => ['array'],
-            'recipients.*' => ['array', new ValidMember()],
+            'recipients.*' => ['string'],
         ];
     }
 }

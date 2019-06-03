@@ -37,7 +37,7 @@ class UpdateTest extends TestCase
 
         /** @var \App\Models\Communications\Memo $memo1 */
         $memo1 = factory(Memo::class)->create();
-        $memo1->setRecipients([$user->uuid]);
+        $memo1->setRecipients([$user->id]);
 
         // When
         $response = $this->signIn($other)->put(route('memos.update', [$memo1->uuid]), [
@@ -57,7 +57,7 @@ class UpdateTest extends TestCase
 
         /** @var \App\Models\Communications\Memo $memo1 */
         $memo1 = factory(Memo::class)->create();
-        $memo1->setRecipients([$user->uuid]);
+        $memo1->setRecipients([$user->id]);
         $memo1->setIsRead($user, true);
 
         // When

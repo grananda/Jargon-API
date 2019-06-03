@@ -73,13 +73,14 @@ class MemoPolicy extends AbstractPolicy
     }
 
     /**
-     * @param \App\Models\User $user
+     * @param \App\Models\User                $user
+     * @param \App\Models\Communications\Memo $memo
      *
      * @return bool
      */
-    public function staffUpdate(User $user)
+    public function staffUpdate(User $user, Memo $memo)
     {
-        return $user->checkUserHasRoleType('staff') && ! $user->checkUserHasRole('junior-staff');
+        return $memo->status === 'draft' && $user->checkUserHasRoleType('staff') && ! $user->checkUserHasRole('junior-staff');
     }
 
     /**

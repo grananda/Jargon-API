@@ -73,7 +73,7 @@ class DeleteTest extends TestCase
 
         /** @var \App\Models\Communications\Memo $memo1 */
         $memo1 = factory(Memo::class)->create();
-        $memo1->setRecipients([$user->uuid]);
+        $memo1->setRecipients([$user->id]);
 
         // When
         $response = $this->signIn($user)->delete(route('memos.destroy', [$memo1->uuid]));
