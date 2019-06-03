@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Listeners\SendUserDeletionNotification
  */
 class SendUserDeletionNotificationTest extends TestCase
 {

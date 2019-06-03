@@ -13,7 +13,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Option\OptionController::store
  */
 class StoreTest extends TestCase
 {

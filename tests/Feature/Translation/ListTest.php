@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Translations\TranslationController::index
  */
 class ListTest extends TestCase
 {

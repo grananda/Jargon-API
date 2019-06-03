@@ -14,7 +14,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Translations\TranslationController::update
  */
 class UpdateTest extends TestCase
 {

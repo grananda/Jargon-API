@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Subscription\CardController::update
  */
 class UpdateTest extends TestCase
 {

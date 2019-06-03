@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Webhook\StripeWebHookController::index
  */
 class StripeTest extends AbstractStripeTestCase
 {

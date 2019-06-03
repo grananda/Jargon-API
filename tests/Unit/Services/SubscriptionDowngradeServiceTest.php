@@ -20,7 +20,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Services\SubscriptionDowngradeService
  */
 class SubscriptionDowngradeServiceTest extends TestCase
 {

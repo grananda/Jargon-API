@@ -18,7 +18,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Models\Translations\Project
  */
 class ProjectModelTest extends TestCase
 {

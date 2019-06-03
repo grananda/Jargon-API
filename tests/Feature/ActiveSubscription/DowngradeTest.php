@@ -12,7 +12,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Subscription\ActiveSubscriptionDowngradeController::update
  */
 class DowngradeTest extends TestCase
 {

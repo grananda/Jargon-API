@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Repositories;
+namespace Tests\External\Repositories;
 
 use App\Models\Subscriptions\SubscriptionProduct;
 use App\Repositories\Stripe\StripeSubscriptionProductRepository;
@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 /**
  * @group external
- * @coversNothing
+ * @covers \App\Repositories\Stripe\StripeSubscriptionProductRepository
  */
 class StripeSubscriptionProductRepositoryTest extends TestCase
 {

@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Repositories\OptionUserRepository
  */
 class OptionUserRepositoryTest extends TestCase
 {

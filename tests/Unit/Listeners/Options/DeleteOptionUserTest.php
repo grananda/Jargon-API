@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Listeners\DeleteOptionUser
  */
 class DeleteOptionUserTest extends TestCase
 {

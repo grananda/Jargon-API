@@ -14,7 +14,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Project\ProjectInvitationController::update
  */
 class UpdateTest extends TestCase
 {

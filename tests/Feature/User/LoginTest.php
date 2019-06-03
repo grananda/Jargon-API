@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\User\AuthController::login
  */
 class LoginTest extends TestCase
 {

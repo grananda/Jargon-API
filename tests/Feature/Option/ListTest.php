@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Option\OptionController::index
  */
 class ListTest extends TestCase
 {

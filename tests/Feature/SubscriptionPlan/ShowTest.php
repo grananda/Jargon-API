@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Subscription\SubscriptionPlanController::show
  */
 class ShowTest extends TestCase
 {

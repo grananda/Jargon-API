@@ -10,7 +10,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Organization\OrganizationApiController::store
  */
 class StoreTest extends TestCase
 {

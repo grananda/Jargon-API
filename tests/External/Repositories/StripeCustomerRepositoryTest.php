@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Repositories;
+namespace Tests\External\Repositories;
 
 use App\Jobs\UpdateStripeCustomer;
 use App\Repositories\Stripe\StripeCustomerRepository;
@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 /**
  * @group external
- * @coversNothing
+ * @covers \App\Repositories\Stripe\StripeCustomerRepository
  */
 class StripeCustomerRepositoryTest extends TestCase
 {

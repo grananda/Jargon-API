@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Repositories;
+namespace Tests\External\Repositories;
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
@@ -18,7 +18,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group external
- * @coversNothing
+ * @covers \App\Repositories\Stripe\StripeSubscriptionRepository
  */
 class StripeSubscriptionRepositoryTest extends TestCase
 {

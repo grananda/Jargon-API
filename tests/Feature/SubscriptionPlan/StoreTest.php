@@ -15,7 +15,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Subscription\SubscriptionPlanController::store
  */
 class StoreTest extends TestCase
 {

@@ -13,7 +13,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Listeners\AddOptionUser
  */
 class AddOptionUserTest extends TestCase
 {

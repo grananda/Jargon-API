@@ -13,7 +13,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Listeners\SendPasswordRecoveryNotification
  */
 class SendPasswordRecoveryNotificationTest extends TestCase
 {

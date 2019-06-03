@@ -18,7 +18,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Services\SubscriptionService
  */
 class SubscriptionServiceTest extends TestCase
 {
