@@ -36,6 +36,7 @@ class RouteServiceProvider extends ServiceProvider
         'nodes',
         'translations',
         'memos',
+        'invoices',
     ];
 
     /**
