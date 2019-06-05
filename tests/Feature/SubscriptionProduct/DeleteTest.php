@@ -14,13 +14,12 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Subscription\SubscriptionProductController::destroy
  */
 class DeleteTest extends TestCase
 {
     use RefreshDatabase;
-    use
-        CreateActiveSubscription;
+    use CreateActiveSubscription;
 
     /** @test */
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()

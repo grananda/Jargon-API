@@ -11,7 +11,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Organization\OrganizationApiController::update
  */
 class UpdateTest extends TestCase
 {

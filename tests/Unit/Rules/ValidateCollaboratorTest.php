@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Rules\ValidCollaborator
  */
 class ValidateCollaboratorTest extends TestCase
 {

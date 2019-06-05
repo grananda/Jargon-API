@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Models\User
  */
 class UserModelTest extends TestCase
 {

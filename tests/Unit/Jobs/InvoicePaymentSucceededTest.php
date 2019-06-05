@@ -15,7 +15,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Jobs\Stripe\InvoicePaymentSucceeded
  */
 class InvoicePaymentSucceededTest extends TestCase
 {

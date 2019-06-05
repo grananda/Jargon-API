@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Node\NodeController::update
  */
 class UpdateTest extends TestCase
 {

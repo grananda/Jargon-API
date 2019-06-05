@@ -14,7 +14,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Listeners\SendTeamCollaboratorNotification
  */
 class SendTeamCollaboratorNotificationTest extends TestCase
 {

@@ -13,7 +13,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Models\Team
  */
 class TeamModelTest extends TestCase
 {

@@ -12,7 +12,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Subscription\ActiveSubscriptionUpgradeController::update
  */
 class UpgradeTest extends TestCase
 {

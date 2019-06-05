@@ -15,7 +15,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Listeners\ReactivateStripeSubscription
  */
 class ReactivateStripeSubscriptionTest extends TestCase
 {

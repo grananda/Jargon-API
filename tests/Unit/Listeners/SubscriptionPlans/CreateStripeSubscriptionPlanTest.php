@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Listeners\SubscriptionPlans\CreateStripeSubscriptionPlan
  */
 class CreateStripeSubscriptionPlanTest extends TestCase
 {

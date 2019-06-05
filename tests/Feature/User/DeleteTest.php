@@ -14,7 +14,7 @@ use Tests\traits\CreateOptionUsers;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\User\UserController::destroy
  */
 class DeleteTest extends TestCase
 {

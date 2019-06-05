@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\User\UserController::store
  */
 class StoreTest extends TestCase
 {

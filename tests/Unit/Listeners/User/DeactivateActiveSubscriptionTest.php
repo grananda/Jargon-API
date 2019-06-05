@@ -13,7 +13,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Events\ActiveSubscription\ActiveSubscriptionWasDeactivated
  */
 class DeactivateActiveSubscriptionTest extends TestCase
 {

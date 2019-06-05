@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Organization\OrganizationApiController::show
  */
 class ShowTest extends TestCase
 {

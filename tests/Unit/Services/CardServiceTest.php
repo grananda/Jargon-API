@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Services\CardService
  */
 class CardServiceTest extends TestCase
 {

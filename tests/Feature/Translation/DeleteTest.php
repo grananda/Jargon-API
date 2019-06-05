@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Translations\TranslationController::destroy
  */
 class DeleteTest extends TestCase
 {

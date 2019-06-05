@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Rules\ValidMember
  */
 class ValidateMemberTest extends TestCase
 {

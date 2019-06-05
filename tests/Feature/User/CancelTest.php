@@ -13,7 +13,7 @@ use Tests\traits\CreateOptionUsers;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\User\AccountController::cancel
  */
 class CancelTest extends TestCase
 {

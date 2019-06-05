@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Node\NodeDuplicationController::update
  */
 class UpdateTest extends TestCase
 {

@@ -13,7 +13,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Translations\TranslationController::store
  */
 class StoreTest extends TestCase
 {

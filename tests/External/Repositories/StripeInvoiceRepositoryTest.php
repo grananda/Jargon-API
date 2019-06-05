@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Repositories;
+namespace Tests\External\Repositories;
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
@@ -20,7 +20,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group external
- * @coversNothing
+ * @covers \App\Repositories\Stripe\StripeInvoiceRepository
  */
 class StripeInvoiceRepositoryTest extends TestCase
 {
@@ -55,8 +55,8 @@ class StripeInvoiceRepositoryTest extends TestCase
         /** @var StripeCardRepository $stripeCardRepository */
         $stripeCardRepository = resolve(StripeCardRepository::class);
 
-        /** @var \App\Repositories\Stripe\StripeInvoiceRepository $stripeInvoiceRespository */
-        $stripeInvoiceRespository = resolve(StripeInvoiceRepository::class);
+        /** @var \App\Repositories\Stripe\StripeInvoiceRepository $stripeInvoiceRepository */
+        $stripeInvoiceRepository = resolve(StripeInvoiceRepository::class);
 
         // *** Create objects ***
 
@@ -99,7 +99,7 @@ class StripeInvoiceRepositoryTest extends TestCase
         /** @var \App\Models\Subscriptions\ActiveSubscription $activeSubscription */
         $activeSubscription = $user->fresh()->activeSubscription;
 
-        $responseInvoices = $stripeInvoiceRespository->list($user);
+        $responseInvoices = $stripeInvoiceRepository->list($user);
 
         // *** Cleanup ***
 

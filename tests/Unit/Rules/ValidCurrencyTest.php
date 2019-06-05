@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Rules\ValidCurrencyCode
  */
 class ValidCurrencyTest extends TestCase
 {

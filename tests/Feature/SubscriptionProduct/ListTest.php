@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Subscription\SubscriptionProductController::index
  */
 class ListTest extends TestCase
 {

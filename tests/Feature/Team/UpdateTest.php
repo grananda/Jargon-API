@@ -13,7 +13,7 @@ use Tests\traits\CreateActiveSubscription;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\Team\TeamController::update
  */
 class UpdateTest extends TestCase
 {

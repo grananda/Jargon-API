@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\User\AccountController::activate
  */
 class ActivationTest extends TestCase
 {

@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 /**
  * @group unit
- * @coversNothing
+ * @covers \App\Services\CustomerService
  */
 class CustomerServiceTest extends TestCase
 {

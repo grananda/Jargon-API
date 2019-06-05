@@ -11,7 +11,7 @@ use Tests\TestCase;
 
 /**
  * @group feature
- * @coversNothing
+ * @covers \App\Http\Controllers\User\AccountController::deactivate
  */
 class DeactivationTest extends TestCase
 {
