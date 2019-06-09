@@ -15,121 +15,111 @@ use Tests\TestCase;
  */
 class GitHubRepositoryTest extends TestCase
 {
-    private $username;
+	/**
+	 * @var \App\Models\Translations\Project
+	 */
+	private $project;
 
-    private $repo;
+	/**
+	 * @var \App\Repositories\GitHub\GitHubRepository
+	 */
+	private $gitHubRepository;
 
-    public function setUp(): void
-    {
-        parent::setUp();
+	/**
+	 * @var \App\Models\Translations\ProjectGitHubConfig
+	 */
+	private $gitConfig;
 
-        $this->username = env('GIT_HUB_TEST_USER', null);
+	public function setUp(): void
+	{
+		parent::setUp();
 
-        $this->repo = env('GIT_HUB_TEST_REPO', null);
-    }
+		$user = $this->user();
 
-    /** @test */
-    public function an_exception_is_thrown_when_no_git_hub_has_been_related_to_project()
-    {
-        // Given
-        $this->expectException(GitHubConnectionException::class);
+		/** @var \App\Models\Translations\Project $project */
+		$this->project = factory(Project::class)->create();
+		$this->project->setOwner($user);
 
-        $user = $this->user();
+		$this->gitConfig = factory(ProjectGitHubConfig::class)->create(
+			[
+				'access_token' => env('GIT_HUB_TEST_TOKEN'),
+				'username'     => env('GIT_HUB_TEST_USER'),
+				'repository'   => env('GIT_HUB_TEST_REPO'),
+				'project_id'   => $this->project->id,
+			]
+		);
 
-        /** @var \App\Models\Translations\Project $project */
-        $project = factory(Project::class)->create();
-        $project->setOwner($user);
+		$this->gitHubRepository = resolve(GitHubRepository::class);
+	}
 
-        /** @var GitHubRepository $gitHubRepository */
-        $gitHubRepository = resolve(GitHubRepository::class);
+	/** @test */
+	public function an_exception_is_thrown_when_no_git_hub_has_been_related_to_project()
+	{
+		// Given
+		$this->expectException(GitHubConnectionException::class);
 
-        // When
-        $gitHubRepository->getRepositoryList($project);
-    }
+		$this->project->gitHubConfig = null;
 
-    /** @test */
-    public function get_repository_list()
-    {
-        // Given
-        $user = $this->user();
+		// When
+		$this->gitHubRepository->getRepositoryList($this->project);
+	}
 
-        /** @var \App\Models\Translations\Project $project */
-        $project = factory(Project::class)->create();
-        $project->setOwner($user);
+	/** @test */
+	public function get_repository_list()
+	{
+		// When
+		$response = $this->gitHubRepository->getRepositoryList($this->project);
 
-        /** @var \App\Models\Translations\ProjectGitHubConfig $ghConfig */
-        $ghConfig = factory(ProjectGitHubConfig::class)->create(
-            [
-                'access_token' => env('GIT_HUB_TEST_TOKEN'),
-                'username'     => env('GIT_HUB_TEST_USER'),
-                'repository'   => env('GIT_HUB_TEST_REPO'),
-                'project_id'   => $project->id,
-            ]
-        );
+		// Then
+		$this->assertIsArray($response);
+		$this->assertSame($this->gitConfig->repository, $response[0]['name']);
+	}
 
-        /** @var GitHubRepository $gitHubRepository */
-        $gitHubRepository = resolve(GitHubRepository::class);
+	/** @test */
+	public function repository_information_can_be_retrieved()
+	{
+		// When
+		$response = $this->gitHubRepository->getRepositoryDetails($this->project, $this->project->gitHubConfig->repository);
 
-        // When
-        $response = $gitHubRepository->getRepositoryList($project);
+		// Then
+		$this->assertIsArray($response);
+		$this->assertSame($this->gitConfig->repository, $response['name']);
+	}
 
-        // Then
-        $this->assertIsArray($response);
-        $this->assertSame(env('GIT_HUB_TEST_REPO'), $response[0]['name']);
-    }
+	/** @test
+	 * @throws \Github\Exception\MissingArgumentException
+	 */
+	public function a_new_branch_can_be_created()
+	{
+		// Given
 
-    /** @test */
-    public function repository_information_can_be_retrieved()
-    {
-        // Given
-        /** @var GitHubManager $gitHub */
-        $gitHub = resolve(GitHubManager::class);
+		$branchName = 'heads/featureTest';
+		$ref        = 'refs/' . $branchName;
+		$masterRef  = 'heads/master';
 
-        // When
-        $response = $gitHub->repo()->show($this->username, $this->repo);
+		// When
+		$response = $this->gitHubRepository->createBranch($this->project, $branchName);
 
-        // Then
-        $this->assertIsArray($response);
-        $this->assertSame($this->repo, $response['name']);
-    }
+		$reference = $gitHub->gitData()
+			->references()
+			->show($this->username, $this->repo, $masterRef);
 
-    /** @test
-     * @throws \Github\Exception\MissingArgumentException
-     */
-    public function a_new_branch_can_be_created()
-    {
-        // Given
-        /** @var GitHubManager $gitHub */
-        $gitHub = resolve(GitHubManager::class);
+		$response = $gitHub->gitData()
+			->references()
+			->create($this->username, $this->repo,
+				[
+					'ref' => $ref,
+					'sha' => $reference['object']['sha'],
+				]
+			);
 
-        $branchName = 'heads/featureTest';
-        $ref        = 'refs/'.$branchName;
-        $masterRef  = 'heads/master';
+		$delete = $gitHub->gitData()
+			->references()
+			->remove($this->username, $this->repo, $branchName);
 
-        // When
-        $reference = $gitHub->gitData()
-            ->references()
-            ->show($this->username, $this->repo, $masterRef)
-        ;
-
-        $response = $gitHub->gitData()
-            ->references()
-            ->create($this->username, $this->repo,
-                [
-                    'ref' => $ref,
-                    'sha' => $reference['object']['sha'],
-                ]
-            )
-        ;
-
-        $delete = $gitHub->gitData()
-            ->references()
-            ->remove($this->username, $this->repo, $branchName)
-        ;
-
-        // Then
-        $this->assertIsArray($response);
-        $this->assertSame($ref, $response['ref']);
-        $this->assertEmpty($delete);
-    }
+		// Then
+		$this->assertIsArray($response);
+		$this->assertSame($ref, $response['ref']);
+		$this->assertEmpty($delete);
+	}
 }

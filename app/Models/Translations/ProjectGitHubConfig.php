@@ -7,7 +7,9 @@ use App\Models\Traits\HasUuid;
 
 /**
  * @property string access_token
- * @property string  username
+ * @property string username
+ * @property string repository
+ * @property string  base_branch
  */
 class ProjectGitHubConfig extends BaseEntity
 {

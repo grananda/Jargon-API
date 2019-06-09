@@ -18,7 +18,7 @@ class CreateProjectGitHubConfigsTable extends Migration
             $table->uuid('uuid');
             $table->string('username')->nullable(false);
             $table->string('repository')->nullable(false);
-            $table->string('base_branch')->default('heads/master');
+            $table->string('base_branch')->default('master');
             $table->string('access_token')->nullable(false);
             $table->unsignedBigInteger('project_id')->unique();
             $table->timestamps();
