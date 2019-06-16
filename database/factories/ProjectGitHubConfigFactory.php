@@ -12,7 +12,7 @@ $factory->define(ProjectGitHubConfig::class, function (Faker $faker) {
     return [
         'username'     => $faker->userName,
         'repository'   => implode('-', $faker->words(3)),
-        'base_branch'  => 'heads/master',
+        'base_branch'  => 'master',
         'access_token' => $faker->linuxPlatformToken,
         'project_id'   => function () {
             return factory(Project::class)->create()->id;
