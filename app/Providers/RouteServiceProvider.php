@@ -38,6 +38,7 @@ class RouteServiceProvider extends ServiceProvider
         'memos',
         'invoices',
         'repositories',
+        'branches',
     ];
 
     /**

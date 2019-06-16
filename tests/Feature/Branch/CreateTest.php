@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Repository;
+namespace Tests\Feature\Branch;
 
 use App\Models\Translations\Project;
 use App\Models\Translations\ProjectGitHubConfig;
@@ -12,17 +12,22 @@ use Tests\TestCase;
 
 /**
  * @group  feature
- * @covers \App\Http\Controllers\Git\RepositoryController::index
+ * @covers \App\Http\Controllers\Git\BranchController::store
  */
-class ListTest extends TestCase
+class CreateTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
     public function a_401_will_be_returned_if_the_user_is_not_logged_in()
     {
+        // Given
+        $data = [
+            'branch' => 'test-branch',
+        ];
+
         // When
-        $response = $this->get(route('repositories.index', [123]));
+        $response = $this->post(route('branches.store', [123]), $data);
 
         // Then
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -42,8 +47,12 @@ class ListTest extends TestCase
         $project = factory(Project::class)->create();
         $project->setOwner($owner);
 
+        $data = [
+            'branch' => 'test-branch',
+        ];
+
         // When
-        $response = $this->signIn($user)->get(route('repositories.index', [$project->uuid]));
+        $response = $this->signIn($user)->post(route('branches.store', [$project->uuid]), $data);
 
         // Then
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -55,9 +64,9 @@ class ListTest extends TestCase
         // Given
         $this->mock(GitHubRepository::class, function ($mock) {
             /* @var \Mockery\Mock $mock */
-            $mock->shouldReceive('getRepositoryList')
+            $mock->shouldReceive('createBranch')
                 ->withAnyArgs()
-                ->andReturn($this->loadFixture('git/repositories.list'))
+                ->andReturn($this->loadFixture('git/references.create'))
             ;
         });
 
@@ -77,11 +86,17 @@ class ListTest extends TestCase
             ]
         );
 
+        $data = [
+            'branch' => 'featureTest',
+        ];
+
+        $ref = "refs/heads/{$data['branch']}";
+
         // When
-        $response = $this->signIn($user)->get(route('repositories.index', [$project->uuid]));
+        $response = $this->signIn($user)->post(route('branches.store', [$project->uuid]), $data);
 
         // Then
-        $response->assertStatus(Response::HTTP_OK);
-        $this->assertSame($project->gitHubConfig->repository, $response->json()['data'][0]['name']);
+        $response->assertStatus(Response::HTTP_CREATED);
+        $this->assertSame($ref, $response->json()['data']['ref']);
     }
 }

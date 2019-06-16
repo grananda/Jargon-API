@@ -80,8 +80,8 @@ class GitHubRepository
      * @param \App\Models\Translations\Project $project
      * @param string                           $branch
      *
-     * @throws \Github\Exception\MissingArgumentException
      * @throws \App\Exceptions\GitHubConnectionException
+     * @throws \Github\Exception\MissingArgumentException
      *
      * @return array
      */
