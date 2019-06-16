@@ -10,11 +10,15 @@ use GrahamCampbell\GitHub\GitHubManager;
 class GitHubRepository
 {
     /**
+     * The GitHubManager instance.
+     *
      * @var \GrahamCampbell\GitHub\GitHubManager
      */
     private $gitHubManager;
 
     /**
+     * Authorization type for GitHub API.
+     *
      * @var string
      */
     private $authType;
@@ -32,6 +36,8 @@ class GitHubRepository
     }
 
     /**
+     * Gets list of repositories available for a given project git configuration.
+     *
      * @param \App\Models\Translations\Project $project
      *
      * @throws \App\Exceptions\GitHubConnectionException
@@ -49,6 +55,8 @@ class GitHubRepository
     }
 
     /**
+     * Retrieves a repository details for a given project git configuration.
+     *
      * @param \App\Models\Translations\Project $project
      * @param string                           $branch
      *
@@ -67,11 +75,13 @@ class GitHubRepository
     }
 
     /**
+     * Creates a branch within the current project working repository,.
+     *
      * @param \App\Models\Translations\Project $project
      * @param string                           $branch
      *
-     * @throws \App\Exceptions\GitHubConnectionException
      * @throws \Github\Exception\MissingArgumentException
+     * @throws \App\Exceptions\GitHubConnectionException
      *
      * @return array
      */
@@ -94,6 +104,16 @@ class GitHubRepository
         ;
     }
 
+    /**
+     * Removes a branch within the current project working repository,.
+     *
+     * @param \App\Models\Translations\Project $project
+     * @param string                           $branch
+     *
+     * @throws \App\Exceptions\GitHubConnectionException
+     *
+     * @return array
+     */
     public function removeBranch(Project $project, string $branch)
     {
         $this->authenticate($project);
@@ -106,6 +126,8 @@ class GitHubRepository
     }
 
     /**
+     * Gets project base branch reference data.
+     *
      * @param \App\Models\Translations\Project $project
      *
      * @throws \App\Exceptions\GitHubConnectionException
@@ -128,6 +150,8 @@ class GitHubRepository
     }
 
     /**
+     * Authenticates user in GitHub API.
+     *
      * @param \App\Models\Translations\Project $project
      *
      * @throws \App\Exceptions\GitHubConnectionException
