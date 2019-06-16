@@ -4,22 +4,22 @@ namespace App\Http\Controllers\Git;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Repository\IndexRepositoryRequest;
-use App\Repositories\GitHub\GitHubRepository;
+use App\Repositories\GitHub\GitHubRepoRepository;
 use Exception;
 
 class RepositoryController extends ApiController
 {
     /**
-     * @var \App\Repositories\GitHub\GitHubRepository
+     * @var \App\Repositories\GitHub\GitHubRepoRepository
      */
     private $gitHubRepository;
 
     /**
      * RepositoryController constructor.
      *
-     * @param \App\Repositories\GitHub\GitHubRepository $gitHubRepository
+     * @param \App\Repositories\GitHub\GitHubRepoRepository $gitHubRepository
      */
-    public function __construct(GitHubRepository $gitHubRepository)
+    public function __construct(GitHubRepoRepository $gitHubRepository)
     {
         $this->gitHubRepository = $gitHubRepository;
     }

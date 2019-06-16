@@ -5,22 +5,22 @@ namespace App\Http\Controllers\Git;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Branch\DeleteBranchRequest;
 use App\Http\Requests\Branch\StoreBranchRequest;
-use App\Repositories\GitHub\GitHubRepository;
+use App\Repositories\GitHub\GitHubBranchRepository;
 use Exception;
 
 class BranchController extends ApiController
 {
     /**
-     * @var \App\Repositories\GitHub\GitHubRepository
+     * @var \App\Repositories\GitHub\GitHubBranchRepository
      */
     private $gitHubRepository;
 
     /**
      * RepositoryController constructor.
      *
-     * @param \App\Repositories\GitHub\GitHubRepository $gitHubRepository
+     * @param \App\Repositories\GitHub\GitHubBranchRepository $gitHubRepository
      */
-    public function __construct(GitHubRepository $gitHubRepository)
+    public function __construct(GitHubBranchRepository $gitHubRepository)
     {
         $this->gitHubRepository = $gitHubRepository;
     }

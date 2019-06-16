@@ -5,7 +5,7 @@ namespace Tests\Feature\Repository;
 use App\Models\Translations\Project;
 use App\Models\Translations\ProjectGitHubConfig;
 use App\Models\User;
-use App\Repositories\GitHub\GitHubRepository;
+use App\Repositories\GitHub\GitHubRepoRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -53,7 +53,7 @@ class ListTest extends TestCase
     public function a_200_will_be_returned_when_requesting_a_project_repositories()
     {
         // Given
-        $this->mock(GitHubRepository::class, function ($mock) {
+        $this->mock(GitHubRepoRepository::class, function ($mock) {
             /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('getRepositoryList')
                 ->withAnyArgs()
