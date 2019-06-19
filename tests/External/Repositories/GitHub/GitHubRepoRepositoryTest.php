@@ -25,7 +25,7 @@ class GitHubRepoRepositoryTest extends TestCase
     /**
      * @var \App\Repositories\GitHub\GitHubRepository
      */
-    private $gitHubRepository;
+    private $gitHubRepoRepository;
 
     /**
      * @var \App\Models\Translations\ProjectGitHubConfig
@@ -51,7 +51,7 @@ class GitHubRepoRepositoryTest extends TestCase
             ]
         );
 
-        $this->gitHubRepository = resolve(GitHubRepoRepository::class);
+        $this->gitHubRepoRepository = resolve(GitHubRepoRepository::class);
     }
 
     /** @test */
@@ -63,14 +63,14 @@ class GitHubRepoRepositoryTest extends TestCase
         $this->project->gitHubConfig = null;
 
         // When
-        $this->gitHubRepository->getRepositoryList($this->project);
+        $this->gitHubRepoRepository->getRepositoryList($this->project);
     }
 
     /** @test */
     public function get_repository_list()
     {
         // When
-        $response = $this->gitHubRepository->getRepositoryList($this->project);
+        $response = $this->gitHubRepoRepository->getRepositoryList($this->project);
 
         // Then
         $this->assertIsArray($response);
@@ -81,7 +81,7 @@ class GitHubRepoRepositoryTest extends TestCase
     public function repository_information_can_be_retrieved()
     {
         // When
-        $response = $this->gitHubRepository->getRepositoryDetails($this->project, $this->project->gitHubConfig->repository);
+        $response = $this->gitHubRepoRepository->getRepositoryDetails($this->project, $this->project->gitHubConfig->repository);
 
         // Then
         $this->assertIsArray($response);

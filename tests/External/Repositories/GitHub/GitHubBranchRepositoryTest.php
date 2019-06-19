@@ -22,9 +22,9 @@ class GitHubBranchRepositoryTest extends TestCase
     private $project;
 
     /**
-     * @var \App\Repositories\GitHub\GitHubRepository
+     * @var \App\Repositories\GitHub\GitHubBranchRepository
      */
-    private $gitHubRepository;
+    private $gitHubBranchRepository;
 
     /**
      * @var \App\Models\Translations\ProjectGitHubConfig
@@ -50,7 +50,7 @@ class GitHubBranchRepositoryTest extends TestCase
             ]
         );
 
-        $this->gitHubRepository = resolve(GitHubBranchRepository::class);
+        $this->gitHubBranchRepository = resolve(GitHubBranchRepository::class);
     }
 
     /** @test */
@@ -61,9 +61,9 @@ class GitHubBranchRepositoryTest extends TestCase
         $ref        = "refs/heads/{$branchName}";
 
         // When
-        $response = $this->gitHubRepository->createBranch($this->project, $branchName);
+        $response = $this->gitHubBranchRepository->createBranch($this->project, $branchName);
 
-        $delete = $this->gitHubRepository->removeBranch($this->project, $branchName);
+        $delete = $this->gitHubBranchRepository->removeBranch($this->project, $branchName);
 
         // Then
         $this->assertIsArray($response);

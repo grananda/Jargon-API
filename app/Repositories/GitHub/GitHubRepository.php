@@ -52,4 +52,29 @@ abstract class GitHubRepository
             ->authenticate($project->gitHubConfig->access_token, Client::AUTH_HTTP_TOKEN)
         ;
     }
+
+    /**
+     * Gets project base branch reference data.
+     *
+     * @param \App\Models\Translations\Project $project
+     * @param string                           $branch
+     *
+     * @throws \App\Exceptions\GitHubConnectionException
+     *
+     * @return array
+     */
+    protected function getReferenceDetails(Project $project, string $branch)
+    {
+        $this->authenticate($project);
+
+        return $this->gitHubManager
+            ->gitData()
+            ->references()
+            ->show(
+                $project->gitHubConfig->username,
+                $project->gitHubConfig->repository,
+                "heads/{$branch}"
+            )
+        ;
+    }
 }

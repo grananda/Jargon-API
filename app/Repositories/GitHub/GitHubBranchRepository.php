@@ -12,8 +12,8 @@ class GitHubBranchRepository extends GitHubRepository
      * @param \App\Models\Translations\Project $project
      * @param string                           $branch
      *
-     * @throws \Github\Exception\MissingArgumentException
      * @throws \App\Exceptions\GitHubConnectionException
+     * @throws \Github\Exception\MissingArgumentException
      *
      * @return array
      */
@@ -68,16 +68,6 @@ class GitHubBranchRepository extends GitHubRepository
      */
     private function getBaseBranchReferenceDetails(Project $project)
     {
-        $this->authenticate($project);
-
-        return $this->gitHubManager
-            ->gitData()
-            ->references()
-            ->show(
-                $project->gitHubConfig->username,
-                $project->gitHubConfig->repository,
-                "heads/{$project->gitHubConfig->base_branch}"
-            )
-        ;
+        return $this->getReferenceDetails($project, $project->gitHubConfig->base_branch);
     }
 }
