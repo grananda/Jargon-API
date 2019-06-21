@@ -5,24 +5,24 @@ namespace App\Http\Controllers\Git;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Branch\DeleteBranchRequest;
 use App\Http\Requests\Branch\StoreBranchRequest;
-use App\Repositories\GitHub\GitHubBranchRepository;
+use App\Services\GitHub\GitHubBranchService;
 use Exception;
 
 class BranchController extends ApiController
 {
     /**
-     * @var \App\Repositories\GitHub\GitHubBranchRepository
+     * @var \App\Services\GitHub\GitHubBranchService
      */
-    private $gitHubRepository;
+    private $gitHubService;
 
     /**
      * RepositoryController constructor.
      *
-     * @param \App\Repositories\GitHub\GitHubBranchRepository $gitHubRepository
+     * @param \App\Services\GitHub\GitHubBranchService $gitHubRepository
      */
-    public function __construct(GitHubBranchRepository $gitHubRepository)
+    public function __construct(GitHubBranchService $gitHubRepository)
     {
-        $this->gitHubRepository = $gitHubRepository;
+        $this->gitHubService = $gitHubRepository;
     }
 
     /**
@@ -35,7 +35,7 @@ class BranchController extends ApiController
     public function store(StoreBranchRequest $request)
     {
         try {
-            $branch = $this->gitHubRepository->createBranch($request->project, $request->branch);
+            $branch = $this->gitHubService->createBranch($request->project->gitConfig, $request->branch);
 
             return $this->responseCreated($branch);
         } catch (Exception $e) {
@@ -53,7 +53,7 @@ class BranchController extends ApiController
     public function destroy(DeleteBranchRequest $request)
     {
         try {
-            $this->gitHubRepository->removeBranch($request->project, $request->branch);
+            $this->gitHubService->removeBranch($request->project->gitConfig, $request->branch);
 
             return $this->responseNoContent();
         } catch (Exception $e) {

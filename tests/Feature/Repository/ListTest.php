@@ -5,7 +5,7 @@ namespace Tests\Feature\Repository;
 use App\Models\Translations\GitConfig;
 use App\Models\Translations\Project;
 use App\Models\User;
-use App\Repositories\GitHub\GitHubRepoRepository;
+use App\Services\GitHub\GitHubRepoService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -53,7 +53,7 @@ class ListTest extends TestCase
     public function a_200_will_be_returned_when_requesting_a_project_repositories()
     {
         // Given
-        $this->mock(GitHubRepoRepository::class, function ($mock) {
+        $this->mock(GitHubRepoService::class, function ($mock) {
             /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('getRepositoryList')
                 ->withAnyArgs()
@@ -82,6 +82,6 @@ class ListTest extends TestCase
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
-        $this->assertSame($project->gitHubConfig->repository, $response->json()['data'][0]['name']);
+        $this->assertSame($project->gitConfig->repository, $response->json()['data'][0]['name']);
     }
 }

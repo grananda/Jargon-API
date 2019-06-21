@@ -12,7 +12,7 @@ use App\Models\Traits\HasUuid;
 use App\Models\User;
 
 /**
- * @property \App\Models\Translations\GitConfig gitHubConfig
+ * @property \App\Models\Translations\GitConfig gitConfig
  */
 class Project extends BaseEntity
 {

@@ -5,7 +5,7 @@ namespace Tests\Feature\Branch;
 use App\Models\Translations\GitConfig;
 use App\Models\Translations\Project;
 use App\Models\User;
-use App\Repositories\GitHub\GitHubBranchRepository;
+use App\Services\GitHub\GitHubBranchService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
@@ -62,7 +62,7 @@ class DeleteTest extends TestCase
     public function a_200_will_be_returned_when_requesting_a_project_repositories()
     {
         // Given
-        $this->mock(GitHubBranchRepository::class, function ($mock) {
+        $this->mock(GitHubBranchService::class, function ($mock) {
             /* @var \Mockery\Mock $mock */
             $mock->shouldReceive('removeBranch')
                 ->withAnyArgs()

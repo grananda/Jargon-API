@@ -4,24 +4,24 @@ namespace App\Http\Controllers\Git;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Repository\IndexRepositoryRequest;
-use App\Repositories\GitHub\GitHubRepoRepository;
+use App\Services\GitHub\GitHubRepoService;
 use Exception;
 
 class RepositoryController extends ApiController
 {
     /**
-     * @var \App\Repositories\GitHub\GitHubRepoRepository
+     * @var \App\Services\GitHub\GitHubRepoService
      */
-    private $gitHubRepository;
+    private $gitHubService;
 
     /**
      * RepositoryController constructor.
      *
-     * @param \App\Repositories\GitHub\GitHubRepoRepository $gitHubRepository
+     * @param \App\Services\GitHub\GitHubRepoService $gitHubRepository
      */
-    public function __construct(GitHubRepoRepository $gitHubRepository)
+    public function __construct(GitHubRepoService $gitHubRepository)
     {
-        $this->gitHubRepository = $gitHubRepository;
+        $this->gitHubService = $gitHubRepository;
     }
 
     /**
@@ -32,7 +32,7 @@ class RepositoryController extends ApiController
     public function index(IndexRepositoryRequest $request)
     {
         try {
-            $repositories = $this->gitHubRepository->getRepositoryList($request->project);
+            $repositories = $this->gitHubService->getRepositoryList($request->project->gitConfig);
 
             return $this->responseOk($repositories);
         } catch (Exception $e) {
