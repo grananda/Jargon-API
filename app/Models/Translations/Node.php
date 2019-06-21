@@ -7,6 +7,9 @@ use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Kalnoy\Nestedset\NodeTrait;
 
+/**
+ * @property string key
+ */
 class Node extends BaseEntity
 {
     use HasUuid;
