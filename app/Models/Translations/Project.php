@@ -11,11 +11,13 @@ use App\Models\Traits\HasCollaborators;
 use App\Models\Traits\HasUuid;
 use App\Models\User;
 
+/**
+ * @property \App\Models\Translations\GitConfig gitConfig
+ */
 class Project extends BaseEntity
 {
     use HasUuid;
-    use
-        HasCollaborators;
+    use HasCollaborators;
 
     const ITEM_TOKEN_LENGTH = 50;
 
@@ -87,6 +89,16 @@ class Project extends BaseEntity
     }
 
     /**
+     * Git project options.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function gitConfig()
+    {
+        return $this->hasOne(GitConfig::class);
+    }
+
+    /**
      * @param Organization $organization
      *
      * @return Project
@@ -151,5 +163,13 @@ class Project extends BaseEntity
     public function createAddCollaboratorEvent(self $project, User $user, string $invitationToken)
     {
         event(new CollaboratorAddedToProject($this, $user, $invitationToken));
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasGitHubAccess()
+    {
+        return $this->gitHubConfig && $this->gitHubConfig->access_token;
     }
 }

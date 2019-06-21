@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\External\Repositories;
+namespace Tests\External\Repositories\Stripe;
 
 use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;

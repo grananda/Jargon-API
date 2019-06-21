@@ -122,7 +122,6 @@ $fixers = [
     'trim_array_spaces' => true,
 
     // PHPUnit
-    'php_unit_strict'                     => true,
     'php_unit_test_class_requires_covers' => true,
     'general_phpdoc_annotation_remove'    => [
         'expectedException', 'expectedExceptionMessage', 'expectedExceptionMessageRegExp',

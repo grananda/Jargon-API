@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\External\Repositories;
+namespace Tests\External\Repositories\Stripe;
 
 use App\Models\Subscriptions\SubscriptionProduct;
 use App\Repositories\Stripe\StripeSubscriptionProductRepository;
