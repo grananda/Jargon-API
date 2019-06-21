@@ -1,17 +1,16 @@
 <?php
 
-namespace Tests\External\Repositories\GitHub;
+namespace Tests\External\Services\GitHub;
 
-use App\Models\Translations\Project;
-use App\Models\Translations\ProjectGitHubConfig;
-use App\Repositories\GitHub\GitHubBranchRepository;
-use App\Repositories\GitHub\GitHubCommitRepository;
+use App\Models\Translations\GitConfig;
+use App\Services\GitHub\GitHubBranchService;
+use App\Services\GitHub\GitHubCommitService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
  * @group  external
- * @covers \App\Repositories\GitHub\GitHubCommitRepository
+ * @covers \App\Services\GitHub\GitHubCommitService
  */
 class GitHubCommitRepositoryTest extends TestCase
 {
@@ -23,17 +22,17 @@ class GitHubCommitRepositoryTest extends TestCase
     private $project;
 
     /**
-     * @var \App\Repositories\GitHub\GitHubBranchRepository
+     * @var \App\Services\GitHub\GitHubBranchService
      */
-    private $gitHubBranchRepository;
+    private $gitHubBranchService;
 
     /**
-     * @var \App\Repositories\GitHub\GitHubCommitRepository
+     * @var \App\Services\GitHub\GitHubCommitService
      */
-    private $gitHubCommitRepository;
+    private $gitHubCommitService;
 
     /**
-     * @var \App\Models\Translations\ProjectGitHubConfig
+     * @var \App\Models\Translations\GitConfig
      */
     private $gitConfig;
 
@@ -41,45 +40,38 @@ class GitHubCommitRepositoryTest extends TestCase
     {
         parent::setUp();
 
-        $user = $this->user();
-
-        /* @var \App\Models\Translations\Project $project */
-        $this->project = factory(Project::class)->create();
-        $this->project->setOwner($user);
-
-        $this->gitConfig = factory(ProjectGitHubConfig::class)->create(
+        $this->gitConfig = factory(GitConfig::class)->create(
             [
                 'access_token' => env('GIT_HUB_TEST_TOKEN'),
                 'username'     => env('GIT_HUB_TEST_USER'),
                 'repository'   => env('GIT_HUB_TEST_REPO'),
-                'project_id'   => $this->project->id,
             ]
         );
 
-        $this->gitHubBranchRepository = resolve(GitHubBranchRepository::class);
+        $this->gitHubBranchService = resolve(GitHubBranchService::class);
 
-        $this->gitHubCommitRepository = resolve(GitHubCommitRepository::class);
+        $this->gitHubCommitService = resolve(GitHubCommitService::class);
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @throws \Exception
+     */
     public function a_new_file_can_be_committed_into_a_branch()
     {
         // Given
-        $branchName = 'featureTest';
+        $branchName = $this->faker->uuid;
 
-        // Step 1
-        $branch    = $this->gitHubBranchRepository->createBranch($this->project, $branchName);
+        $branch    = $this->gitHubBranchService->createBranch($this->gitConfig, $branchName);
         $branchSha = $branch['object']['sha'];
 
         // When
-        $response = $this->gitHubCommitRepository->commitFiles(
+        $response = $this->gitHubCommitService->commitFiles($this->gitConfig,
             [
-                'username'   => $this->project->gitHubConfig->username,
-                'email'      => 'jfernandez74@gmail.com',
-                'repository' => $this->project->gitHubConfig->repository,
-                'branch'     => $branchName,
-                'sha'        => $branchSha,
-                'files'      => [
+                'branch' => $branchName,
+                'sha'    => $branchSha,
+                'files'  => [
                     [
                         'path'    => 'test1.php',
                         'mode'    => '100644',
@@ -107,6 +99,6 @@ class GitHubCommitRepositoryTest extends TestCase
         $this->assertSame('commit', $response['object']['type']);
 
         // Clean
-        $this->gitHubBranchRepository->removeBranch($this->project, $branchName, $branchSha);
+        $this->gitHubBranchService->removeBranch($this->gitConfig, $branchName);
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Repositories\GitHub;
+namespace App\Services\GitHub;
 
 use App\Exceptions\GitHubConnectionException;
-use App\Models\Translations\Project;
+use App\Models\Translations\GitConfig;
 use Github\Client;
 use GrahamCampbell\GitHub\GitHubManager;
 
-abstract class GitHubRepository
+abstract class GitHubService
 {
     /**
      * The GitHubManager instance.
@@ -38,41 +38,41 @@ abstract class GitHubRepository
     /**
      * Authenticates user in GitHub API.
      *
-     * @param \App\Models\Translations\Project $project
+     * @param \App\Models\Translations\GitConfig $gitConfig
      *
      * @throws \App\Exceptions\GitHubConnectionException
      */
-    protected function authenticate(Project $project): void
+    protected function authenticate(GitConfig $gitConfig): void
     {
-        if (! $project->hasGitHubAccess()) {
+        if (! $gitConfig->access_token) {
             throw new GitHubConnectionException(trans('Project GitHub configuration missing'));
         }
 
         $this->gitHubManager
-            ->authenticate($project->gitHubConfig->access_token, Client::AUTH_HTTP_TOKEN)
+            ->authenticate($gitConfig->access_token, Client::AUTH_HTTP_TOKEN)
         ;
     }
 
     /**
      * Gets project base branch reference data.
      *
-     * @param \App\Models\Translations\Project $project
-     * @param string                           $branch
+     * @param \App\Models\Translations\GitConfig $gitConfig
+     * @param string                             $branch
      *
      * @throws \App\Exceptions\GitHubConnectionException
      *
      * @return array
      */
-    protected function getReferenceDetails(Project $project, string $branch)
+    protected function getReferenceDetails(GitConfig $gitConfig, string $branch)
     {
-        $this->authenticate($project);
+        $this->authenticate($gitConfig);
 
         return $this->gitHubManager
             ->gitData()
             ->references()
             ->show(
-                $project->gitHubConfig->username,
-                $project->gitHubConfig->repository,
+                $gitConfig->username,
+                $gitConfig->repository,
                 "heads/{$branch}"
             )
         ;

@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Branch;
 
+use App\Models\Translations\GitConfig;
 use App\Models\Translations\Project;
-use App\Models\Translations\ProjectGitHubConfig;
 use App\Models\User;
 use App\Repositories\GitHub\GitHubBranchRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -77,7 +77,7 @@ class DeleteTest extends TestCase
         $project = factory(Project::class)->create();
         $project->setOwner($user);
 
-        factory(ProjectGitHubConfig::class)->create(
+        factory(GitConfig::class)->create(
             [
                 'access_token' => env('GIT_HUB_TEST_TOKEN'),
                 'username'     => env('GIT_HUB_TEST_USER'),

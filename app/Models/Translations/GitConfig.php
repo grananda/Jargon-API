@@ -9,14 +9,16 @@ use App\Models\Traits\HasUuid;
  * @property string access_token
  * @property string username
  * @property string repository
- * @property string  base_branch
+ * @property string base_branch
+ * @property string  email
  */
-class ProjectGitHubConfig extends BaseEntity
+class GitConfig extends BaseEntity
 {
     use HasUuid;
 
     protected $fillable = [
         'username',
+        'email',
         'repository',
         'base_branch',
         'access_token',

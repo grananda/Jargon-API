@@ -12,7 +12,7 @@ use App\Models\Traits\HasUuid;
 use App\Models\User;
 
 /**
- * @property \App\Models\Translations\ProjectGitHubConfig gitHubConfig
+ * @property \App\Models\Translations\GitConfig gitHubConfig
  */
 class Project extends BaseEntity
 {
@@ -89,13 +89,13 @@ class Project extends BaseEntity
     }
 
     /**
-     * GitHub project options.
+     * Git project options.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function gitHubConfig()
+    public function gitConfig()
     {
-        return $this->hasOne(ProjectGitHubConfig::class);
+        return $this->hasOne(GitConfig::class);
     }
 
     /**
