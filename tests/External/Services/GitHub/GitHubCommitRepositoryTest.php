@@ -101,4 +101,56 @@ class GitHubCommitRepositoryTest extends TestCase
         // Clean
         $this->gitHubBranchService->removeBranch($this->gitConfig, $branchName);
     }
+
+    /**
+     * @test
+     *
+     * @throws \Exception
+     */
+    public function an_existing_file_can_be_committed_into_a_branch()
+    {
+        // Given
+        $branchName = $this->faker->uuid;
+
+        $branch    = $this->gitHubBranchService->createBranch($this->gitConfig, $branchName);
+        $branchSha = $branch['object']['sha'];
+
+        // When
+        $this->gitHubCommitService->commitFiles($this->gitConfig,
+            [
+                'branch' => $branchName,
+                'sha'    => $branchSha,
+                'files'  => [
+                    [
+                        'path'    => 'test1.php',
+                        'mode'    => '100644',
+                        'type'    => 'blob',
+                        'content' => '<?php [];',
+                    ],
+                ],
+            ]
+        );
+
+        $response = $this->gitHubCommitService->commitFiles($this->gitConfig,
+            [
+                'branch' => $branchName,
+                'sha'    => $branchSha,
+                'files'  => [
+                    [
+                        'path'    => 'test1.php',
+                        'mode'    => '100644',
+                        'type'    => 'blob',
+                        'content' => '<?php [1];',
+                    ],
+                ],
+            ]
+        );
+
+        // Then
+        $this->assertSame("refs/heads/{$branchName}", $response['ref']);
+        $this->assertSame('commit', $response['object']['type']);
+
+        // Clean
+        $this->gitHubBranchService->removeBranch($this->gitConfig, $branchName);
+    }
 }
