@@ -12,7 +12,10 @@ use App\Models\Traits\HasUuid;
 use App\Models\User;
 
 /**
- * @property \App\Models\Translations\GitConfig gitConfig
+ * @property \App\Models\Translations\GitConfig    gitConfig
+ * @property \Illuminate\Support\Collection        rootNodes
+ * @property \Illuminate\Support\Collection        dialects
+ * @property \App\Models\Translations\JargonOption jargonOptions
  */
 class Project extends BaseEntity
 {
@@ -64,6 +67,7 @@ class Project extends BaseEntity
         return $this->belongsToMany(Dialect::class)
             ->withPivot('dialect_id', 'is_default')
             ->withTimestamps()
+            ->orderBy('locale')
         ;
     }
 
@@ -96,6 +100,14 @@ class Project extends BaseEntity
     public function gitConfig()
     {
         return $this->hasOne(GitConfig::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function jargonOptions()
+    {
+        return $this->hasOne(JargonOption::class);
     }
 
     /**
