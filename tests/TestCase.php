@@ -111,17 +111,20 @@ abstract class TestCase extends BaseTestCase
      * Reads the contents of the given test fixture.
      *
      * @param string $name
+     * @param bool   $json
      *
      * @throws \Exception
      *
      * @return array
      */
-    protected function loadFixture(string $name)
+    protected function loadFixture(string $name, $json = true)
     {
-        $file = __DIR__."/fixtures/{$name}.json";
+        $file = $json ? __DIR__."/fixtures/{$name}.json" : __DIR__."/fixtures/{$name}";
 
         if (file_exists($file)) {
-            return json_decode(file_get_contents($file), true);
+            $content = file_get_contents($file);
+
+            return $json ? json_decode($content, true) : $content;
         }
 
         throw new \Exception('Fixture was not found!');

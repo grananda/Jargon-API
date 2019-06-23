@@ -8,6 +8,9 @@ use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property string definition
+ */
 class Translation extends BaseEntity
 {
     use SoftDeletes;

@@ -1,0 +1,15 @@
+<?php
+
+return [
+  'api' =>
+  [
+    'messages' =>
+    [
+      'http_ok' => 'Ok-ES',
+    ],
+    'responses' =>
+    [
+      'http_error' => 'Error-ES',
+    ],
+  ],
+];

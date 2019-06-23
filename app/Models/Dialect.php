@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @property Collection $translations
- * @property Language $language
+ * @property Collection     $translations
+ * @property Language       $language
+ * @property string          locale
  */
 class Dialect extends BaseEntity
 {
