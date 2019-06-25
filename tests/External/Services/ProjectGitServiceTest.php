@@ -144,7 +144,7 @@ class ProjectGitServiceTest extends TestCase
         /** @var GitHubPullRequestService $gitHubPullRequestService */
         $gitHubPullRequestService = resolve(GitHubPullRequestService::class);
 
-        $gitHubPullRequestService->closePullRequest($gitConfig, $response['number']);
+        $gitHubPullRequestService->closePullRequest($gitConfig, $response['pull_request_number']);
         $gitHubBranchService->removeBranch($gitConfig, $response['branch']);
     }
 }

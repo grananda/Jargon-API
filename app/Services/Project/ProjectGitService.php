@@ -3,9 +3,11 @@
 namespace App\Services\Project;
 
 use App\Models\Translations\Project;
+use App\Services\GitHub\GitHubAssigneeService;
 use App\Services\GitHub\GitHubBranchService;
 use App\Services\GitHub\GitHubCommitService;
 use App\Services\GitHub\GitHubPullRequestService;
+use App\Services\GitHub\GutHubReviewService;
 
 class ProjectGitService
 {
@@ -13,6 +15,16 @@ class ProjectGitService
      * @var \App\Services\Project\ProjectTranslationParserService
      */
     private $projectTranslationParserService;
+
+    /**
+     * @var \App\Services\GitHub\GutHubReviewService
+     */
+    private $gitHubReviewService;
+
+    /**
+     * @var \App\Services\GitHub\GitHubAssigneeService
+     */
+    private $gitHubAssigneeService;
 
     /**
      * @var \App\Services\GitHub\GitHubPullRequestService
@@ -36,17 +48,23 @@ class ProjectGitService
      * @param \App\Services\GitHub\GitHubPullRequestService         $gitHubPullRequestService
      * @param \App\Services\GitHub\GitHubCommitService              $gitHubCommitService
      * @param \App\Services\GitHub\GitHubBranchService              $gitHunBranchService
+     * @param \App\Services\GitHub\GitHubAssigneeService            $gitHubIssueService
+     * @param \App\Services\GitHub\GutHubReviewService              $gitHubReviewService
      */
     public function __construct(
         ProjectTranslationParserService $projectTranslationParserService,
         GitHubPullRequestService $gitHubPullRequestService,
         GitHubCommitService $gitHubCommitService,
-        GitHubBranchService $gitHunBranchService
+        GitHubBranchService $gitHunBranchService,
+        GitHubAssigneeService $gitHubIssueService,
+        GutHubReviewService $gitHubReviewService
     ) {
         $this->projectTranslationParserService = $projectTranslationParserService;
         $this->gitHubPullRequestService        = $gitHubPullRequestService;
         $this->gitHubCommitService             = $gitHubCommitService;
         $this->gitHunBranchService             = $gitHunBranchService;
+        $this->gitHubAssigneeService           = $gitHubIssueService;
+        $this->gitHubReviewService             = $gitHubReviewService;
     }
 
     /**
@@ -93,9 +111,15 @@ class ProjectGitService
 
         $pullRequest = $this->gitHubPullRequestService->createPullRequest($project->gitConfig, $branchName);
 
+        $assignee = $this->gitHubAssigneeService->assignUserToPullRequest($project->gitConfig, $pullRequest['number']);
+
+        $reviewer = $this->gitHubReviewService->setReviewerToPullRequest($project->gitConfig, $pullRequest['number']);
+
         return [
-            'branch' => $branchName,
-            'number' => $pullRequest['number'],
+            'branch'              => $branchName,
+            'pull_request_number' => $pullRequest['number'],
+            'assignee'            => $assignee,
+            'reviewer'            => $reviewer,
         ];
     }
 }
