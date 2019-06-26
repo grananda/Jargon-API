@@ -5,7 +5,6 @@ namespace App\Services\Node;
 use App\Models\Dialect;
 use App\Models\Translations\JargonOption;
 use App\Models\Translations\Node;
-use Illuminate\Support\Facades\Hash;
 
 class NodeTranslationParserService
 {
@@ -36,7 +35,7 @@ class NodeTranslationParserService
                 'path'    => $options->i18n_path.$dialect->locale,
                 'file'    => $rootNode->key.'.'.$options->file_ext,
                 'content' => $file,
-                'hash'    => Hash::make($file),
+                'hash'    => sha1($file),
             ];
     }
 

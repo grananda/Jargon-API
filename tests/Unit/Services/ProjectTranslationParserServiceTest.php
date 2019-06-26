@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
- * @group unit
+ * @group  unit
  * @covers \App\Services\Project\ProjectTranslationParserService
  */
 class ProjectTranslationParserServiceTest extends TestCase

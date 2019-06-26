@@ -3,6 +3,7 @@
 namespace App\Services\Project;
 
 use App\Models\Translations\Project;
+use App\Repositories\GitFileHashRepository;
 use App\Services\GitHub\GitHubAssigneeService;
 use App\Services\GitHub\GitHubBranchService;
 use App\Services\GitHub\GitHubCommitService;
@@ -42,6 +43,11 @@ class ProjectGitService
     private $gitHunBranchService;
 
     /**
+     * @var \App\Repositories\GitFileHashRepository
+     */
+    private $gitFileHashRepository;
+
+    /**
      * ProjectGitService constructor.
      *
      * @param \App\Services\Project\ProjectTranslationParserService $projectTranslationParserService
@@ -50,6 +56,7 @@ class ProjectGitService
      * @param \App\Services\GitHub\GitHubBranchService              $gitHunBranchService
      * @param \App\Services\GitHub\GitHubAssigneeService            $gitHubIssueService
      * @param \App\Services\GitHub\GutHubReviewService              $gitHubReviewService
+     * @param \App\Repositories\GitFileHashRepository               $gitFileHashRepository
      */
     public function __construct(
         ProjectTranslationParserService $projectTranslationParserService,
@@ -57,7 +64,8 @@ class ProjectGitService
         GitHubCommitService $gitHubCommitService,
         GitHubBranchService $gitHunBranchService,
         GitHubAssigneeService $gitHubIssueService,
-        GutHubReviewService $gitHubReviewService
+        GutHubReviewService $gitHubReviewService,
+        GitFileHashRepository $gitFileHashRepository
     ) {
         $this->projectTranslationParserService = $projectTranslationParserService;
         $this->gitHubPullRequestService        = $gitHubPullRequestService;
@@ -65,6 +73,7 @@ class ProjectGitService
         $this->gitHunBranchService             = $gitHunBranchService;
         $this->gitHubAssigneeService           = $gitHubIssueService;
         $this->gitHubReviewService             = $gitHubReviewService;
+        $this->gitFileHashRepository           = $gitFileHashRepository;
     }
 
     /**
@@ -72,8 +81,8 @@ class ProjectGitService
      *
      * @param \App\Models\Translations\Project $project
      *
-     * @throws \App\Exceptions\GitHubConnectionException
      * @throws \Github\Exception\MissingArgumentException
+     * @throws \App\Exceptions\GitHubConnectionException
      *
      * @return array
      */
@@ -90,15 +99,26 @@ class ProjectGitService
 
         foreach ($files as $fileSet) {
             foreach ($fileSet as $file) {
-                $commitFiles[] = [
-                    'path'    => "{$file['path']}/{$file['file']}",
-                    'mode'    => GitHubCommitService::GIT_HUB_COMMIT_FILE_MODE,
-                    'type'    => GitHubCommitService::GIT_HUB_COMMIT_FILE_TYPE,
-                    'content' => $file['content'],
-                ];
+                /** @var \App\Models\Translations\GitFileHash $lastPullRequest */
+                $lastPullRequest = $this->gitFileHashRepository->findLastPullRequestByProject($project);
+
+                /** @var \App\Models\Translations\GitFileHash $lastHash */
+                $lastHash = $this->gitFileHashRepository->findLastByProjectAndFile($project, $file);
+
+                if ($lastPullRequest->pull_request_number !== $lastHash->pull_request_number) {
+                    $commitFiles[] = [
+                        'path'    => "{$file['path']}/{$file['file']}",
+                        'mode'    => GitHubCommitService::GIT_HUB_COMMIT_FILE_MODE,
+                        'type'    => GitHubCommitService::GIT_HUB_COMMIT_FILE_TYPE,
+                        'content' => $file['content'],
+                    ];
+                }
             }
         }
 
+        if (! sizeof($commitFiles)) {
+            return [];
+        }
         $branch = $this->gitHunBranchService->createBranch($project->gitConfig, $branchName);
 
         $this->gitHubCommitService->commitFiles($project->gitConfig,
