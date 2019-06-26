@@ -81,8 +81,9 @@ class ProjectGitService
      *
      * @param \App\Models\Translations\Project $project
      *
-     * @throws \Github\Exception\MissingArgumentException
      * @throws \App\Exceptions\GitHubConnectionException
+     * @throws \Github\Exception\MissingArgumentException
+     * @throws \Throwable
      *
      * @return array
      */
@@ -100,12 +101,12 @@ class ProjectGitService
         foreach ($files as $fileSet) {
             foreach ($fileSet as $file) {
                 /** @var \App\Models\Translations\GitFileHash $lastPullRequest */
-                $lastPullRequest = $this->gitFileHashRepository->findLastPullRequestByProject($project);
+                $lastPullRequest = $this->gitFileHashRepository->findLastPullRequestByProject($project) ?? $this->gitFileHashRepository->getModel();
 
                 /** @var \App\Models\Translations\GitFileHash $lastHash */
-                $lastHash = $this->gitFileHashRepository->findLastByProjectAndFile($project, $file);
+                $lastHash = $this->gitFileHashRepository->findLastByProjectAndFile($project, $file) ?? $this->gitFileHashRepository->getModel();
 
-                if ($lastPullRequest->pull_request_number !== $lastHash->pull_request_number) {
+                if (! $lastHash->pull_request_number || $lastPullRequest->pull_request_number !== $lastHash->pull_request_number) {
                     $commitFiles[] = [
                         'path'    => "{$file['path']}/{$file['file']}",
                         'mode'    => GitHubCommitService::GIT_HUB_COMMIT_FILE_MODE,
@@ -134,6 +135,18 @@ class ProjectGitService
         $assignee = $this->gitHubAssigneeService->assignUserToPullRequest($project->gitConfig, $pullRequest['number']);
 
         $reviewer = $this->gitHubReviewService->setReviewerToPullRequest($project->gitConfig, $pullRequest['number']);
+
+        foreach ($files as $fileSet) {
+            foreach ($fileSet as $file) {
+                $this->gitFileHashRepository->create([
+                    'locale'              => $file['locale'],
+                    'file'                => $file['file'],
+                    'hash'                => $file['hash'],
+                    'pull_request_number' => $pullRequest['number'],
+                    'project_id'          => $project->id,
+                ]);
+            }
+        }
 
         return [
             'branch'              => $branchName,

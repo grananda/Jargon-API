@@ -14,6 +14,7 @@ class GitFileHash extends BaseEntity
         'file',
         'hash',
         'pull_request_number',
+        'project_id',
     ];
 
     protected $dates = [

@@ -28,6 +28,7 @@ class ProjectGitServiceTest extends TestCase
     /** @test
      * @throws \App\Exceptions\GitHubConnectionException
      * @throws \Github\Exception\MissingArgumentException
+     * @throws \Throwable
      */
     public function a_project_is_process_into_git()
     {
@@ -138,6 +139,9 @@ class ProjectGitServiceTest extends TestCase
 
         // Then
         $this->assertIsArray($response);
+        $this->assertDatabaseHas('git_file_hashes', [
+            'pull_request_number' => $response['pull_request_number'],
+        ]);
 
         // Clean
         /** @var GitHubBranchService $gitHubBranchService */
