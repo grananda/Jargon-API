@@ -2,36 +2,35 @@
 
 namespace App\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use App\Models\Translations\Project;
+use App\Services\Project\ProjectTranslationParserService;
 
-class CreateProjectPullRequest implements ShouldQueue
+class CreateProjectPullRequest extends AbstractJob
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
+    /**
+     * @var \App\Models\Translations\Project
+     */
+    private $project;
 
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param \App\Models\Translations\Project $project
      */
-    public function __construct()
+    public function __construct(Project $project)
     {
-        //
+        $this->project = $project;
     }
 
     /**
      * Execute the job.
      *
+     * @param \App\Services\Project\ProjectTranslationParserService $projectTranslationParserService
+     *
      * @return void
      */
-    public function handle()
+    public function handle(ProjectTranslationParserService $projectTranslationParserService)
     {
-        //
+        $projectTranslationParserService->parseProjectTranslationTree($this->project);
     }
 }
