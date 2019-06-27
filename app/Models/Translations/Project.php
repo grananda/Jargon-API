@@ -103,6 +103,16 @@ class Project extends BaseEntity
     }
 
     /**
+     * Git project file hashes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function gitFiles()
+    {
+        return $this->hasOne(GitFileHash::class);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function jargonOptions()

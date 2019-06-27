@@ -38,6 +38,7 @@ class ProjectTranslationParserService
         foreach ($project->rootNodes as $rootNode) {
             /** @var array $files */
             $files = [];
+
             foreach ($project->dialects as $dialect) {
                 $files[] = $this->nodeTranslationParserService->parseTranslationFile($rootNode, $dialect, $defaultDialect, $project->jargonOptions);
             }

@@ -7,6 +7,10 @@ use Carbon\Carbon;
 
 class GitHubCommitService extends GitHubService
 {
+    public const GIT_HUB_COMMIT_FILE_MODE = '100644';
+
+    public const GIT_HUB_COMMIT_FILE_TYPE = 'blob';
+
     private const STANDARD_COMMIT_MESSAGE_PREFIX = 'Jargon translation sync ';
 
     /**
