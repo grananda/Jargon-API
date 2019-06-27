@@ -39,6 +39,7 @@ class RouteServiceProvider extends ServiceProvider
         'invoices',
         'repositories',
         'branches',
+        'git',
     ];
 
     /**
