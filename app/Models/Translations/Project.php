@@ -16,6 +16,7 @@ use App\Models\User;
  * @property \Illuminate\Support\Collection        rootNodes
  * @property \Illuminate\Support\Collection        dialects
  * @property \App\Models\Translations\JargonOption jargonOptions
+ * @property string                                 uuid
  */
 class Project extends BaseEntity
 {

@@ -432,4 +432,172 @@ class NodeTranslationParserServiceTest extends TestCase
         $this->assertArrayHasKey('hash', $response);
         $this->assertEquals($fixture, $response['content']);
     }
+
+    /** @test */
+    public function a_node_structure_is_created_from_a_json_string()
+    {
+        // Given
+        $user1 = $this->user();
+
+        /** @var \App\Models\Organization $organization */
+        $organization = factory(Organization::class)->create();
+
+        /** @var \App\Models\Translations\Project $project1 */
+        $project1 = factory(Project::class)->create();
+        $project1->setOrganization($organization);
+        $project1->setOwner($user1);
+
+        $dialect1 = Dialect::where('locale', 'es_ES')->first();
+
+        $dialect2 = Dialect::where('locale', 'en_US')->first();
+
+        $project1->setDialects(
+            [
+                $dialect1->id => ['is_default' => true],
+                $dialect2->id => ['is_default' => false],
+            ]
+        );
+
+        /** @var array $data */
+        $data = [
+            'project' => $project1->uuid,
+            'data'    => [
+                [
+                    [
+                        'locale'  => 'ES',
+                        'content' => [
+                            'api' => [
+                                'messages' => [
+                                    'http_ok' => 'Ok-ES',
+                                ],
+                                'responses' => [
+                                    'http_error' => 'Error-ES',
+                                ],
+                            ],
+                        ],
+                        'hash' => $this->faker->sha1,
+                    ],
+                    [
+                        'locale'  => 'EN',
+                        'content' => [
+                            'api' => [
+                                'messages' => [
+                                    'http_ok' => 'Ok-EN',
+                                ],
+                                'responses' => [
+                                    'http_error' => 'Error-EN',
+                                ],
+                            ],
+                        ],
+                        'hash' => $this->faker->sha1,
+                    ],
+                ],
+                [
+                    [
+                        'locale'  => 'ES',
+                        'content' => [
+                            'user' => [
+                                'login' => [
+                                    'message' => 'acceder',
+                                ],
+                            ],
+                        ],
+                        'hash' => $this->faker->sha1,
+                    ],
+                    [
+                        'locale'  => 'EN',
+                        'content' => [
+                            'user' => [
+                                'login' => [
+                                    'message' => 'login',
+                                ],
+                            ],
+                        ],
+                        'hash' => $this->faker->sha1,
+                    ],
+                ],
+            ],
+        ];
+
+        /** @var string $json */
+        $json = json_encode($data);
+
+        /** @var \App\Services\Node\NodeTranslationParserService $service */
+        $service = resolve(NodeTranslationParserService::class);
+
+        // When
+
+        $service->jsonToTree($project1, $json);
+
+        // Then
+        $this->assertDatabaseHas('nodes', [
+            'key'        => 'api',
+            'route'      => 'api',
+            'project_id' => $project1->id,
+            'sort_index' => 0,
+            'parent_id'  => null,
+        ]);
+        $this->assertDatabaseHas('nodes', [
+            'key'        => 'messages',
+            'route'      => 'api.messages',
+            'project_id' => $project1->id,
+            'sort_index' => 0,
+        ]);
+        $this->assertDatabaseHas('nodes', [
+            'key'        => 'http_ok',
+            'route'      => 'api.messages.http_ok',
+            'project_id' => $project1->id,
+            'sort_index' => 0,
+        ]);
+        $this->assertDatabaseHas('nodes', [
+            'key'        => 'responses',
+            'route'      => 'api.responses',
+            'project_id' => $project1->id,
+            'sort_index' => 1,
+        ]);
+        $this->assertDatabaseHas('nodes', [
+            'key'        => 'http_error',
+            'route'      => 'api.responses.http_error',
+            'project_id' => $project1->id,
+            'sort_index' => 0,
+        ]);
+
+        $this->assertDatabaseHas('nodes', [
+            'key'        => 'user',
+            'route'      => 'user',
+            'project_id' => $project1->id,
+            'sort_index' => 0,
+            'parent_id'  => null,
+        ]);
+        $this->assertDatabaseHas('nodes', [
+            'key'        => 'login',
+            'route'      => 'user.login',
+            'project_id' => $project1->id,
+            'sort_index' => 0,
+        ]);
+        $this->assertDatabaseHas('nodes', [
+            'key'        => 'message',
+            'route'      => 'user.login.message',
+            'project_id' => $project1->id,
+            'sort_index' => 0,
+        ]);
+
+        $this->assertDatabaseHas('translations', [
+            'dialect_id' => $dialect1->id,
+            'definition' => 'Ok-ES',
+        ]);
+        $this->assertDatabaseHas('translations', [
+            'dialect_id' => $dialect2->id,
+            'definition' => 'Ok-EN',
+        ]);
+
+        $this->assertDatabaseHas('translations', [
+            'dialect_id' => $dialect1->id,
+            'definition' => 'acceder',
+        ]);
+        $this->assertDatabaseHas('translations', [
+            'dialect_id' => $dialect2->id,
+            'definition' => 'login',
+        ]);
+    }
 }
