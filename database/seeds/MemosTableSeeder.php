@@ -22,7 +22,7 @@ class MemosTableSeeder extends AbstractSeeder
 
         foreach ($memos as $memo) {
             /* @var Memo $memo */
-            $memo->setRecipients($users->pluck('uuid')->toArray());
+            $memo->setRecipients($users->pluck('id')->toArray());
         }
     }
 }
