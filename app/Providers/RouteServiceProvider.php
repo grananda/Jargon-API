@@ -40,6 +40,7 @@ class RouteServiceProvider extends ServiceProvider
         'repositories',
         'branches',
         'git',
+        'apiPlugin',
     ];
 
     /**
