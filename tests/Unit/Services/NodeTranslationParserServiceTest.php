@@ -464,7 +464,7 @@ class NodeTranslationParserServiceTest extends TestCase
             'data'    => [
                 [
                     [
-                        'locale'  => 'ES',
+                        'locale'  => 'es_ES',
                         'content' => [
                             'api' => [
                                 'messages' => [
@@ -478,7 +478,7 @@ class NodeTranslationParserServiceTest extends TestCase
                         'hash' => $this->faker->sha1,
                     ],
                     [
-                        'locale'  => 'EN',
+                        'locale'  => 'en_US',
                         'content' => [
                             'api' => [
                                 'messages' => [
@@ -494,7 +494,7 @@ class NodeTranslationParserServiceTest extends TestCase
                 ],
                 [
                     [
-                        'locale'  => 'ES',
+                        'locale'  => 'es_ES',
                         'content' => [
                             'user' => [
                                 'login' => [
@@ -505,7 +505,7 @@ class NodeTranslationParserServiceTest extends TestCase
                         'hash' => $this->faker->sha1,
                     ],
                     [
-                        'locale'  => 'EN',
+                        'locale'  => 'en_US',
                         'content' => [
                             'user' => [
                                 'login' => [
@@ -534,7 +534,7 @@ class NodeTranslationParserServiceTest extends TestCase
             'key'        => 'api',
             'route'      => 'api',
             'project_id' => $project1->id,
-            'sort_index' => 0,
+            'sort_index' => 1,
             'parent_id'  => null,
         ]);
         $this->assertDatabaseHas('nodes', [
@@ -566,7 +566,7 @@ class NodeTranslationParserServiceTest extends TestCase
             'key'        => 'user',
             'route'      => 'user',
             'project_id' => $project1->id,
-            'sort_index' => 0,
+            'sort_index' => 1,
             'parent_id'  => null,
         ]);
         $this->assertDatabaseHas('nodes', [

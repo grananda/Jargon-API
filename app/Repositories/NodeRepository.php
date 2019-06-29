@@ -38,7 +38,7 @@ class NodeRepository extends CoreRepository
     public function createNode(Project $project, ?Node $parentNode, array $attributes = [])
     {
         return $this->dbConnection->transaction(function () use ($project, $parentNode, $attributes) {
-            $attributes['key'] = __(Node::TEMPLATE_KEY, ['count' => $parentNode ? $parentNode->children->count() : 0 + 1]);
+            $attributes['key'] = $attributes['key'] ?? __(Node::TEMPLATE_KEY, ['count' => $parentNode ? $parentNode->children->count() : 0 + 1]);
             $attributes['project_id'] = $project->id;
             $attributes['sort_index'] = $parentNode ? Node::NEW_NODE_INDEX : 1;
             $attributes['route'] = $parentNode ? implode('.', [$parentNode->route, $attributes['key']]) : $attributes['key'];
