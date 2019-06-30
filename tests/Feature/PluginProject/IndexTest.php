@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 /**
- * @coversNothing
+ * @group unit
+ * @covers \App\Http\Controllers\Plugin\ApiPluginProjectController::index
  */
 class IndexTest extends TestCase
 {

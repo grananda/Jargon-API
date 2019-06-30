@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Plugin;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Plugin\StoreApiPluginSyncRequest;
-use App\Http\Resources\JargonOptions\JargonOptionsResource;
+use App\Jobs\ProcessProjectRemoteSync;
 use Exception;
 
 class ApiPluginSyncController extends ApiController
@@ -19,7 +19,9 @@ class ApiPluginSyncController extends ApiController
     public function store(StoreApiPluginSyncRequest $request)
     {
         try {
-            return $this->responseOk(new JargonOptionsResource($request->project->jargonOptions));
+            dispatch(new ProcessProjectRemoteSync($request->project, $request->json));
+
+            return $this->responseOk([]);
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
         }

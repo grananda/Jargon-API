@@ -23,7 +23,7 @@ abstract class ApiController extends BaseController
      */
     public function responseOk($data, array $headers = [])
     {
-        return response()->json(compact('data'), HttpResponse::HTTP_OK, $headers, JSON_PRETTY_PRINT);
+        return response()->json(sizeof($data) === 0 ? null : compact('data'), HttpResponse::HTTP_OK, $headers, JSON_PRETTY_PRINT);
     }
 
     /**

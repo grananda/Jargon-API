@@ -12,6 +12,9 @@ class StoreApiPluginSyncRequest extends FormRequest
      */
     public $project;
 
+    /** @var string */
+    public $json;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -20,6 +23,8 @@ class StoreApiPluginSyncRequest extends FormRequest
     public function authorize()
     {
         $this->project = Project::findByUuidOrFail($this->route('id'));
+
+        $this->json = $this->input('data');
 
         return $this->user()->can('show', [$this->project]);
     }
@@ -32,8 +37,7 @@ class StoreApiPluginSyncRequest extends FormRequest
     public function rules()
     {
         return [
-            'project' => ['required', 'string'],
-            'data'    => ['required', 'json'],
+            'data' => ['required', 'json'],
         ];
     }
 }
