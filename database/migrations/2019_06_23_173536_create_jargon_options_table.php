@@ -20,10 +20,8 @@ class CreateJargonOptionsTable extends Migration
             $table->string('i18n_path')->default('resources/lang/');
             $table->string('framework')->default('laravel');
             $table->string('translation_file_mode')->default('array');
-            $table->unsignedBigInteger('project_id');
+            $table->unsignedInteger('project_id');
             $table->timestamps();
-
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
     }
 

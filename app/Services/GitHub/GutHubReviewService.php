@@ -48,15 +48,17 @@ class GutHubReviewService extends GitHubService
 
         shuffle($_collaborators);
 
-        $this->gitHubManager
-            ->pullRequests()
-            ->reviewRequests()
-            ->create($gitConfig->username, $gitConfig->repository, $pullRequestNumber,
-                [
-                    current($_collaborators),
-                ]
-            )
-        ;
+        if (sizeof($_collaborators) > 0) {
+            $this->gitHubManager
+                ->pullRequests()
+                ->reviewRequests()
+                ->create($gitConfig->username, $gitConfig->repository, $pullRequestNumber,
+                    [
+                        current($_collaborators),
+                    ]
+                )
+            ;
+        }
 
         return $_collaborators;
     }

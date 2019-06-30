@@ -16,6 +16,7 @@ use App\Models\User;
  * @property \Illuminate\Support\Collection        rootNodes
  * @property \Illuminate\Support\Collection        dialects
  * @property \App\Models\Translations\JargonOption jargonOptions
+ * @property string                                 uuid
  */
 class Project extends BaseEntity
 {
@@ -118,6 +119,17 @@ class Project extends BaseEntity
     public function jargonOptions()
     {
         return $this->hasOne(JargonOption::class);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function defaultDialect()
+    {
+        return $this->dialects()
+            ->where('is_default', true)
+            ->first()
+        ;
     }
 
     /**

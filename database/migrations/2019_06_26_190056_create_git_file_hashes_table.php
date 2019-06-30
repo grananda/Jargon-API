@@ -15,15 +15,13 @@ class CreateGitFileHashesTable extends Migration
     {
         Schema::create('git_file_hashes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('project_id');
+            $table->unsignedInteger('project_id');
             $table->string('locale');
             $table->string('file');
             $table->string('hash');
             $table->string('pull_request_number');
 
             $table->timestamps();
-
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
     }
 
