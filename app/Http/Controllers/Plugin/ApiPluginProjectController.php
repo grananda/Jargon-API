@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Plugin;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Plugin\IndexApiPluginProjectRequest;
+use App\Http\Resources\JargonOptions\JargonOptionsResource;
 use Exception;
 
 class ApiPluginProjectController extends ApiController
@@ -18,7 +19,7 @@ class ApiPluginProjectController extends ApiController
     public function index(IndexApiPluginProjectRequest $request)
     {
         try {
-            return $this->responseOk([]);
+            return $this->responseOk(new JargonOptionsResource($request->project->jargonOptions));
         } catch (Exception $e) {
             return $this->responseInternalError($e->getMessage());
         }

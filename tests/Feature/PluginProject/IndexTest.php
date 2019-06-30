@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\PluginProject;
 
+use App\Models\Dialect;
+use App\Models\Translations\JargonOption;
 use App\Models\Translations\Project;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -57,10 +59,28 @@ class IndexTest extends TestCase
         $project = factory(Project::class)->create();
         $project->setOwner($user);
 
+        /** @var \App\Models\Dialect $dialect1 */
+        $dialect1 = Dialect::where('locale', 'es_ES')->first();
+
+        /** @var \App\Models\Dialect $dialect2 */
+        $dialect2 = Dialect::where('locale', 'en_US')->first();
+
+        $project->setDialects([$dialect1->id => ['is_default' => 1], $dialect2->id]);
+
+        /** @var \App\Models\Translations\JargonOption $jargonOptions */
+        $jargonOptions = factory(JargonOption::class)->create([
+            'project_id' => $project->id,
+        ]);
+
         // When
         $response = $this->signIn($user)->get(route('plugin.index', [$project->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
+
+        $response = $response->json()['data'];
+
+        $this->assertSame($project->uuid, $response['project']);
+        $this->assertSame($dialect1->locale, $response['default_dialect']);
     }
 }

@@ -15,6 +15,7 @@ class JargonOption extends Model
         'language',
         'file_ext',
         'framework',
+        'i18n_path',
         'translation_file_mode',
     ];
 

@@ -122,6 +122,17 @@ class Project extends BaseEntity
     }
 
     /**
+     * @return mixed
+     */
+    public function defaultDialect()
+    {
+        return $this->dialects()
+            ->where('is_default', true)
+            ->first()
+        ;
+    }
+
+    /**
      * @param Organization $organization
      *
      * @return Project

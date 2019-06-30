@@ -20,7 +20,10 @@ class JargonOptionsResource extends JsonResource
             'file_ext'              => $this->file_ext,
             'framework'             => $this->framework,
             'translation_file_mode' => $this->translation_file_mode,
+            'i18n_path'             => $this->i18n_path,
             'project'               => $this->project->uuid,
+            'dialects'              => $this->project->dialects->pluck('locale')->toArray(),
+            'default_dialect'       => $this->project->defaultDialect()->locale,
         ];
     }
 }
