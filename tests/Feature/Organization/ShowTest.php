@@ -46,12 +46,16 @@ class ShowTest extends TestCase
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
 
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-        $organization->setOwner($owner);
+        /** @var \App\Models\Organization $organization1 */
+        $organization1 = factory(Organization::class)->create();
+        $organization1->setOwner($owner);
+
+        /** @var \App\Models\Organization $organization2 */
+        $organization2 = factory(Organization::class)->create();
+        $organization2->setOwner($user);
 
         // When
-        $response = $this->signIn($user)->get(route('organizations.show', [$organization->uuid]));
+        $response = $this->signIn($user)->get(route('organizations.show', [$organization1->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -67,9 +71,13 @@ class ShowTest extends TestCase
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
 
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-        $organization->setOwner($owner);
+        /** @var \App\Models\Organization $organization1 */
+        $organization1 = factory(Organization::class)->create();
+        $organization1->setOwner($owner);
+
+        /** @var \App\Models\Organization $organization2 */
+        $organization2 = factory(Organization::class)->create();
+        $organization2->setOwner($user);
 
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
@@ -82,7 +90,7 @@ class ShowTest extends TestCase
         $project->setTeams([$team->id]);
 
         // When
-        $response = $this->signIn($user)->get(route('organizations.show', [$organization->uuid]));
+        $response = $this->signIn($user)->get(route('organizations.show', [$organization1->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -98,9 +106,13 @@ class ShowTest extends TestCase
         /** @var \App\Models\User $owner */
         $owner = factory(User::class)->create();
 
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-        $organization->setOwner($owner);
+        /** @var \App\Models\Organization $organization1 */
+        $organization1 = factory(Organization::class)->create();
+        $organization1->setOwner($owner);
+
+        /** @var \App\Models\Organization $organization2 */
+        $organization2 = factory(Organization::class)->create();
+        $organization2->setOwner($user);
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();
@@ -108,7 +120,7 @@ class ShowTest extends TestCase
         $project->setMember($user);
 
         // When
-        $response = $this->signIn($user)->get(route('organizations.show', [$organization->uuid]));
+        $response = $this->signIn($user)->get(route('organizations.show', [$organization1->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_FORBIDDEN);
@@ -145,9 +157,13 @@ class ShowTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->user();
 
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-        $organization->setOwner($owner);
+        /** @var \App\Models\Organization $organization1 */
+        $organization1 = factory(Organization::class)->create();
+        $organization1->setOwner($owner);
+
+        /** @var \App\Models\Organization $organization2 */
+        $organization2 = factory(Organization::class)->create();
+        $organization2->setOwner($user);
 
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
@@ -157,18 +173,18 @@ class ShowTest extends TestCase
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();
-        $project->setOrganization($organization);
+        $project->setOrganization($organization1);
         $project->setOwner($owner);
         $project->setTeams([
             $team->id,
         ]);
 
         // When
-        $response = $this->signIn($user)->get(route('organizations.show', [$organization->uuid]));
+        $response = $this->signIn($user)->get(route('organizations.show', [$organization1->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonFragment(['id' => $organization->uuid]);
+        $response->assertJsonFragment(['id' => $organization1->uuid]);
     }
 
     /** @test */
@@ -181,22 +197,26 @@ class ShowTest extends TestCase
         /** @var \App\Models\User $user */
         $user = $this->user();
 
-        /** @var \App\Models\Organization $organization */
-        $organization = factory(Organization::class)->create();
-        $organization->setOwner($owner);
+        /** @var \App\Models\Organization $organization1 */
+        $organization1 = factory(Organization::class)->create();
+        $organization1->setOwner($owner);
+
+        /** @var \App\Models\Organization $organization2 */
+        $organization2 = factory(Organization::class)->create();
+        $organization2->setOwner($user);
 
         /** @var \App\Models\Translations\Project $project */
         $project = factory(Project::class)->create();
-        $project->setOrganization($organization);
+        $project->setOrganization($organization1);
         $project->setOwner($owner);
         $project->setMember($user);
         $project->validateMember($user);
 
         // When
-        $response = $this->signIn($user)->get(route('organizations.show', [$organization->uuid]));
+        $response = $this->signIn($user)->get(route('organizations.show', [$organization1->uuid]));
 
         // Then
         $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonFragment(['id' => $organization->uuid]);
+        $response->assertJsonFragment(['id' => $organization1->uuid]);
     }
 }

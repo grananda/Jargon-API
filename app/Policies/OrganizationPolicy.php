@@ -47,7 +47,7 @@ class OrganizationPolicy extends AbstractPolicy
      */
     public function show(User $user, Organization $organization)
     {
-        return (bool) $this->organizationRepository->findAllByMember($user)->map(function ($item) use ($organization) {
+        return (bool) $this->organizationRepository->findAllByMember($user)->filter(function ($item) use ($organization) {
             return $item->id === $organization->id;
         })->count();
     }

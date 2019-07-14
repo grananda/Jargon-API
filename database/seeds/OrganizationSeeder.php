@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Mail;
 
 class OrganizationSeeder extends AbstractSeeder
 {
-    const ORGANIZATIONS_LIMIT = 5;
+    const ORGANIZATIONS_LIMIT = 2;
 
     /**
      * Run the database seeds.
