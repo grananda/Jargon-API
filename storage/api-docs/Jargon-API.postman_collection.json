@@ -17,7 +17,17 @@
 								"id": "7d222299-7180-4b8b-a043-bfca7f3230fc",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody)",
-									"pm.environment.set(\"access_token\", jsonData.access_token);",
+									"pm.environment.set(\"access_token\", jsonData.data.access_token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "80a82d5b-2764-4af1-b98f-0769ebb3c24e",
+								"exec": [
 									""
 								],
 								"type": "text/javascript"
@@ -201,7 +211,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations/{{organization_id}}",
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations/{{organization_id}}?{{debug_session}}",
 							"protocol": "{{protocol}}",
 							"host": [
 								"{{ip}}"
@@ -212,6 +222,12 @@
 								"{{version}}",
 								"organizations",
 								"{{organization_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
 							]
 						}
 					},
@@ -244,7 +260,7 @@
 							"raw": "{\n\t\"name\": \"Sample Organization 1\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\"\n}"
 						},
 						"url": {
-							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations",
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations?{{debug_session}}",
 							"protocol": "{{protocol}}",
 							"host": [
 								"{{ip}}"
@@ -254,6 +270,12 @@
 								"{{route}}",
 								"{{version}}",
 								"organizations"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
 							]
 						}
 					},
@@ -286,7 +308,7 @@
 							"raw": "{\n\t\"name\": \"Sample Organization 1\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\"\n}"
 						},
 						"url": {
-							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations/{{organization_id}}",
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations/{{organization_id}}?{{debug_session}}",
 							"protocol": "{{protocol}}",
 							"host": [
 								"{{ip}}"
@@ -297,6 +319,12 @@
 								"{{version}}",
 								"organizations",
 								"{{organization_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
 							]
 						}
 					},
@@ -304,6 +332,18 @@
 				},
 				{
 					"name": "List Organizations",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8847445a-0486-403b-add9-4fd9d86db3e9",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -333,7 +373,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations",
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations?{{debug_session}}",
 							"protocol": "{{protocol}}",
 							"host": [
 								"{{ip}}"
@@ -343,6 +383,12 @@
 								"{{route}}",
 								"{{version}}",
 								"organizations"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
 							]
 						}
 					},
@@ -368,7 +414,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations/{{organization_id}}",
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations/{{organization_id}}?{{debug_session}}",
 							"protocol": "{{protocol}}",
 							"host": [
 								"{{ip}}"
@@ -379,6 +425,12 @@
 								"{{version}}",
 								"organizations",
 								"{{organization_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
 							]
 						}
 					},
@@ -501,10 +553,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Sample Project 1\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n\t\"teams\": [],\n\t\"collaborators\": []\n}"
+							"raw": "{\n\t\"title\": \"Sample Project 1\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n\t\"teams\": [\n\t\t[\n\t\t\t\"{{team_id}}\"\n\t\t]\n\t],\n\t\"collaborators\": [\n\t\t{\n\t\t\t\"id\": \"{{collaborator_id}}\",\n\t\t\t\"role\": \"project-manager\",\n\t\t\t\"owner\": false\n\t\t}\n\t]\n}"
 						},
 						"url": {
-							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects",
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects?{{debug_session}}",
 							"protocol": "{{protocol}}",
 							"host": [
 								"{{ip}}"
@@ -514,6 +566,99 @@
 								"{{route}}",
 								"{{version}}",
 								"projects"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects/{{project_id}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"projects",
+								"{{project_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Teams",
+			"item": [
+				{
+					"name": "List Teams",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/teams",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"teams"
 							]
 						}
 					},
