@@ -186,6 +186,68 @@
 			"name": "Organizations",
 			"item": [
 				{
+					"name": "Create Organization",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8bc7d131-99cb-4abf-9188-cd2348fbf63f",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)",
+									"pm.environment.set(\"organization_id\", jsonData.data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Sample Organization 1\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"organizations"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Organization",
 					"request": {
 						"auth": {
@@ -222,54 +284,6 @@
 								"{{version}}",
 								"organizations",
 								"{{organization_id}}"
-							],
-							"query": [
-								{
-									"key": "{{debug_session}}",
-									"value": null
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Organization",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Sample Organization 1\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\"\n}"
-						},
-						"url": {
-							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations?{{debug_session}}",
-							"protocol": "{{protocol}}",
-							"host": [
-								"{{ip}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"{{route}}",
-								"{{version}}",
-								"organizations"
 							],
 							"query": [
 								{
@@ -334,9 +348,21 @@
 					"name": "List Organizations",
 					"event": [
 						{
+							"listen": "test",
+							"script": {
+								"id": "7093306f-2378-40c2-9550-9d0ad8b77e18",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)",
+									"pm.environment.set(\"organization_id\", jsonData.data[0].id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
 							"listen": "prerequest",
 							"script": {
-								"id": "8847445a-0486-403b-add9-4fd9d86db3e9",
+								"id": "1fbec4d1-2ec7-4615-8a08-941058a1b3f0",
 								"exec": [
 									""
 								],
@@ -442,6 +468,68 @@
 			"name": "Projects",
 			"item": [
 				{
+					"name": "Create Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ecba5c8c-777c-47eb-8ead-aba17dc92aa9",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)",
+									"pm.environment.set(\"project_id\", jsonData.data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Sample Project 1\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n\t\"teams\": [\n\t\t[\n\t\t\t\"{{team_id}}\"\n\t\t]\n\t],\n\t\"collaborators\": [\n\t\t{\n\t\t\t\"id\": \"{{collaborator_id}}\",\n\t\t\t\"role\": \"project-manager\",\n\t\t\t\"owner\": false\n\t\t}\n\t]\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"projects"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "List Projects",
 					"request": {
 						"auth": {
@@ -530,54 +618,6 @@
 					"response": []
 				},
 				{
-					"name": "Create Project",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{access_token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"title\": \"Sample Project 1\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n\t\"teams\": [\n\t\t[\n\t\t\t\"{{team_id}}\"\n\t\t]\n\t],\n\t\"collaborators\": [\n\t\t{\n\t\t\t\"id\": \"{{collaborator_id}}\",\n\t\t\t\"role\": \"project-manager\",\n\t\t\t\"owner\": false\n\t\t}\n\t]\n}"
-						},
-						"url": {
-							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects?{{debug_session}}",
-							"protocol": "{{protocol}}",
-							"host": [
-								"{{ip}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"{{route}}",
-								"{{version}}",
-								"projects"
-							],
-							"query": [
-								{
-									"key": "{{debug_session}}",
-									"value": null
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Remove Project",
 					"request": {
 						"auth": {
@@ -619,6 +659,159 @@
 			"name": "Teams",
 			"item": [
 				{
+					"name": "Create Team",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8bc7d131-99cb-4abf-9188-cd2348fbf63f",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)",
+									"pm.environment.set(\"team_id\", jsonData.data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Sample Team 2\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n\t\"collaborators\" : []\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/teams?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"teams"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "JWT {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/teams/{{team_id}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"teams",
+								"{{team_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Sample Organization 1 Updated\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n\t\"collaborators\": []\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/teams/{{team_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"teams",
+								"{{team_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "List Teams",
 					"request": {
 						"auth": {
@@ -659,6 +852,48 @@
 								"{{route}}",
 								"{{version}}",
 								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/teams/{{team_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"teams",
+								"{{team_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
 							]
 						}
 					},
