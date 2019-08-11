@@ -115,7 +115,7 @@ class UpdateTest extends TestCase
     }
 
     /** @test */
-    public function a_200_will_be_returned_if_an_owner_updates_an_team()
+    public function a_200_will_be_returned_if_an_owner_updates_a_team()
     {
         /* @var \App\Models\User $owner */
         Event::fake(CollaboratorAddedToTeam::class);

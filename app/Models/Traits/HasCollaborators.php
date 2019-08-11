@@ -8,6 +8,15 @@ use Illuminate\Support\Str;
 
 trait HasCollaborators
 {
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function (self $model) {
+            $model->collaborators()->detach();
+        });
+    }
+
     /**
      * Returns entity active collaborators.
      *
