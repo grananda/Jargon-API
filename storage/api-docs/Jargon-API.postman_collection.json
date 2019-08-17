@@ -505,7 +505,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\": \"Sample Project 1\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n\t\"teams\": [\n\t\t[\n\t\t\t\"{{team_id}}\"\n\t\t]\n\t],\n\t\"collaborators\": [\n\t\t{\n\t\t\t\"id\": \"{{collaborator_id}}\",\n\t\t\t\"role\": \"project-manager\",\n\t\t\t\"owner\": false\n\t\t}\n\t]\n}"
+							"raw": "{\n    \"title\": \"Sample Project 1\",\n    \"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n    \"teams\": [\n        [\n            \"{{team_id}}\"\n        ]\n    ],\n    \"collaborators\": [\n        {\n            \"id\": \"{{collaborator_id}}\",\n            \"role\": \"project-manager\",\n            \"owner\": false\n        }\n    ],\n    \"dialects\": [\n        {\n            \"locale\": \"es_ES\",\n            \"default\": true\n        },\n        {\n            \"locale\": \"es_MX\",\n            \"default\": false\n        }\n    ]\n}"
 						},
 						"url": {
 							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects?{{debug_session}}",
@@ -612,6 +612,55 @@
 								"{{version}}",
 								"projects",
 								"{{project_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Sample Project 1 Updated\",\n    \"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n    \"teams\": [],\n    \"collaborators\": [\n        {\n            \"id\": \"{{collaborator_id}}\",\n            \"role\": \"project-manager\",\n            \"owner\": false\n        }\n    ],\n    \"dialects\": [\n        {\n            \"locale\": \"es_ES\",\n            \"default\": false\n        },\n        {\n            \"locale\": \"es_MX\",\n            \"default\": true\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects/{{project_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"projects",
+								"{{project_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
 							]
 						}
 					},

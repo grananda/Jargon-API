@@ -37,10 +37,12 @@ class UpdateProjectRequest extends Request
         return [
             'title'           => ['required', 'string'],
             'description'     => ['nullable', 'string', 'max:255'],
-            'collaborators'   => ['array'],
+            'collaborators'   => ['array', 'sometimes'],
             'collaborators.*' => ['array', new ValidMember()],
-            'teams'           => ['array'],
+            'teams'           => ['array', 'sometimes'],
             'teams.*'         => ['array', new ValidTeam($this->user())],
+            'dialects'        => ['array', 'sometimes'],
+            'dialects.*'      => ['array'],
         ];
     }
 }
