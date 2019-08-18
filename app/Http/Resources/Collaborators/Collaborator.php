@@ -20,8 +20,8 @@ class Collaborator extends JsonResource
             'id'       => $this->uuid,
             'name'     => $this->name,
             'email'    => $this->email,
-            'is_owner' => (bool)$this->pivot->is_owner,
-            'is_valid' => (bool)$this->pivot->is_valid,
+            'is_owner' => (bool) $this->pivot->is_owner,
+            'is_valid' => (bool) $this->pivot->is_valid,
             'role'     => new \App\Http\Resources\Roles\Role(Role::find($this->pivot->role_id)),
         ];
     }

@@ -17,10 +17,10 @@ class Team extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'            => $this->uuid,
-            'name'          => $this->name,
-            'description'   => $this->description,
-            'collaborators' => new CollaboratorCollection($this->collaborators),
+            'id'               => $this->uuid,
+            'name'             => $this->name,
+            'description'      => $this->description,
+            'collaborators'    => new CollaboratorCollection($this->collaborators),
             'nonActiveMembers' => new CollaboratorCollection($this->nonActiveMembers),
         ];
     }

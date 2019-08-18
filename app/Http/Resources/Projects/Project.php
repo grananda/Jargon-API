@@ -24,7 +24,7 @@ class Project extends JsonResource
             'description'      => $this->description,
             'collaborators'    => new CollaboratorCollection($this->collaborators),
             'nonActiveMembers' => new CollaboratorCollection($this->nonActiveMembers),
-            'teams'         => Team::collection($this->teams),
+            'teams'            => Team::collection($this->teams),
             'dialects'         => Dialect::collection($this->dialects),
             'default_language' => new Dialect($this->dialects()->wherePivot('is_default', true)->first()),
         ];
