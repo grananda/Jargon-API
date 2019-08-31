@@ -52,7 +52,7 @@ class UserSeeder extends AbstractSeeder
             $userItem = factory(User::class)->create([
                 'name'     => $user['name'],
                 'email'    => $user['email'],
-                'password' => Hash::make($user['password']),
+                'password' => $user['password'],
             ]);
             $userItem->setRole($role);
 
