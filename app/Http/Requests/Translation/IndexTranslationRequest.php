@@ -22,7 +22,7 @@ class IndexTranslationRequest extends Request
      */
     public function authorize()
     {
-        $this->node = Node::findByUuid($this->route('id'));
+        $this->node = Node::findByUuidOrFail($this->route('id'));
 
         return $this->user()->can('list', [Translation::class, $this->node->project]);
     }

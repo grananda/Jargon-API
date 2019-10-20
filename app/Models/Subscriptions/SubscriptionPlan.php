@@ -43,7 +43,6 @@ class SubscriptionPlan extends BaseEntity
      * {@inheritdoc}
      */
     protected $dispatchesEvents = [
-        'created' => SubscriptionPlanWasCreated::class,
         'deleted' => SubscriptionPlanWasDeleted::class,
     ];
 

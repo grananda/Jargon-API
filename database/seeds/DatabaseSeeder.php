@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             $this->call(TeamsTableSeeder::class);
             $this->call(ProjectsTableSeeder::class);
             $this->call(MemosTableSeeder::class);
-//            $this->call(NodesSeeder::class);
+            $this->call(NodesSeeder::class);
         }
 
         DB::commit();

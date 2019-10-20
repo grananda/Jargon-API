@@ -31,6 +31,7 @@ use App\Listeners\SendTeamCollaboratorNotification;
 use App\Listeners\SendUserActivationNotification;
 use App\Listeners\SendUserDeactivationNotification;
 use App\Listeners\SendUserDeletionNotification;
+use App\Listeners\SubscriptionPlans\CreateStripeSubscriptionPlan;
 use App\Listeners\SubscriptionPlans\DeleteStripeSubscriptionPlan;
 use App\Listeners\SubscriptionPlans\UpdateStripeSubscriptionPlan;
 use App\Listeners\SubscriptionProducts\CreateStripeSubscriptionProduct;
@@ -92,7 +93,7 @@ class EventServiceProvider extends ServiceProvider
 
         // SubscriptionPlan events
         SubscriptionPlanWasCreated::class => [
-            CreateStripeSubscriptionProduct::class,
+            CreateStripeSubscriptionPlan::class,
         ],
         SubscriptionPlanWasDeleted::class => [
             DeleteStripeSubscriptionPlan::class,
