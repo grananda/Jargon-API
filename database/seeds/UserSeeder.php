@@ -11,7 +11,6 @@ use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends AbstractSeeder
 {
