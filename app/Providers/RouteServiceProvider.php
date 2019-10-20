@@ -41,6 +41,7 @@ class RouteServiceProvider extends ServiceProvider
         'branches',
         'git',
         'apiPlugin',
+        'memos-staff',
     ];
 
     /**
@@ -79,7 +80,6 @@ class RouteServiceProvider extends ServiceProvider
                 foreach ($this->routes as $route) {
                     require base_path("routes/{$route}.php");
                 }
-            })
-        ;
+            });
     }
 }
