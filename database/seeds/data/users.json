@@ -11,7 +11,7 @@
         "email": "staff@jargon.network",
         "username": "staffmember",
         "password": "123456",
-        "role": "staff"
+        "role": "senior-staff"
     },
     {
         "name": "John Freemium",
