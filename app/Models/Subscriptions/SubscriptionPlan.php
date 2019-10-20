@@ -2,7 +2,6 @@
 
 namespace App\Models\Subscriptions;
 
-use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
 use App\Models\BaseEntity;
 use App\Models\Currency;

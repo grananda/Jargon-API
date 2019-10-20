@@ -43,6 +43,6 @@ class UpdateStripeSubscriptionPlanTest extends TestCase
         $listener->handle($event);
 
         // Then
-        Event::assertDispatched(SubscriptionPlanWasCreated::class);
+        Event::assertNotDispatched(SubscriptionPlanWasCreated::class);
     }
 }
