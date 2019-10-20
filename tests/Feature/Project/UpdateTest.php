@@ -182,11 +182,11 @@ class UpdateTest extends TestCase
             ],
             'dialects' => [
                 [
-                    'locale'  => $dialect1->uuid,
+                    'locale'  => $dialect1->locale,
                     'default' => true,
                 ],
                 [
-                    'locale'  => $dialect2->uuid,
+                    'locale'  => $dialect2->locale,
                     'default' => false,
                 ],
             ],
