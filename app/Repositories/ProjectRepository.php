@@ -19,17 +19,26 @@ class ProjectRepository extends CoreRepository
     private $teamRepository;
 
     /**
+     * The DialectRepository instance.
+     *
+     * @var \App\Repositories\DialectRepository
+     */
+    private $dialectRepository;
+
+    /**
      * ProjectRepository constructor.
      *
-     * @param \Illuminate\Database\Connection  $dbConnection
-     * @param \App\Models\Translations\Project $model
-     * @param \App\Repositories\TeamRepository $teamRepository
+     * @param \Illuminate\Database\Connection     $dbConnection
+     * @param \App\Models\Translations\Project    $model
+     * @param \App\Repositories\TeamRepository    $teamRepository
+     * @param \App\Repositories\DialectRepository $dialectRepository
      */
-    public function __construct(Connection $dbConnection, Project $model, TeamRepository $teamRepository)
+    public function __construct(Connection $dbConnection, Project $model, TeamRepository $teamRepository, DialectRepository $dialectRepository)
     {
         parent::__construct($dbConnection, $model);
 
-        $this->teamRepository = $teamRepository;
+        $this->teamRepository    = $teamRepository;
+        $this->dialectRepository = $dialectRepository;
     }
 
     /**
@@ -73,13 +82,7 @@ class ProjectRepository extends CoreRepository
             /** @var \App\Models\Translations\Project $project */
             $project = $this->createWithOwner($user, $attributes);
 
-            if (isset($attributes['collaborators'])) {
-                $this->addCollaborators($project, $attributes['collaborators']);
-            }
-
-            if (isset($attributes['teams'])) {
-                $this->addTeams($project, $attributes['teams']);
-            }
+            $this->setProjectRelations($project, $attributes);
 
             return $project->fresh();
         });
@@ -101,16 +104,31 @@ class ProjectRepository extends CoreRepository
             /** @var Project $project */
             $project = $this->update($project, $attributes);
 
-            if (isset($attributes['collaborators'])) {
-                $this->addCollaborators($project, $attributes['collaborators']);
-            }
-
-            if (isset($attributes['teams'])) {
-                $this->addTeams($project, $attributes['teams']);
-            }
+            $this->setProjectRelations($project, $attributes);
 
             return $project->fresh();
         });
+    }
+
+    /**
+     * Set projects satellite relations.
+     *
+     * @param \App\Models\Translations\Project $project
+     * @param array                            $attributes
+     */
+    private function setProjectRelations(Project $project, array $attributes)
+    {
+        if (isset($attributes['collaborators'])) {
+            $this->addCollaborators($project, $attributes['collaborators']);
+        }
+
+        if (isset($attributes['teams'])) {
+            $this->addTeams($project, $attributes['teams']);
+        }
+
+        if (isset($attributes['dialects'])) {
+            $this->addDialects($project, $attributes['dialects']);
+        }
     }
 
     /**
@@ -128,6 +146,31 @@ class ProjectRepository extends CoreRepository
         ]);
 
         $entity->setTeams($teams->pluck('id')->toArray());
+
+        return $entity->refresh();
+    }
+
+    /**
+     * Adds dialect to entity.
+     *
+     * @param \App\Models\Translations\Project $entity
+     * @param array                            $dialects
+     *
+     * @return \App\Models\Translations\Project
+     */
+    private function addDialects(Project $entity, array $dialects)
+    {
+        $data = [];
+
+        foreach ($dialects as $item) {
+            $dialect = $this->dialectRepository->findBy([
+                'locale' => $item['locale'],
+            ]);
+
+            $data[$dialect['id']] = ['is_default' => $item['default']];
+        }
+
+        $entity->setDialects($data);
 
         return $entity->refresh();
     }

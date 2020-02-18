@@ -2,7 +2,6 @@
 
 namespace App\Models\Subscriptions;
 
-use App\Events\SubscriptionPlan\SubscriptionPlanWasCreated;
 use App\Events\SubscriptionPlan\SubscriptionPlanWasDeleted;
 use App\Models\BaseEntity;
 use App\Models\Currency;
@@ -43,7 +42,6 @@ class SubscriptionPlan extends BaseEntity
      * {@inheritdoc}
      */
     protected $dispatchesEvents = [
-        'created' => SubscriptionPlanWasCreated::class,
         'deleted' => SubscriptionPlanWasDeleted::class,
     ];
 

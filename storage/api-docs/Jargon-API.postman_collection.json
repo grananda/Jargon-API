@@ -1,0 +1,3440 @@
+{
+	"info": {
+		"_postman_id": "164abb17-27c4-4cf0-8f1b-f7eeb45f7103",
+		"name": "Jargon-API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Staff",
+					"item": [
+						{
+							"name": "Deactivate User",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7d222299-7180-4b8b-a043-bfca7f3230fc",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/users/346d0b9a-597b-44bb-8d8b-2852e4029035?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"users",
+										"346d0b9a-597b-44bb-8d8b-2852e4029035"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Authenticate User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7d222299-7180-4b8b-a043-bfca7f3230fc",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)",
+									"pm.environment.set(\"access_token\", jsonData.data.access_token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "80a82d5b-2764-4af1-b98f-0769ebb3c24e",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\":\"{{email}}\",\n\t\"password\":\"{{password}}\",\n\t\"remember_me\":true\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/login?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"login"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7d222299-7180-4b8b-a043-bfca7f3230fc",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)",
+									"pm.environment.set(\"access_token\", jsonData.data.access_token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "80a82d5b-2764-4af1-b98f-0769ebb3c24e",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\":\"{{email_admin}}\",\n\t\"password\":\"{{password_admin}}\",\n\t\"remember_me\":true\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/login?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"login"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7d222299-7180-4b8b-a043-bfca7f3230fc",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/users?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"users"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activate User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7d222299-7180-4b8b-a043-bfca7f3230fc",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/activate-user/bcaaab42-ec68-400d-87ba-b9a73d0a7dd5/jldh4yUJ1LpCUxi8xFspIJGjpWMDTJp9?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"activate-user",
+								"bcaaab42-ec68-400d-87ba-b9a73d0a7dd5",
+								"jldh4yUJ1LpCUxi8xFspIJGjpWMDTJp9"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Registration",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Smith\",\n    \"email\": \"jsmith@domain.com\",\n    \"password\": \"123456\",\n    \"password_confirmation\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/register?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"register"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password Reset",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resend Activation Link",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request Password Reset",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Store User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Organizations",
+			"item": [
+				{
+					"name": "Create Organization",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8bc7d131-99cb-4abf-9188-cd2348fbf63f",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)",
+									"pm.environment.set(\"organization_id\", jsonData.data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Sample Organization 1\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"organizations"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Organization",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT {{access_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations/{{organization_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"organizations",
+								"{{organization_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Organization",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Sample Organization 1\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations/{{organization_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"organizations",
+								"{{organization_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Organizations",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7093306f-2378-40c2-9550-9d0ad8b77e18",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1fbec4d1-2ec7-4615-8a08-941058a1b3f0",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"organizations"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Organization",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/organizations/{{organization_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"organizations",
+								"{{organization_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "Create Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ecba5c8c-777c-47eb-8ead-aba17dc92aa9",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)",
+									"pm.environment.set(\"project_id\", jsonData.data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Sample Project 1\",\n    \"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n    \"teams\": [\n        [\n            \"{{team_id}}\"\n        ]\n    ],\n    \"collaborators\": [\n        {\n            \"id\": \"{{collaborator_id}}\",\n            \"role\": \"project-manager\",\n            \"owner\": false\n        }\n    ],\n    \"dialects\": [\n        {\n            \"locale\": \"es_ES\",\n            \"default\": true\n        },\n        {\n            \"locale\": \"es_MX\",\n            \"default\": false\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"projects"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Projects",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "JWT {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects/{{project_id}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"projects",
+								"{{project_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept Poject Invitation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "JWT {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects/invitation/{{project_invitation_token}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"projects",
+								"invitation",
+								"{{project_invitation_token}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Sample Project 1 Updated\",\n    \"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n    \"teams\": [],\n    \"collaborators\": [\n        {\n            \"id\": \"{{collaborator_id}}\",\n            \"role\": \"project-manager\",\n            \"owner\": false\n        }\n    ],\n    \"dialects\": [\n        {\n            \"locale\": \"es_ES\",\n            \"default\": false\n        },\n        {\n            \"locale\": \"es_MX\",\n            \"default\": true\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects/{{project_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"projects",
+								"{{project_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Project",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/projects/{{project_id}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"projects",
+								"{{project_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Teams",
+			"item": [
+				{
+					"name": "Create Team",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8bc7d131-99cb-4abf-9188-cd2348fbf63f",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)",
+									"pm.environment.set(\"team_id\", jsonData.data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Sample Team 22\",\n    \"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n    \"collaborators\": [\n        {\n            \"id\": \"{{collaborator_id}}\",\n            \"role\": \"project-manager\",\n            \"owner\": false\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/teams?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"teams"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "JWT {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/teams/{{team_id}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"teams",
+								"{{team_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Sample Organization 1 Updated\",\n\t\"description\": \"Lorem ipsum dolor sit amet consectetur adipiscing elit, suscipit morbi justo fringilla est in, etiam nunc conubia ullamcorper nec quis\",\n\t\"collaborators\": []\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/teams/{{team_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"teams",
+								"{{team_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Teams",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/teams",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"teams"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Team",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/teams/{{team_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"teams",
+								"{{team_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept Team Invitation",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "JWT {{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/teams/invitation/{{team_invitation_token}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"teams",
+								"invitation",
+								"{{team_invitation_token}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Memo",
+			"item": [
+				{
+					"name": "Staff",
+					"item": [
+						{
+							"name": "Store Memo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7093306f-2378-40c2-9550-9d0ad8b77e18",
+										"exec": [
+											"var jsonData = JSON.parse(responseBody)",
+											"pm.environment.set(\"memo_id\", jsonData.data[0].id);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "1fbec4d1-2ec7-4615-8a08-941058a1b3f0",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t \"subject\"    : \"Memo 1\",\n     \"body\"       : \"memo body\",\n     \"status\"     : \"draft\",\n     \"recipients\" :[\n    \t\"c1cb43e1-ed47-4a46-a518-784ad1dab084\"\t\n     ]\n}"
+								},
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/staff/memos?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"staff",
+										"memos"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Memos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7093306f-2378-40c2-9550-9d0ad8b77e18",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "1fbec4d1-2ec7-4615-8a08-941058a1b3f0",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/staff/memos?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"staff",
+										"memos"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Show Memo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7093306f-2378-40c2-9550-9d0ad8b77e18",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "1fbec4d1-2ec7-4615-8a08-941058a1b3f0",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/staff/memos/{{memo_id}}?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"staff",
+										"memos",
+										"{{memo_id}}"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Memo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7093306f-2378-40c2-9550-9d0ad8b77e18",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "1fbec4d1-2ec7-4615-8a08-941058a1b3f0",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/staff/memos/{{memo_id}}?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"staff",
+										"memos",
+										"{{memo_id}}"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Memo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7093306f-2378-40c2-9550-9d0ad8b77e18",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "1fbec4d1-2ec7-4615-8a08-941058a1b3f0",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t \"subject\"    : \"Memo 2\",\n     \"body\"       : \"memo body\",\n     \"status\"     : \"draft\",\n     \"recipients\" :[\n    \t\"c1cb43e1-ed47-4a46-a518-784ad1dab084\"\t\n     ]\n}"
+								},
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/staff/memos/{{memo_id}}?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"staff",
+										"memos",
+										"{{memo_id}}"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "List Memos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7093306f-2378-40c2-9550-9d0ad8b77e18",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1fbec4d1-2ec7-4615-8a08-941058a1b3f0",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/memos?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"memos"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Memo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7093306f-2378-40c2-9550-9d0ad8b77e18",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1fbec4d1-2ec7-4615-8a08-941058a1b3f0",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/memos/{{memo_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"memos",
+								"{{memo_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Memo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7093306f-2378-40c2-9550-9d0ad8b77e18",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1fbec4d1-2ec7-4615-8a08-941058a1b3f0",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/memos/{{memo_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"memos",
+								"{{memo_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Memo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7093306f-2378-40c2-9550-9d0ad8b77e18",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1fbec4d1-2ec7-4615-8a08-941058a1b3f0",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"is_read\": true\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/memos/{{memo_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"memos",
+								"{{memo_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "ActiveSubscription",
+			"item": [
+				{
+					"name": "Upgrade Subscription",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": \"{{subscription_plan_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/active-subscriptions/upgrade?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"active-subscriptions",
+								"upgrade"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Downgrade Subscription",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": \"{{subscription_plan_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/active-subscriptions/downgrade?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"active-subscriptions",
+								"downgrade"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subscriptions",
+			"item": [
+				{
+					"name": "Subscription Products",
+					"item": [
+						{
+							"name": "Staff",
+							"item": [
+								{
+									"name": "Create Subscription Product",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "128dbfdc-db7c-4916-a703-381cf8c7e9b2",
+												"exec": [
+													"var jsonData = JSON.parse(responseBody)",
+													"pm.environment.set(\"subscription_product_id\", jsonData.data.id);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{access_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"title\": \"Test Product\",\n    \"description\": \"Test Product Description\",\n    \"alias\": \"test\",\n    \"rank\": 100,\n    \"is_active\": true\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/subscriptions/products?{{debug_session}}",
+											"protocol": "{{protocol}}",
+											"host": [
+												"{{ip}}"
+											],
+											"port": "{{port}}",
+											"path": [
+												"{{route}}",
+												"{{version}}",
+												"subscriptions",
+												"products"
+											],
+											"query": [
+												{
+													"key": "{{debug_session}}",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Subscription Product",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "128dbfdc-db7c-4916-a703-381cf8c7e9b2",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{access_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"title\": \"Test Product 2\",\n    \"description\": \"Test Product Description\",\n    \"alias\": \"test\",\n    \"rank\": 100,\n    \"is_active\": true\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/subscriptions/products/{{subscription_product_id}}?{{debug_session}}",
+											"protocol": "{{protocol}}",
+											"host": [
+												"{{ip}}"
+											],
+											"port": "{{port}}",
+											"path": [
+												"{{route}}",
+												"{{version}}",
+												"subscriptions",
+												"products",
+												"{{subscription_product_id}}"
+											],
+											"query": [
+												{
+													"key": "{{debug_session}}",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Subscription Product",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "128dbfdc-db7c-4916-a703-381cf8c7e9b2",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{access_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/subscriptions/products/{{subscription_product_id}}?{{debug_session}}",
+											"protocol": "{{protocol}}",
+											"host": [
+												"{{ip}}"
+											],
+											"port": "{{port}}",
+											"path": [
+												"{{route}}",
+												"{{version}}",
+												"subscriptions",
+												"products",
+												"{{subscription_product_id}}"
+											],
+											"query": [
+												{
+													"key": "{{debug_session}}",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "List Subscription Products",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/subscriptions/products?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"subscriptions",
+										"products"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Show Subscription Products",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/subscriptions/products/{{subscription_product_id}}?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"subscriptions",
+										"products",
+										"{{subscription_product_id}}"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Subscription Plans",
+					"item": [
+						{
+							"name": "Staff",
+							"item": [
+								{
+									"name": "Create Subscription Plan",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "128dbfdc-db7c-4916-a703-381cf8c7e9b2",
+												"exec": [
+													"var jsonData = JSON.parse(responseBody)",
+													"pm.environment.set(\"subscription_plan_id\", jsonData.data.id);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{access_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"currency\": \"EUR\",\n    \"product\": \"{{subscription_product_id}}\",\n    \"alias\": \"test-product-plan-1\",\n    \"interval\": \"month\",\n    \"sort_order\": 10,\n    \"amount\": 100,\n    \"is_active\": true,\n    \"options\": [\n        {\n            \"option_value\": \"5\",\n            \"option_key\": \"project_count\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/subscriptions/plans?{{debug_session}}",
+											"protocol": "{{protocol}}",
+											"host": [
+												"{{ip}}"
+											],
+											"port": "{{port}}",
+											"path": [
+												"{{route}}",
+												"{{version}}",
+												"subscriptions",
+												"plans"
+											],
+											"query": [
+												{
+													"key": "{{debug_session}}",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Subscription Plan",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "128dbfdc-db7c-4916-a703-381cf8c7e9b2",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{access_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/subscriptions/plans/{{subscription_plan_id}}?{{debug_session}}",
+											"protocol": "{{protocol}}",
+											"host": [
+												"{{ip}}"
+											],
+											"port": "{{port}}",
+											"path": [
+												"{{route}}",
+												"{{version}}",
+												"subscriptions",
+												"plans",
+												"{{subscription_plan_id}}"
+											],
+											"query": [
+												{
+													"key": "{{debug_session}}",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Subscription Plan",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "128dbfdc-db7c-4916-a703-381cf8c7e9b2",
+												"exec": [
+													"var jsonData = JSON.parse(responseBody)",
+													"pm.environment.set(\"subscription_plan_id\", jsonData.data.id);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{access_token}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"type": "text",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"sort_order\": 10,\n    \"is_active\": true,\n    \"options\": [\n        {\n            \"option_value\": \"5\",\n            \"option_key\": \"project_count\"\n        }\n    ]\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/subscriptions/plans/{{subscription_plan_id}}?{{debug_session}}",
+											"protocol": "{{protocol}}",
+											"host": [
+												"{{ip}}"
+											],
+											"port": "{{port}}",
+											"path": [
+												"{{route}}",
+												"{{version}}",
+												"subscriptions",
+												"plans",
+												"{{subscription_plan_id}}"
+											],
+											"query": [
+												{
+													"key": "{{debug_session}}",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "List Subscription Plans",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/subscriptions/plans?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"subscriptions",
+										"plans"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Subscription Plan Options",
+					"item": [
+						{
+							"name": "Staff",
+							"item": [
+								{
+									"name": "Create Option",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update Option",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "List Options",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Options",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "List Subscription Plan Options",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/subscriptions/options?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"subscriptions",
+										"options"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Nodes",
+			"item": [
+				{
+					"name": "Create Node",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "af1f34a3-ed3b-47db-92ee-7c88dc403a2c",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)",
+									"pm.environment.set(\"node_id\", jsonData.data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"key\": \"new-node-child\",\n    \"project\": \"fcace9c4-a96c-4fdf-b07d-1917a1a18162\",\n    \"parent\": \"95ea4b2c-473d-4b35-a6f6-c3286b908c7b\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/nodes?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"nodes"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Nodes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/nodes/project/{{project_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"nodes",
+								"project",
+								"{{project_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Node",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"key\": \"child-node-xxx\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/nodes/{{node_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"nodes",
+								"{{node_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Node",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/nodes/{{node_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"nodes",
+								"{{node_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Copy Node",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"parent\": \"bc65dc3e-c868-40d9-8707-841c713ffe5e\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/nodes/copy/{{node_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"nodes",
+								"copy",
+								"{{node_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Move Node",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"parent\": \"bc65dc3e-c868-40d9-8707-841c713ffe5e\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/nodes/move/{{node_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"nodes",
+								"move",
+								"{{node_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Stripe",
+			"item": [
+				{
+					"name": "Customers",
+					"item": [
+						{
+							"name": "Store Stripe Customer",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/customers?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"customers"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b95cd825-9548-4443-ade9-459a9c6e3c61",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "7ff70ed1-d722-445b-9788-11eaa11adc52",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Cards",
+					"item": [
+						{
+							"name": "Store Card",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t \"stripeCardToken\": \"{{stripe_card_token}}\"\n}"
+								},
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/cards?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"cards"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "invoices",
+					"item": [
+						{
+							"name": "List Invoices",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/invoices?{{debug_session}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{ip}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{route}}",
+										"{{version}}",
+										"invoices"
+									],
+									"query": [
+										{
+											"key": "{{debug_session}}",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Git",
+			"item": [
+				{
+					"name": "Branches",
+					"item": [
+						{
+							"name": "Create Branch",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Branch",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Pull Requests",
+					"item": [
+						{
+							"name": "Create Pull Request",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Repositories",
+					"item": [
+						{
+							"name": "List Repositories",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Plugin Component",
+			"item": [
+				{
+					"name": "List Plugin Options",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sync Trees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Translations",
+			"item": [
+				{
+					"name": "List Translations",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/translations/node/{{node_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"translations",
+								"node",
+								"{{node_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Store Translations",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "82fad8fb-251c-4f0d-a935-80c8c35eca83",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody)",
+									"pm.environment.set(\"translation_id\", jsonData.data.id);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"definition\": \"Translation text\",\n    \"dialect\": \"iu_CA\",\n    \"node\": \"e8792cd8-1609-4eb4-9175-d4fe218c2096\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/translations?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"translations"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Translations",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"definition\": \"Translation text new\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/translations/{{translation_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"translations",
+								"{{translation_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Translations",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{ip}}:{{port}}/{{route}}/{{version}}/translations/{{translation_id}}?{{debug_session}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{ip}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{route}}",
+								"{{version}}",
+								"translations",
+								"{{translation_id}}"
+							],
+							"query": [
+								{
+									"key": "{{debug_session}}",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	]
+}

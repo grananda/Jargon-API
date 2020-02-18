@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\User\DeleteUserRequest;
 use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Requests\UserRegistrationRequest;
+use App\Http\Resources\Users\User as UserResource;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Exception;
@@ -65,7 +66,7 @@ class UserController extends ApiController
             /** @var User $user */
             $user = $this->userRepository->updateUser($request->user, $request->validated());
 
-            return $this->responseOk($user);
+            return $this->responseOk(new UserResource($user));
         } catch (Exception $exception) {
             return $this->responseInternalError($exception->getMessage());
         }
@@ -80,7 +81,7 @@ class UserController extends ApiController
      */
     public function show(Request $request)
     {
-        return $this->responseOk($request->user());
+        return $this->responseOk(new UserResource($request->user()));
     }
 
     /**

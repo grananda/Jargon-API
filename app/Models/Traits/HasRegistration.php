@@ -27,11 +27,11 @@ trait HasRegistration
     public function activate()
     {
         if ($this->isActivated()) {
-            throw new UserAlreadyActivated($this);
+            throw new UserAlreadyActivated(trans('error.activation.completed'));
         }
 
         if ($this->hasActivationTokenExpired()) {
-            throw new UserActivationTokenExpired($this);
+            throw new UserActivationTokenExpired(trans('error.activation.expired'));
         }
 
         $this->activated_at = $this->freshTimestamp();

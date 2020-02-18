@@ -2,7 +2,7 @@
 
 namespace App\Listeners\SubscriptionProducts;
 
-use App\Events\SubscriptionProduct\SubscriptionProductWasCreated;
+use App\Events\SubscriptionProduct\SubscriptionProductWasDeleted;
 use App\Repositories\Stripe\StripeSubscriptionProductRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -29,13 +29,13 @@ class DeleteStripeSubscriptionProduct implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param \App\Events\SubscriptionProduct\SubscriptionProductWasCreated $event
+     * @param \App\Events\SubscriptionProduct\SubscriptionProductWasDeleted $event
      *
      * @throws \App\Exceptions\StripeApiCallException
      *
      * @return void
      */
-    public function handle(SubscriptionProductWasCreated $event)
+    public function handle(SubscriptionProductWasDeleted $event)
     {
         $this->stripeSubscriptionProductRepository->delete($event->subscriptionProduct);
     }

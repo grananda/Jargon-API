@@ -55,6 +55,7 @@ class User extends Authenticatable implements MustVerifyEmail
         parent::boot();
 
         static::creating(function (self $model) {
+            $model->password = bcrypt($model->password);
             $model->activation_token = Str::random(self::ACTIVATION_TOKEN_LENGTH);
             $model->fireModelEvent('activation-token-generated');
         });

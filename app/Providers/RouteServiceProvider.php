@@ -41,6 +41,7 @@ class RouteServiceProvider extends ServiceProvider
         'branches',
         'git',
         'apiPlugin',
+        'memos-staff',
     ];
 
     /**

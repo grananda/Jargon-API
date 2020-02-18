@@ -3,6 +3,7 @@
 namespace Tests\Feature\Project;
 
 use App\Events\Collaborator\CollaboratorAddedToProject;
+use App\Models\Dialect;
 use App\Models\Organization;
 use App\Models\Team;
 use App\Models\Translations\Project;
@@ -136,6 +137,12 @@ class UpdateTest extends TestCase
         $organization = factory(Organization::class)->create();
         $organization->setOwner($owner);
 
+        /** @var \App\Models\Dialect $dialect1 */
+        $dialect1 = Dialect::where('locale', 'es_MX')->first();
+
+        /** @var \App\Models\Dialect $dialect */
+        $dialect2 = Dialect::where('locale', 'es_ES')->first();
+
         /** @var \App\Models\Team $team */
         $team = factory(Team::class)->create();
         $team->setOwner($owner);
@@ -146,6 +153,7 @@ class UpdateTest extends TestCase
         $project->setMember($collaborator1);
         $project->setMember($collaborator2);
         $project->validateMember($collaborator2);
+        $project->setDialects([$dialect1->id]);
 
         $collaborators->each(function ($collaborator) use ($project) {
             $project->setMember($collaborator);
@@ -170,6 +178,16 @@ class UpdateTest extends TestCase
             'teams' => [
                 [
                     $team->uuid,
+                ],
+            ],
+            'dialects' => [
+                [
+                    'locale'  => $dialect1->locale,
+                    'default' => true,
+                ],
+                [
+                    'locale'  => $dialect2->locale,
+                    'default' => false,
                 ],
             ],
         ];
@@ -205,6 +223,17 @@ class UpdateTest extends TestCase
                 'user_id'     => $item->id,
             ]);
         });
+
+        $this->assertDatabaseHas('dialect_project', [
+            'project_id' => $project->id,
+            'is_default' => true,
+            'dialect_id' => $dialect1->id,
+        ]);
+        $this->assertDatabaseHas('dialect_project', [
+            'project_id' => $project->id,
+            'is_default' => false,
+            'dialect_id' => $dialect2->id,
+        ]);
 
         Event::assertDispatched(CollaboratorAddedToProject::class, 7);
     }

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', 'User\AuthController@login')->name('auth.login');
+Route::get('activate-user/{id}/{token}', 'User\AccountController@activate')->name('auth.activate');
 
 Route::post('/request-password-reset', 'User\AuthController@requestPasswordReset')->name('account.password.request');
 Route::post('/request-reset', 'User\AuthController@PasswordReset')->name('account.password.reset');

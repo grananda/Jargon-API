@@ -60,7 +60,7 @@ class LoginTest extends TestCase
 
         /** @var \App\Models\User $user */
         $user = $this->user('registered-user', [
-            'password' => bcrypt($password),
+            'password' => $password,
         ]);
 
         // When

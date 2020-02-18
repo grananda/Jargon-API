@@ -11,7 +11,6 @@ use App\Models\Subscriptions\SubscriptionPlan;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends AbstractSeeder
 {
@@ -52,7 +51,7 @@ class UserSeeder extends AbstractSeeder
             $userItem = factory(User::class)->create([
                 'name'     => $user['name'],
                 'email'    => $user['email'],
-                'password' => Hash::make($user['password']),
+                'password' => $user['password'],
             ]);
             $userItem->setRole($role);
 
